@@ -15,12 +15,24 @@ tablero = Tablero("Medio", "blue", 15)
 columna_1 = tablero.columna(sg, a)
 
 columna_2 = [
-              [sg.Text('CONFIGURACION'),]
+              [sg.Image(filename='imagenes/playerlogo.png', pad=(5, 0)), sg.Text('JUGADOR'), sg.Text('Nombre')],
+              [sg.Text('PUNTAJE'), sg.Text('Caja de Pts') ],
+              [sg.Image(filename='imagenes/computerlogo.png', pad=(5, 0)), sg.Text('PC')],
+              [sg.Text('PUNTAJE'), sg.Text('Caja de pts')],
+              [sg.Button('CONFIGURACION')],
+              [sg.Button('PASAR')],
+              [sg.Button('CAMBIAR PALABRA')],
+              [sg.Text('ORIENTACIÓN DE LA PALABRA')],
+              [sg.Button('▲', pad=(102, 10))],
+              [sg.Text(' '*10), sg.Button('◀', pad=(5, 0)), sg.Button('■', pad=(5, 0)), sg.Button('▶', pad=(5, 0))],
+              [sg.Button('▼',pad=(102, 10))],
             ]
 
+colum2 = sg.Frame('CONFIGURACION', columna_2, pad=(20,50))
+
 layout = [
-        [sg.Column(columna_1, background_color= 'grey40'), sg.Column(columna_2, background_color='pink')],
-        [sg.Button("Evaluar"),sg.Button('Exit')]
+        [sg.Column(columna_1, background_color= 'grey40'), sg.Column([[colum2]])],
+        [sg.Button("Evaluar Palabra"),sg.Button('Exit')]
         ]
 
 window = sg.Window('ScrabbleAR', ).Layout(layout).Finalize()

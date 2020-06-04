@@ -29,9 +29,9 @@ class Tablero():
     def columna(self, sg, a):
         
         columna_1 = [
-                    [sg.Button("#") for i in a],
+                    [sg.Button("#", pad=(20, 10), button_color=('white','OrangeRed3')) for i in a],
                     [sg.Graph((500,500),(0,385),(385,0), key='_GRAPH_', background_color='grey70',change_submits=True, drag_submits=False)],
-                    [sg.Button(i) for i in a]
+                    [sg.Button(i, pad=(20, 10), button_color=('white','OrangeRed3')) for i in a]
                  ]
         
         return columna_1
@@ -66,5 +66,5 @@ class Tablero():
     def imprimir(self):
 
         print("Color: {} Nivel del juego: {}".format(self.__color, self.__nivel))
-        print(self.__matriz)
+        
     

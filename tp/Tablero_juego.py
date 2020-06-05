@@ -26,12 +26,14 @@ class Tablero():
     def get_text_box(self):
         return self.__text_box
             
-    def columna(self, sg, a):
-        
+    def columna(self): #quite dos parametros, creo que siempre que se pueda mejor minimizar la cantidad de estos.
+        import PySimpleGUI as sg #el sg se puede importar aca
         columna_1 = [
-                    [sg.Button("#", pad=(20, 10), button_color=('white','OrangeRed3')) for i in a],
+                    #[sg.Button("#", pad=(20, 10), button_color=('white','OrangeRed3')) for i in a],
+                    [sg.Button("#", pad=(10, 10), button_color=('white','OrangeRed3'),size=(6,2),font=("Impact", 12)) for i in range(7)],
                     [sg.Graph((500,500),(0,385),(385,0), key='_GRAPH_', background_color='grey70',change_submits=True, drag_submits=False)],
-                    [sg.Button(i, pad=(20, 10), button_color=('white','OrangeRed3')) for i in a]
+                    #[sg.Button(i, pad=(20, 10), button_color=('white','OrangeRed3')) for i in a]
+                    [sg.Button("A", pad=(10, 10), button_color=('white','OrangeRed3'),size=(6,2),font=("Impact", 12)) for i in range(7)] #creo que no tenia mucho sentido crear un parametro para una lista de prueba de letras random, ahora simplemente puse la A para visualizar pero las letras cambiarian despues cargadaas desde la bolsa.
                  ]
         
         return columna_1

@@ -3,6 +3,8 @@ from string import ascii_uppercase as up
 from random import choice
 import random
 from Tablero_juego import*
+#tema del la ventana
+sg.theme('DarkTeal8')
 letrasRandom = lambda : [choice(up) for i in range(7)]
 a=letrasRandom()
 
@@ -13,8 +15,16 @@ color_button = ('white','OrangeRed3')
 tablero = Tablero("Medio", "blue", 15)
 
 columna_1 = tablero.columna(sg, a)
+Tiempo_juego= [
+                [sg.Text(size=(10, 2), font=('Helvetica', 20), justification='center', key='-TURNO-')],
+              ]
+
+T_turno = [
+            [sg.Text(size=(10, 2), font=('Helvetica', 20), justification='center', key='-DURACION-')],
+          ]
 
 columna_2 = [
+              [sg.Frame('DURACION DEL JUEGO',Tiempo_juego, pad=(10,10), relief= 'solid'), sg.Frame('DURACION DEL TURNO',T_turno, pad= (10, 10), relief= 'solid')],
               [sg.Image(filename='imagenes/playerlogo.png', pad=(5, 0)), sg.Text('JUGADOR'), sg.Text('Nombre')],
               [sg.Text('PUNTAJE'), sg.Text('Caja de Pts') ],
               [sg.Image(filename='imagenes/computerlogo.png', pad=(5, 0)), sg.Text('PC')],
@@ -27,20 +37,21 @@ columna_2 = [
               [sg.Text(' '*10), sg.Button('◀', pad=(5, 0)), sg.Button('■', pad=(5, 0)), sg.Button('▶', pad=(5, 0))],
               [sg.Button('▼',pad=(102, 10))],
             ]
+#suken, solid, ridge, raised
 
-colum2 = sg.Frame('CONFIGURACION', columna_2, pad=(20,50))
 
-layout = [
-        [sg.Column(columna_1, background_color= 'grey40'), sg.Column([[colum2]])],
-        [sg.Button("Evaluar Palabra"),sg.Button('Exit')]
-        ]
+layout = [ [sg.Text(' '*43), sg.Text('FICHAS COMPUTADORA')],
+           [sg.Column(columna_1, background_color= 'grey40'), sg.Frame('CONFIGURACION', columna_2, pad=(20, 50), relief= 'solid')],
+           [sg.Text(' '*43), sg.Text('FICHAS JUGADOR')],
+           [sg.Button("Evaluar Palabra"),sg.Button('Exit'), sg.Button('Guardar Partida',  pad=(230, 0))]
+         ]
 
-window = sg.Window('ScrabbleAR', ).Layout(layout).Finalize()
+window = sg.Window('ScrabbleAR',resizable= True,) .Layout(layout) .Finalize()
 g = window.FindElement('_GRAPH_')
 
 #metodos del tablero 
 tablero.mostrar_tablero(g)
-tablero.diseño_tablero(g)
+tablero.diseño_tablero(g) 
 tablero.Crear_Matriz()
 matriz = tablero.get_matriz()
 text_box = tablero.get_text_box()
@@ -59,8 +70,28 @@ word=''
 
 button_selected = False
 current_button_selected = ''
-while True:
+Tiempo, duracion = True, 0
+Turno, turn_cont = True, 0
+
+while True:                    
     event, values = window.Read()
+    
+    while True:
+     # Event Loop
+        event, values = window.read(timeout=10) # Please try and use as high of a timeout value as you can
+        if Tiempo:
+            window['-DURACION-'].update('{:02d}:{:02d}.{:02d}'.format((duracion // 100) // 60, (duracion // 100) % 60, duracion % 100))
+            duracion += 1
+        if Turno:
+            window['-TURNO-'].update('{:02d}:{:02d}.{:02d}'.format((turn_cont // 100) // 60, (turn_cont // 100) % 60, turn_cont % 100))
+            turn_cont +=1
+        
+        if duracion == 3000:
+            break
+
+        #if turn_cont == 120:
+        #    turn_cont = 0
+       
     print(values)
     if event is None or 'tipo' == 'Exit':
         break

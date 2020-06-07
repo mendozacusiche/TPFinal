@@ -29,6 +29,7 @@ columna_2 = [
               [sg.Text('PUNTAJE'), sg.Text('Caja de Pts') ],
               [sg.Image(filename='imagenes/computerlogo.png', pad=(5, 0)), sg.Text('PC')],
               [sg.Text('PUNTAJE'), sg.Text('Caja de pts')],
+              [sg.Text('CANTIDAD DE FICHAS'), sg.Text('cant fichas en la bolsa')],
               [sg.Button('CONFIGURACION')],
               [sg.Button('PASAR')],
               [sg.Button('CAMBIAR PALABRA')],

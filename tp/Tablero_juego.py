@@ -42,6 +42,7 @@ class Tablero():
        
             
     def columna(self, sg): 
+        
         columna_1 = [
                     [sg.Button("#", pad=(20, 0), button_color=('white','OrangeRed3')) for i in range(7)],
                     [sg.Graph((500,500),(0,self.__Esquinas),(self.__Esquinas,0), key='_GRAPH_', background_color='grey70',change_submits=True, drag_submits=False)],
@@ -76,6 +77,3 @@ class Tablero():
 
                 if (row % 7 == 0) and (col % 7 == 0):
                     obj.draw_rectangle((col * BOX_SIZE + 5, row * BOX_SIZE + 3), (col * BOX_SIZE + BOX_SIZE + 5, row * BOX_SIZE + BOX_SIZE + 3),line_color='yellow' ,fill_color='medium sea green')
-               
-   
-    

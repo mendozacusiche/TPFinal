@@ -2,7 +2,7 @@ import PySimpleGUI as sg
 from string import ascii_uppercase as up
 from random import choice
 import random
-from Tablero_juego import*
+from Tablero_juego import *
 #tema del la ventana
 sg.theme('DarkTeal8')
 letrasRandom = lambda : [choice(up) for i in range(7)]
@@ -12,9 +12,9 @@ a=letrasRandom()
 tam_celda =25
 color_button = ('white','OrangeRed3')
 #instanciamos el tablero del juego
-tablero = Tablero("Medio", "blue", 15)
+tablero = Tablero("dificil", 'SkyBlue3')
 
-columna_1 = tablero.columna(sg, a)
+columna_1 = tablero.columna(sg)
 Tiempo_juego= [
                 [sg.Text(size=(10, 2), font=('Helvetica', 20), justification='center', key='-TURNO-')],
               ]
@@ -76,23 +76,6 @@ Turno, turn_cont = True, 0
 
 while True:                    
     event, values = window.Read()
-    
-    while True:
-     # Event Loop
-        event, values = window.read(timeout=10) # Please try and use as high of a timeout value as you can
-        if Tiempo:
-            window['-DURACION-'].update('{:02d}:{:02d}.{:02d}'.format((duracion // 100) // 60, (duracion // 100) % 60, duracion % 100))
-            duracion += 1
-        if Turno:
-            window['-TURNO-'].update('{:02d}:{:02d}.{:02d}'.format((turn_cont // 100) // 60, (turn_cont // 100) % 60, turn_cont % 100))
-            turn_cont +=1
-        
-        if duracion == 3000:
-            break
-
-        #if turn_cont == 120:
-        #    turn_cont = 0
-       
     print(values)
     if event is None or 'tipo' == 'Exit':
         break

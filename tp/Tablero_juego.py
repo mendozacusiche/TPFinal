@@ -41,12 +41,23 @@ class Tablero():
            
        
             
+<<<<<<< HEAD
     def columna(self, sg): 
         
         columna_1 = [
                     [sg.Button("#", pad=(20, 0), button_color=('white','OrangeRed3')) for i in range(7)],
                     [sg.Graph((500,500),(0,self.__Esquinas),(self.__Esquinas,0), key='_GRAPH_', background_color='grey70',change_submits=True, drag_submits=False)],
                     [sg.Button("A", pad=(20, 0), button_color=('white','OrangeRed3')) for i in range(7)] #creo que no tenia mucho sentido crear un parametro para una lista de prueba de letras random, ahora simplemente puse la A para visualizar pero las letras cambiarian despues cargadaas desde la bolsa.
+=======
+    def columna(self): #quite dos parametros, creo que siempre que se pueda mejor minimizar la cantidad de estos.
+        import PySimpleGUI as sg #el sg se puede importar aca
+        columna_1 = [
+                    #[sg.Button("#", pad=(20, 10), button_color=('white','OrangeRed3')) for i in a],
+                    [sg.Button("#", pad=(10, 10), button_color=('white','OrangeRed3'),size=(6,2),font=("Impact", 12)) for i in range(7)],
+                    [sg.Graph((500,500),(0,385),(385,0), key='_GRAPH_', background_color='grey70',change_submits=True, drag_submits=False)],
+                    #[sg.Button(i, pad=(20, 10), button_color=('white','OrangeRed3')) for i in a]
+                    [sg.Button("A", pad=(10, 10), button_color=('white','OrangeRed3'),size=(6,2),font=("Impact", 12)) for i in range(7)] #creo que no tenia mucho sentido crear un parametro para una lista de prueba de letras random, ahora simplemente puse la A para visualizar pero las letras cambiarian despues cargadaas desde la bolsa.
+>>>>>>> e6c5ab421c239cabd8c2514193053d418f3b69bf
                  ]
         
         return columna_1
@@ -76,4 +87,14 @@ class Tablero():
                     
 
                 if (row % 7 == 0) and (col % 7 == 0):
+<<<<<<< HEAD
                     obj.draw_rectangle((col * BOX_SIZE + 5, row * BOX_SIZE + 3), (col * BOX_SIZE + BOX_SIZE + 5, row * BOX_SIZE + BOX_SIZE + 3),line_color='yellow' ,fill_color='medium sea green')
+=======
+                    obj.draw_rectangle((col * BOX_SIZE + 5, row * BOX_SIZE + 3), (col * BOX_SIZE + BOX_SIZE + 5, row * BOX_SIZE + BOX_SIZE + 3),line_color='yellow' ,fill_color='medium sea green')
+               
+    def imprimir(self):
+
+        print("Color: {} Nivel del juego: {}".format(self.__color, self.__nivel))
+        
+    
+>>>>>>> e6c5ab421c239cabd8c2514193053d418f3b69bf

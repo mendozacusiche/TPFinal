@@ -3,11 +3,19 @@ import sys, Tablero_juego
 
 def juego(cargar=False): #hay que agregar en algun lugar despues que pasaria si se pasa como parametro True, que seria agregar las palabras al tablero y cambiar los timers con la informacion del archivo del guardado
 
+<<<<<<< HEAD
 	tablero = Tablero_juego.Tablero("Medio", "SkyBlue3",)
 
 	col1 = [
 			[sg.Text("00:00"),sg.Text("texto",size=(50,1),justification="center"),sg.Text("0:00")],
 			[sg.Column(tablero.columna(sg))]
+=======
+	tablero = Tablero_juego.Tablero("Medio", "blue", 15)
+
+	col1 = [
+			[sg.Text("00:00"),sg.Text("texto",size=(50,1),justification="center"),sg.Text("0:00")],
+			[sg.Column(tablero.columna())]
+>>>>>>> e6c5ab421c239cabd8c2514193053d418f3b69bf
 			]
 
 	layout=[[sg.Column(col1)]]
@@ -28,7 +36,11 @@ def juego(cargar=False): #hay que agregar en algun lugar despues que pasaria si 
 				[sg.Button("Cambiar",size=(15,2),font=("Impact", 12))]
 			]		
 
+<<<<<<< HEAD
 		layout[0].append(sg.Frame('OPCIONES', col2))
+=======
+		layout[0].append(sg.Column(col2))
+>>>>>>> e6c5ab421c239cabd8c2514193053d418f3b69bf
 	elif sys.platform == "linux":
 		col2= [
 				[sg.Text("",pad=(0,10))],
@@ -45,7 +57,11 @@ def juego(cargar=False): #hay que agregar en algun lugar despues que pasaria si 
 				[sg.Button("Cambiar",size=(15,2),font=("Impact", 12))]
 			]		
 
+<<<<<<< HEAD
 		layout[0].append(sg.Frame('OPCIONES', col2))
+=======
+		layout[0].append(sg.Column(col2))
+>>>>>>> e6c5ab421c239cabd8c2514193053d418f3b69bf
 	else:
 		col2= [
 				[sg.Text("",pad=(0,10))],
@@ -148,4 +164,8 @@ def juego(cargar=False): #hay que agregar en algun lugar despues que pasaria si 
 
 	window.Close()
 
+<<<<<<< HEAD
 juego()
+=======
+#juego()
+>>>>>>> e6c5ab421c239cabd8c2514193053d418f3b69bf

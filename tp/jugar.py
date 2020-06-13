@@ -86,7 +86,7 @@ def juego(cargar=False):
 
     tam_celda =25
 
-    layout = crear_layout(tablero, (tiempo_total, tiempo_turno))    
+    layout = crear_layout(tablero, tiempos)    
 
     window = sg.Window('ScrabbleAR',resizable= True,).Layout(layout).Finalize()
     g = window.FindElement('_GRAPH_')

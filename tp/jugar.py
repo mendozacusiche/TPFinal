@@ -1,7 +1,20 @@
 import PySimpleGUI as sg
 from string import ascii_uppercase as up
-import random, sys, time, json, threading
+import random, sys, time, json, threading, ventana_bienvenida
 from Tablero_juego import *
+from pattern.es import parse, conjugate, INFINITIVE
+
+def evaluar(palabra, dificultad):
+    ok=False
+    if (dificultad == "Facil") and (parse(palabra).split("/")[1] in ("JJ","NN","VB")):
+        ok=True
+    elif (dificultad == "Medio") and (parse(palabra).split("/")[1] in ("JJ","VB")):
+        ok=True
+    elif (dificultad == "DificilVerbos") and (parse(palabra).split("/")[1] in ("VB")):
+        ok=True
+    elif (dificultad == "DificilAdjetivos") and (parse(palabra).split("/")[1] in ("JJ")):
+        ok=True
+    return ok
 
 def terminar():
     pass
@@ -25,7 +38,7 @@ def iniciar(iniciado, t):
             timers.start()
     return True  
 
-def crear_layout(tablero, tiempos):
+def crear_layout(tablero, tiempos, jugador):
 
 
     #tema del la ventana
@@ -48,7 +61,7 @@ def crear_layout(tablero, tiempos):
 
     columna_2 = [
                   [sg.Frame('DURACION DEL JUEGO',Tiempo_juego, pad=(10,10), relief= 'solid'), sg.Frame('DURACION DEL TURNO',T_turno, pad= (10, 10), relief= 'solid')],
-                  [sg.Image(filename='imagenes/playerlogo.png', pad=(5, 0)), sg.Text('JUGADOR'), sg.Text('Nombre')],
+                  [sg.Image(filename='imagenes/playerlogo.png', pad=(5, 0)), sg.Text(jugador)],
                   [sg.Text('PUNTAJE'), sg.Text('Caja de Pts') ],
                   [sg.Image(filename='imagenes/computerlogo.png', pad=(5, 0)), sg.Text('PC')],
                   [sg.Text('PUNTAJE'), sg.Text('Caja de pts')],
@@ -77,16 +90,24 @@ def juego(cargar=False):
         archivo= open("guardado.txt","r")
     else:
         archivo= open("config.txt","r")
+        jugador = ventana_bienvenida.ventana()
     config = json.load(archivo)
+    if cargar:
+        
     tiempo_total= int(config["tiempo_total"]) * 60
     tiempo_turno= int(config["tiempo_turno"]) * 60
     tiempos=[tiempo_total,tiempo_turno]
+
+    dificultad=config["dificultad"]
+    if dificultad == "Dificil":
+        opciones=["Adjetivos", "Verbos"]
+        dificultad = dificultad+random.choice(opciones)
 
     tablero = Tablero("dificil", 'SkyBlue3')
 
     tam_celda =25
 
-    layout = crear_layout(tablero, tiempos)    
+    layout = crear_layout(tablero, tiempos, jugador)    
 
     window = sg.Window('ScrabbleAR',resizable= True,).Layout(layout).Finalize()
     g = window.FindElement('_GRAPH_')
@@ -119,7 +140,7 @@ def juego(cargar=False):
     while True:                    
         event, values = window.Read(timeout=300)
         print(values)
-        if event == sg.WIN_CLOSED or 'tipo' == 'Exit':
+        if event == sg.WIN_CLOSED or event == 'Exit':
             break
         elif event == '_GRAPH_':
             if iniciado:
@@ -158,3 +179,5 @@ def juego(cargar=False):
                 Check_button(event)
                 button_selected = True
                 current_button_selected = event
+
+    window.close()

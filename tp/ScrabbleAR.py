@@ -1,54 +1,34 @@
 import PySimpleGUI as sg
-import configuracion, main2  
-import json
+import configuracion, nuevo_juego,records, jugar, json
 
 
 def main(args):
-	columna1=[[sg.Text("tablero")]]
-				
-	columna2=[[sg.Text("descripción configuración predeterminada")],
-			[sg.Button('Cambiar configuración')],
-			[sg.Button('Iniciar Nuevo')],
+			
+	layout=[[sg.Button('Nuevo Juego')],
 			[sg.Button('Cargar Juego')],
-			[sg.Button('Top Ten')]]
-	
-	layout=[[sg.Column(columna1),sg.Column(columna2)]]
+			[sg.Button("Records")],
+			[sg.Button('Salir')]]
 	
 	window=sg.Window('Scrabble',layout)
 	
 
-	while True:  #agregue el bucle para que se pueda volver al menu si queremos volver atras
+	while True:
 		event,values=window.Read()
-		#window.close() #comente esta linea para poder usarla en el elif, aunque crearia conflicto con el if. 
 		
-		if (event== 'Iniciar Nuevo'):
+		if (event== 'Nuevo Juego'):
 			window.Hide()
-			main2.juego()
+			nuevo_juego.ventana()
 			window.UnHide()
-			#columna3=[[sg.Text("tablero")]]
-			#columna4=[[sg.Text("descripción configuración predeterminada")],
-			#		[sg.Button('Confirmar')],
-			#		[sg.Button('Cambiar fichas')],
-			#		[sg.Button('Top Ten')],
-			#		[sg.Button('Terminar')]]
-			#layout1=[[sg.Column(columna3),sg.Column(columna4)]]
-			#window=sg.Window('Scrabble',layout1)
-			#while True:
-			#	events,value=window.Read()
-			#	if events=='Terminar':
-			#		break
-		elif (event == 'Cargar Juego'):
+		elif (event=='Cargar Juego'):
 			window.Hide()
-			main2.juego(True)
+			jugar.juego(True)
 			window.UnHide()
-		elif (event=='Cambiar configuración'):
+		elif (event=="Records"):
 			window.Hide()
-			configuracion.ventana()
+			records.ventana()
 			window.UnHide()
-		# elif (event=='Top Ten'):
-			# with open('topten.txt','r') as t:
-				# datos=json.load(t)
-				# print(json.dumps(datos,sort_keys=True,indent=4))	
+		elif (event == sg.WIN_CLOSED or event == "Salir"):
+			break
 			
 	window.close()
 	

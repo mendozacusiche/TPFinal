@@ -1,5 +1,5 @@
 import PySimpleGUI as sg
-import configuracion, nuevo_juego,records, jugar, json
+import configuracion, nuevo_juego, records, jugar
 
 
 def main(args):

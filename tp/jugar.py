@@ -35,7 +35,6 @@ def pasar(tablero,fichas,tiempos,tiempo_turno,Intel,bolsa,window,turnoIA=False):
     recargar_fichas(fichas,bolsa,window,turnoIA)
     tiempos[1]=tiempo_turno
     Intel.set_mi_turno(not turnoIA)
-    print("turno pasado")
 
 def segundo(tablero,fichas_jugador, Intel, tiempo_turno, bolsa, window, t):
     while (t[0]>0):

@@ -1,5 +1,5 @@
 import PySimpleGUI as sg
-import configuracion, jugar, json
+import configuracion, jugar
 
 
 def ventana():
@@ -7,7 +7,7 @@ def ventana():
 				
 	columna2=[[sg.Text("descripción configuración predeterminada")],
 			[sg.Button('Configuracion')],
-			[sg.Button('Iniciar'), sg.Button('Atras')]
+			[sg.Button('Jugar'), sg.Button('Atras')]
 			]
 	
 	layout=[[sg.Column(columna1),sg.Column(columna2)]]
@@ -18,7 +18,7 @@ def ventana():
 	while True:
 		event,values=window.Read()
 		
-		if (event== 'Iniciar'):
+		if (event== 'Jugar'):
 			window.close()
 			jugar.juego()
 		elif (event=='Configuracion'):

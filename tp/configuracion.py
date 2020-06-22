@@ -6,8 +6,8 @@ def aplicar(vals, punts, cants):
 
 	config=json.load(archivo)
 
-	config["tiempo_total"] = vals["-tot-"]
-	config["tiempo_turno"] = vals["-turn-"]
+	config["tiempo_total"] = int(vals["-tot-"])
+	config["tiempo_turno"] = int(vals["-turn-"])
 	config["dificultad"] = vals["-dif-"]
 	for p in punts:
 		config["puntaje_fichas"][p]=punts[p]
@@ -59,9 +59,9 @@ def actualizar_descripcion(win,val):
 	if(val["-dif-"]=="Facil"):
 		win["-desc-"].update("Facil: sustantivos, adjetivos y verbos. Tablero 15x15.")
 	elif (val["-dif-"]=="Medio"):
-		win["-desc-"].update("Medio: sustantivos y verbos. Tablero NxN.")
+		win["-desc-"].update("Medio: sustantivos y verbos. Tablero 19x19.")
 	elif (val["-dif-"]=="Dificil"):
-		win["-desc-"].update("Dificil: tipo palabra al azar. Tablero NxN.")
+		win["-desc-"].update("Dificil: tipo palabra al azar. Tablero 23x23.")
 
 def ventana():
 
@@ -121,10 +121,10 @@ def ventana():
 				window["-t2-"].update(config["cant_fichas"][valores["-l2-"]])
 
 		elif evento == "-t1-":
-			nuevos_puntajes[valores["-l1-"]]=valores["-t1-"]
+			nuevos_puntajes[valores["-l1-"]]=int(valores["-t1-"])
 
 		elif evento == "-t2-":
-			nuevas_cantidades[valores["-l2-"]]=valores["-t2-"]
+			nuevas_cantidades[valores["-l2-"]]=int(valores["-t2-"])
 
 
 	window.Close()

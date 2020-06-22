@@ -1,56 +1,95 @@
 import PySimpleGUI as sg
 from string import ascii_uppercase as up
-import random, sys, time, json, threading, ventana_bienvenida
-from Tablero_juego import *
+import random, sys, time, json, threading, ventana_bienvenida, Fichas, Tablero, IA
 from pattern.es import parse, conjugate, INFINITIVE
 
 def evaluar(palabra, dificultad):
     ok=False
-    if (dificultad == "Facil") and (parse(palabra).split("/")[1] in ("JJ","NN","VB")):
-        ok=True
-    elif (dificultad == "Medio") and (parse(palabra).split("/")[1] in ("JJ","VB")):
-        ok=True
-    elif (dificultad == "DificilVerbos") and (parse(palabra).split("/")[1] in ("VB")):
-        ok=True
-    elif (dificultad == "DificilAdjetivos") and (parse(palabra).split("/")[1] in ("JJ")):
-        ok=True
+    if palabra != "No es palabra":
+        if (dificultad == "Facil") and (parse(palabra).split("/")[1] in ("JJ","NN","VB")):
+            ok=True
+        elif (dificultad == "Medio") and (parse(palabra).split("/")[1] in ("JJ","VB")):
+            ok=True
+        elif (dificultad == "DificilVerbos") and (parse(palabra).split("/")[1] in ("VB")):
+            ok=True
+        elif (dificultad == "DificilAdjetivos") and (parse(palabra).split("/")[1] in ("JJ")):
+            ok=True
     return ok
 
 def terminar():
     pass
 
-def pasar():
-    pass
+def recargar_fichas(fichas, bolsa, window, turnoIA=False):
+    usadas=fichas.get_usadas()
+    for i in range(7):
+        if usadas[i]:
+            l=sacar_letra_bolsa(bolsa)
+            if not turnoIA:
+                window["-letra"+str(i)+"-"].update(l)
+            fichas.set_letra(l,i)
+            usadas[i]=False
 
-def segundo(t):
+def pasar(tablero,fichas,tiempos,tiempo_turno,Intel,bolsa,window,turnoIA=False):
+    window["-CantFichas-"].update(str(contar_letras_bolsa(bolsa)))
+    devolver_fichas(window,tablero,fichas)
+    recargar_fichas(fichas,bolsa,window,turnoIA)
+    tiempos[1]=tiempo_turno
+    Intel.set_mi_turno(not turnoIA)
+    print("turno pasado")
+
+def segundo(tablero,fichas_jugador, Intel, tiempo_turno, bolsa, window, t):
     while (t[0]>0):
         time.sleep(1)
         t[0]-=1
         t[1]-=1
         if(t[1]== 0):
-            pasar()
+            if Intel.get_mi_turno():
+                pasar(tablero,Intel.get_fichas(),t,tiempo_turno,Intel,bolsa,window,True)
+            else:
+                pasar(tablero,fichas_jugador,t,tiempo_turno,Intel,bolsa,window)
     terminar()
 
-def iniciar(iniciado, t):
-    if not iniciado:
-        timers= threading.Thread(target= segundo, args=(t,))
-        if __name__ == 'jugar':
-            timers.start()
-    return True  
+def contar_letras_bolsa(bolsa):
+    cant=0
+    for letra in bolsa.keys():
+        cant=cant+bolsa[letra]
+    return cant
+
+def sacar_letra_bolsa(bolsa):
+    letra=random.choice(list(bolsa.keys()))
+    while (bolsa[letra] == 0):
+        letra=random.choice(list(bolsa.keys()))
+    bolsa[letra]-=1
+    return letra
+
+def iniciar(iniciado, t, window, config, tiempo_turno, tablero):
+    bolsa=config["cant_fichas"]
+    Inteligencia = IA.IA (bolsa)
+    nuevas=[]
+    for i in range(7):
+        l=sacar_letra_bolsa(bolsa)
+        nuevas.append(l)
+        window["-letra"+str(i)+"-"].update(l)
+    fichas_jugador= Fichas.Fichas(nuevas)
+    timers= threading.Thread(target= segundo, args=(tablero,fichas_jugador,Inteligencia,tiempo_turno,bolsa,window,t))
+    if __name__ == 'jugar':
+        timers.start()
+    window["-CantFichas-"].update(str(contar_letras_bolsa(bolsa)))
+    return True, fichas_jugador, bolsa, Inteligencia
+
+def crear_botones(n, tablero):
+    return [[sg.Button(" ",font=("Impact", 12),size=(4,1),pad=(0,0),key=("b_"+str(n)+"_"+str(i)))]for i in range(tablero.get_tamanio())]
 
 def crear_layout(tablero, tiempos, jugador):
-
-
-    #tema del la ventana
     sg.theme('DarkTeal8')
-    letrasRandom = lambda : [random.choice(up) for i in range(7)]
-    a=letrasRandom()
 
-    # tablero del ScrabbleAR
-    color_button = ('white','OrangeRed3')
-    #instanciamos el tablero del juego
+    columna_1 = [
+                [sg.Button("#",font=("Impact", 18), button_color=color_button, key=("-letraIA"+str(i)+"-")) for i in range(7)],
+                [sg.Column(crear_botones(i, tablero), pad=(0,0)) for i in range(tablero.get_tamanio())],
+                [sg.Button(" ",font=("Impact", 18), button_color=color_button, key=("-letra"+str(i)+"-")) for i in range(7)]
+            ]
 
-    columna_1 = tablero.columna(sg)
+
     Tiempo_juego= [
                     [sg.Text(f"{tiempos[0] // 60}:{tiempos[0]%60:02d}",size=(10, 2), font=('Helvetica', 20), justification='center', key='-TURNO-')],
                   ]
@@ -62,38 +101,115 @@ def crear_layout(tablero, tiempos, jugador):
     columna_2 = [
                   [sg.Frame('DURACION DEL JUEGO',Tiempo_juego, pad=(10,10), relief= 'solid'), sg.Frame('DURACION DEL TURNO',T_turno, pad= (10, 10), relief= 'solid')],
                   [sg.Image(filename='imagenes/playerlogo.png', pad=(5, 0)), sg.Text(jugador)],
-                  [sg.Text('PUNTAJE'), sg.Text('Caja de Pts') ],
+                  [sg.Text('PUNTAJE'), sg.Text('0000000',key=("-puntos-")) ],
                   [sg.Image(filename='imagenes/computerlogo.png', pad=(5, 0)), sg.Text('PC')],
-                  [sg.Text('PUNTAJE'), sg.Text('Caja de pts')],
-                  [sg.Text('CANTIDAD DE FICHAS'), sg.Text('cant fichas en la bolsa')],
+                  [sg.Text('PUNTAJE'), sg.Text('0000000',key=("-puntosIA-"))],
+                  [sg.Text('FICHAS EN BOLSA:'), sg.Text("000", key=("-CantFichas-"))],
                   [sg.Button('INICIAR')],
                   [sg.Button('PASAR')],
-                  [sg.Button('CAMBIAR PALABRA')],
-                  [sg.Text('ORIENTACIÓN DE LA PALABRA')],
-                  [sg.Button('▲', pad=(102, 10))],
-                  [sg.Text(' '*10), sg.Button('◀', pad=(5, 0)), sg.Button('■', pad=(5, 0)), sg.Button('▶', pad=(5, 0))],
-                  [sg.Button('▼',pad=(102, 10))],
+                  [sg.Button('CAMBIAR LETRAS')],
                 ]
-    #suken, solid, ridge, raised
 
     layout = [  [sg.Text(' '*43), sg.Text('FICHAS COMPUTADORA')],
                 [sg.Column(columna_1, background_color= 'grey40'), sg.Frame('CONFIGURACION', columna_2, pad=(20, 50), relief= 'solid')],
                 [sg.Text(' '*43), sg.Text('FICHAS JUGADOR')],
                 [sg.Button("Evaluar Palabra"),sg.Button('Exit'), sg.Button('Guardar Partida',  pad=(230, 0))]
              ]
-    return layout
+    return layout     
+
+def checkear_ficha(event, fichas, window, n):
+    if (fichas.get_checked()[n]==False):
+        fichas.descheckear_todas(window)
+        fichas.checkear(n)
+        window["-letra"+str(n)+"-"].update(button_color=('white','blue'))
+    else:
+        fichas.descheckear(n)
+        window["-letra"+str(n)+"-"].update(button_color=('white','OrangeRed3'))
+
+
+def clickear_ficha(event, fichas, window):
+
+    if event == ("-letra0-"):
+        checkear_ficha(event,fichas,window,0)
+        return 0
+    elif event == ("-letra1-"):
+        checkear_ficha(event,fichas,window,1)
+        return 1
+    elif event == ("-letra2-"):
+        checkear_ficha(event,fichas,window,2)
+        return 2
+    elif event == ("-letra3-"):
+        checkear_ficha(event,fichas,window,3)
+        return 3
+    elif event == ("-letra4-"):
+        checkear_ficha(event,fichas,window,4)
+        return 4
+    elif event == ("-letra5-"):
+        checkear_ficha(event,fichas,window,5)
+        return 5
+    elif event == ("-letra6-"):
+        checkear_ficha(event,fichas,window,6)
+        return 6
+
+def devolver_letra(window,tablero,fichas,x,y):
+    pos=0
+    while (fichas.get_letras()[pos]!= ""):
+        pos+=1
+    window["-letra"+str(pos)+"-"].update(tablero.get_letra(x,y))
+    fichas.set_letra(tablero.get_letra(x,y), pos)
+    fichas.desusar(pos)
+    tablero.set_letra("",x,y)
+
+def devolver_fichas(window,tablero,fichas):
+    coordenadas=tablero.get_no_confirmadas()
+    for c in coordenadas:
+        devolver_letra(window,tablero,fichas,c[0],c[1])
+        window["b_"+str(c[0])+"_"+str(c[1])].update("")
+
+def colocar_letra(event,fichas,tablero,window,pos):
+    if True in (fichas.get_checked()):
+        b,x,y = str(event).split("_")
+        x= int (x)
+        y= int (y)
+        if not fichas.get_usadas()[pos]:
+            if (not tablero.get_confirmadas()[x][y]):
+                if (tablero.get_letra(x,y)!=""):
+                    devolver_letra(event,window,tablero,fichas,x,y)
+                tablero.set_letra(fichas.get_letras()[pos],x,y)
+                window[event].update(fichas.get_letras()[pos])
+                window["-letra"+str(pos)+"-"].update("")
+                fichas.set_letra("",pos)
+                fichas.usar(pos)
+        else:
+            if (not tablero.get_confirmadas()[x][y]):
+                if (tablero.get_letra(x,y)!=""):
+                    devolver_letra(event,window,tablero,fichas,x,y)
+                    window[event].update("")
+
+def confirmar(window,tablero,puntos,turnoIA=False):
+    nuevos_puntos=tablero.confirmar_letras()
+    puntos=puntos+nuevos_puntos
+    if turnoIA:
+        window["-puntosIA-"].update(puntos)
+    else:
+        window["-puntos-"].update(puntos)
+    return puntos
 
 def juego(cargar=False):
-
-
     if cargar:
         archivo= open("guardado.txt","r")
+        config = json.load(archivo)
+        jugador = config["jugador"]
+        ventana_bienvenida.ventana(jugador) 
+        puntos=config["puntos"]
+        puntosIA=config["puntosIA"]
     else:
         archivo= open("config.txt","r")
+        config = json.load(archivo)
         jugador = ventana_bienvenida.ventana()
-    config = json.load(archivo)
-    if cargar:
-        
+        puntos=0
+        puntosIA=0
+
     tiempo_total= int(config["tiempo_total"]) * 60
     tiempo_turno= int(config["tiempo_turno"]) * 60
     tiempos=[tiempo_total,tiempo_turno]
@@ -103,81 +219,50 @@ def juego(cargar=False):
         opciones=["Adjetivos", "Verbos"]
         dificultad = dificultad+random.choice(opciones)
 
-    tablero = Tablero("dificil", 'SkyBlue3')
-
-    tam_celda =25
+    tablero = Tablero.Tablero(dificultad)
 
     layout = crear_layout(tablero, tiempos, jugador)    
 
     window = sg.Window('ScrabbleAR',resizable= True,).Layout(layout).Finalize()
-    g = window.FindElement('_GRAPH_')
 
-    #metodos del tablero 
-    tablero.mostrar_tablero(g)
-    tablero.diseño_tablero(g) 
-    tablero.Crear_Matriz()
-    matriz = tablero.get_matriz()
-    text_box = tablero.get_text_box()
-    selected = tablero.get_selected()
-
-
-    Check_box = lambda x,y : g.TKCanvas.itemconfig(matriz[box_y][box_x], fill="#CFF5E3")
-    Uncheck_box = lambda x,y: g.TKCanvas.itemconfig(matriz[box_y][box_x], fill="white")
-    despintar = lambda x: g.TKCanvas.itemconfig(x, fill="white")
-
-    Check_button = lambda x: window.FindElement(x).Update(button_color=('white','blue'))
-    Uncheck_button = lambda x: window.FindElement(x).Update(button_color=('white','green'))
-    current_Check_button = ''
-
-    word=''
-
-    button_selected = False
-    current_button_selected = ''
-    Tiempo, duracion = True, 0
-    Turno, turn_cont = True, 0
     iniciado=False
+    pos_letra= -1
 
     while True:                    
-        event, values = window.Read(timeout=300)
-        print(values)
-        if event == sg.WIN_CLOSED or event == 'Exit':
+        event, values = window.Read(timeout=250)
+        print(event, values)
+        if event in (None,'Exit'):
             break
-        elif event == '_GRAPH_':
-            if iniciado:
-                if values['_GRAPH_'] == (None,None):
-                    continue
-                mouse = values["_GRAPH_"]
-                box_x = mouse[0]//tam_celda
-                box_y = mouse[1]//tam_celda
-                if mouse == (None, None) or box_x > 15 or box_y > 15:
-                    continue
-                if button_selected:
-                    current_Check_button  = box_x, box_y
-                    Check_box(box_x, box_y)
-                    selected[box_x][box_y] = True
-                    
-                    if(text_box[box_x][box_y]== ""):
-                        text_box[box_x][box_y] = g.DrawText(current_button_selected, (box_x * tam_celda + 18, box_y * tam_celda + 17),font='Courier 12')
-                        word+=current_button_selected
-                    else:
-                        # aca iria la actualizacion del cuadrado pero no me sale
-                        print(text_box[box_x][box_y])
-                        g.TKCanvas.itemconfig(text_box[box_y][box_x],text="")
-                        print((g.TKCanvas.itemconfigure(text_box[box_y][box_x])))
         elif event == "INICIAR":
-            iniciado= iniciar(iniciado, tiempos)
+            if not iniciado:
+                iniciado, fichas_jugador, bolsa, Inteligencia = iniciar(iniciado, tiempos, window, config, tiempo_turno, tablero)
         elif event == sg.TIMEOUT_KEY:
             window["-TURNO-"].update(f"{tiempos[0] // 60}:{tiempos[0]%60:02d}")
             window["-DURACION-"].update(f"{tiempos[1] // 60}:{tiempos[1]%60:02d}")
+        elif event in ("-letra0-","-letra1-","-letra2-","-letra3-","-letra4-","-letra5-","-letra6-"):
+            if iniciado:
+            	pos_letra = clickear_ficha(event, fichas_jugador, window)
+        elif event == "Evaluar Palabra":
+            if iniciado:
+                palabra = tablero.buscar_palabra()
+                ok = evaluar(palabra, dificultad)
+                if ok:
+                    puntos=confirmar(window,tablero,puntos)
+                    pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
+                    Inteligencia.turno()
+                    pasar(tablero,Inteligencia.get_fichas(),tiempos,tiempo_turno,Inteligencia,bolsa,window,True)
+                else:
+                    devolver_fichas(window,tablero,fichas_jugador)
+        elif event == "PASAR":
+            if iniciado and not Inteligencia.get_mi_turno():
+                pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
+                Inteligencia.turno()
+                pasar(tablero,Inteligencia.get_fichas(),tiempos,tiempo_turno,Inteligencia,bolsa,window,True)
         else:
-            if button_selected:
-                if event == current_button_selected:
-                    Uncheck_button(event)
-                    button_selected = False
-                    current_button_selected = ''
-            else:
-                Check_button(event)
-                button_selected = True
-                current_button_selected = event
+        	if iniciado:
+        		colocar_letra(event,fichas_jugador,tablero,window,pos_letra)
 
     window.close()
+
+
+color_button = ('white','OrangeRed3')

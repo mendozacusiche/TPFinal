@@ -3,11 +3,12 @@ import configuracion, nuevo_juego, records, jugar
 
 
 def main(args):
-			
-	layout=[[sg.Button('Nuevo Juego')],
-			[sg.Button('Cargar Juego')],
-			[sg.Button("Records")],
-			[sg.Button('Salir')]]
+	sg.theme('DarkTeal8')
+
+	layout=[[sg.Button('Nuevo Juego',font=("Impact",16))],
+			[sg.Button('Cargar Juego',font=("Impact",16))],
+			[sg.Button("Records",font=("Impact",16))],
+			[sg.Button('Salir',font=("Impact",16))]]
 	
 	window=sg.Window('Scrabble',layout)
 	
@@ -21,7 +22,7 @@ def main(args):
 			window.UnHide()
 		elif (event=='Cargar Juego'):
 			window.Hide()
-			jugar.juego(True)
+			#jugar.juego(True)
 			window.UnHide()
 		elif (event=="Records"):
 			window.Hide()

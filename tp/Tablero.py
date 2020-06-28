@@ -78,6 +78,7 @@ class Tablero():
 			palabra=""
 			for i in range(len(fichas)):
 				palabra=palabra+fichas[i][0]
+			palabra=palabra.lower()
 		else:
 			palabra= "No es palabra"
 		
@@ -89,9 +90,3 @@ class Tablero():
 				if ((not self.__confirmadas[x][y]) and (self.__letras[x][y]!="")):
 					self.__confirmadas[x][y]=True
 		return 10
-		
-
-
-
-
-

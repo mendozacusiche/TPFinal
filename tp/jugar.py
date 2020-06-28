@@ -46,6 +46,8 @@ def segundo(tablero,fichas_jugador, Intel, tiempo_turno, bolsa, window, t):
                 pasar(tablero,Intel.get_fichas(),t,tiempo_turno,Intel,bolsa,window,True)
             else:
                 pasar(tablero,fichas_jugador,t,tiempo_turno,Intel,bolsa,window)
+                Intel.turno()
+                pasar(tablero,Intel.get_fichas(),t,tiempo_turno,Intel,bolsa,window,True)
     terminar()
 
 def contar_letras_bolsa(bolsa):
@@ -77,15 +79,17 @@ def iniciar(iniciado, t, window, config, tiempo_turno, tablero):
     return True, fichas_jugador, bolsa, Inteligencia
 
 def crear_botones(n, tablero):
-    return [[sg.Button(" ",font=("Impact", 12),size=(4,1),pad=(0,0),key=("b_"+str(n)+"_"+str(i)))]for i in range(tablero.get_tamanio())]
+    return [[sg.Button(" ",font=("Impact", 9),size=(3,0),pad=(0,0),key=("b_"+str(n)+"_"+str(i)))]for i in range(tablero.get_tamanio())]
 
 def crear_layout(tablero, tiempos, jugador):
-    sg.theme('DarkTeal8')
+
+    layout_fichasIA=[[sg.Button("#",font=("Impact",14), button_color=color_button, key=("-letraIA"+str(i)+"-")) for i in range(7)]]
+    layout_fichas_jugador=[[sg.Button(" ",font=("Impact",14), button_color=color_button, key=("-letra"+str(i)+"-")) for i in range(7)]]
 
     columna_1 = [
-                [sg.Button("#",font=("Impact", 18), button_color=color_button, key=("-letraIA"+str(i)+"-")) for i in range(7)],
+                [sg.Frame('FICHAS COMPUTADORA',layout_fichasIA)],
                 [sg.Column(crear_botones(i, tablero), pad=(0,0)) for i in range(tablero.get_tamanio())],
-                [sg.Button(" ",font=("Impact", 18), button_color=color_button, key=("-letra"+str(i)+"-")) for i in range(7)]
+                [sg.Frame('FICHAS JUGADOR',layout_fichas_jugador),sg.Button('CAMBIAR',font=("Impact",12))]
             ]
 
 
@@ -98,21 +102,22 @@ def crear_layout(tablero, tiempos, jugador):
               ]
 
     columna_2 = [
-                  [sg.Frame('DURACION DEL JUEGO',Tiempo_juego, pad=(10,10), relief= 'solid'), sg.Frame('DURACION DEL TURNO',T_turno, pad= (10, 10), relief= 'solid')],
-                  [sg.Image(filename='imagenes/playerlogo.png', pad=(5, 0)), sg.Text(jugador)],
-                  [sg.Text('PUNTAJE'), sg.Text('0000000',key=("-puntos-")) ],
-                  [sg.Image(filename='imagenes/computerlogo.png', pad=(5, 0)), sg.Text('PC')],
-                  [sg.Text('PUNTAJE'), sg.Text('0000000',key=("-puntosIA-"))],
-                  [sg.Text('FICHAS EN BOLSA:'), sg.Text("000", key=("-CantFichas-"))],
-                  [sg.Button('INICIAR')],
-                  [sg.Button('PASAR')],
-                  [sg.Button('CAMBIAR LETRAS')],
+                [sg.Button('INICIAR',font=("Impact",14))],
+                [sg.Frame('DURACION DEL JUEGO',Tiempo_juego, pad=(10,10), relief= 'solid'), sg.Frame('DURACION DEL TURNO',T_turno, pad= (10, 10), relief= 'solid')],
+                [sg.Image(filename='imagenes/playerlogo.png', pad=(5, 0)), sg.Text(jugador)],
+                [sg.Text('PUNTAJE'), sg.Text('0000000',key=("-puntos-")) ],
+                [sg.Image(filename='imagenes/computerlogo.png', pad=(5, 0)), sg.Text('PC')],
+                [sg.Text('PUNTAJE'), sg.Text('0000000',key=("-puntosIA-"))],
+                [sg.Text('FICHAS EN BOLSA:'), sg.Text("000", key=("-CantFichas-"))],
+                [sg.Button('Pasar',font=("Impact",10))],
+                [sg.Button("Evaluar Palabra",font=("Impact",10))], 
+                [sg.Button('Posponer',font=("Impact",10))],
+                [sg.Button('Terminar',font=("Impact",10))],
+                [sg.Button('Exit',font=("Impact",10))]
                 ]
 
-    layout = [  [sg.Text(' '*43), sg.Text('FICHAS COMPUTADORA')],
-                [sg.Column(columna_1, background_color= 'grey40'), sg.Frame('CONFIGURACION', columna_2, pad=(20, 50), relief= 'solid')],
-                [sg.Text(' '*43), sg.Text('FICHAS JUGADOR')],
-                [sg.Button("Evaluar Palabra"),sg.Button('Exit'), sg.Button('Guardar Partida',  pad=(230, 0))]
+    layout = [  
+                [sg.Column(columna_1, pad=(0,0)), sg.Frame('CONFIGURACION', columna_2, pad=(20, 50), relief= 'solid')],
              ]
     return layout     
 
@@ -173,7 +178,7 @@ def colocar_letra(event,fichas,tablero,window,pos):
         if not fichas.get_usadas()[pos]:
             if (not tablero.get_confirmadas()[x][y]):
                 if (tablero.get_letra(x,y)!=""):
-                    devolver_letra(event,window,tablero,fichas,x,y)
+                    devolver_letra(window,tablero,fichas,x,y)
                 tablero.set_letra(fichas.get_letras()[pos],x,y)
                 window[event].update(fichas.get_letras()[pos])
                 window["-letra"+str(pos)+"-"].update("")
@@ -182,7 +187,7 @@ def colocar_letra(event,fichas,tablero,window,pos):
         else:
             if (not tablero.get_confirmadas()[x][y]):
                 if (tablero.get_letra(x,y)!=""):
-                    devolver_letra(event,window,tablero,fichas,x,y)
+                    devolver_letra(window,tablero,fichas,x,y)
                     window[event].update("")
 
 def confirmar(window,tablero,puntos,turnoIA=False):
@@ -241,6 +246,14 @@ def juego(cargar=False):
         elif event in ("-letra0-","-letra1-","-letra2-","-letra3-","-letra4-","-letra5-","-letra6-"):
             if iniciado:
             	pos_letra = clickear_ficha(event, fichas_jugador, window)
+        elif event == "CAMBIAR":
+            pass
+        elif event == "Posponer":
+            pass
+        elif event == "Terminar":
+            pass
+        elif event in ("-letraIA0-","-letraIA1-","-letraIA2-","-letraIA3-","-letraIA4-","-letraIA5-","-letraIA6-"):
+            pass
         elif event == "Evaluar Palabra":
             if iniciado:
                 palabra = tablero.buscar_palabra()
@@ -252,7 +265,7 @@ def juego(cargar=False):
                     pasar(tablero,Inteligencia.get_fichas(),tiempos,tiempo_turno,Inteligencia,bolsa,window,True)
                 else:
                     devolver_fichas(window,tablero,fichas_jugador)
-        elif event == "PASAR":
+        elif event == "Pasar":
             if iniciado and not Inteligencia.get_mi_turno():
                 pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
                 Inteligencia.turno()

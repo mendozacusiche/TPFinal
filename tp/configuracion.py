@@ -31,15 +31,15 @@ def restaurar(win):
 					'U' : 1 ,   'V' : 4 ,   'W' : 7 , 'X' : 7 ,
 					'Y' : 4 ,   'Z' : 10 }
 
-	cant_fichas= { 'A' : 15 ,   'B' : 4 ,   'C' : 6 , 'D' : 6 ,
-				'E' : 15 ,   'F' : 3 ,   'G' : 3 , 'H' : 3 ,
-				'I' : 10 ,   'J' : 3 , 'K' : 1 , 'L' : 6 ,'LL': 1,
-				'M' : 4 ,   'N' : 8 ,'Ñ': 1,   'O' : 14 , 'P' : 3 ,
+	cant_fichas= { 'A' : 23 ,   'B' : 4 ,   'C' : 6 , 'D' : 6 ,
+				'E' : 23 ,   'F' : 3 ,   'G' : 3 , 'H' : 3 ,
+				'I' : 23 ,   'J' : 3 , 'K' : 1 , 'L' : 6 ,'LL': 1,
+				'M' : 4 ,   'N' : 8 ,'Ñ': 1,   'O' : 23 , 'P' : 3 ,
 				'Q' : 1 , 'R' : 6 ,'RR': 1,   'S' : 10 , 'T' : 6 ,
-				'U' : 10 ,   'V' : 3  ,   'W' : 1 , 'X' : 1 ,
+				'U' : 23 ,   'V' : 3  ,   'W' : 1 , 'X' : 1 ,
 				'Y' : 1 ,   'Z' : 1 }
 
-	j={"tiempo_total":"30","tiempo_turno":"1","dificultad":"Medio","puntaje_fichas":puntaje_fichas,"cant_fichas":cant_fichas}
+	j={"tiempo_total":"20","tiempo_turno":"1","dificultad":"Medio","puntaje_fichas":puntaje_fichas,"cant_fichas":cant_fichas}
 
 	json.dump(j,archivo)
 
@@ -57,11 +57,11 @@ def restaurar(win):
 
 def actualizar_descripcion(win,val):
 	if(val["-dif-"]=="Facil"):
-		win["-desc-"].update("Facil: sustantivos, adjetivos y verbos. Tablero 15x15.")
+		win["-desc-"].update("Facil: sustantivos, adjetivos y verbos. Tablero 23x23.")
 	elif (val["-dif-"]=="Medio"):
-		win["-desc-"].update("Medio: sustantivos y verbos. Tablero 19x19.")
+		win["-desc-"].update("Medio: adjetivos y verbos. Tablero 19x19.")
 	elif (val["-dif-"]=="Dificil"):
-		win["-desc-"].update("Dificil: tipo palabra al azar. Tablero 23x23.")
+		win["-desc-"].update("Dificil: al azar adjetivos o verbos. Tablero 15x15.")
 
 def ventana():
 
@@ -81,7 +81,7 @@ def ventana():
 		[sg.Text("Letra "),sg.Combo(letras,size=(3,1), enable_events=True, key="-l1-"),sg.Text("Puntos "),sg.InputText("",size=(3,1), enable_events=True, key="-t1-")],
 		[sg.Text("Cantidad: ")],
 		[sg.Text("Letra "),sg.Combo(letras,size=(3,1), enable_events=True, key="-l2-"),sg.Text("Cantidad "),sg.InputText("",size=(3,1), enable_events=True, key="-t2-")],
-		[sg.Button("Aplicar"),sg.Button("Restaurar"),sg.Button("Atras")]
+		[sg.Button("Aplicar",font=("Impact",10)),sg.Button("Restaurar",font=("Impact",10)),sg.Button("Atras",font=("Impact",10))]
 		]
 
 	window= sg.Window("Configuracion",layout)

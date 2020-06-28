@@ -19,12 +19,12 @@ def ventana(jugador="None"):
               [sg.Image(filename='imagenes/icons.png', pad=(215, 0))],
               [sg.Text('Por favor, introduzca su nombre ',size=(40, 1), justification='center', font='Courier 15')],
               [sg.InputText(size=(50, 1),justification='left', font="Helvetica",key="-Nombre-")],
-              [sg.Button('Confirmar'), sg.Button('Salir')],
+              [sg.Button('Confirmar',font=("Impact",10))],
             ]
     window = sg.Window('ScrabbleAR',element_justification='center', resizable= True).Layout(layout)
     while True:             # Event Loop
         event, values = window.read()
-        if event in (None, 'Salir'):
+        if event == None:
           window.close()
           return jugador
         elif (event =="Confirmar") and (values["-Nombre-"] not in ("","Olvido el nombre!")):

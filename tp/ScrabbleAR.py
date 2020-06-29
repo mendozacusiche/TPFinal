@@ -5,10 +5,10 @@ import configuracion, nuevo_juego, records, jugar
 def main(args):
 	sg.theme('DarkTeal8')
 
-	layout=[[sg.Button('Nuevo Juego',font=("Impact",16))],
-			[sg.Button('Cargar Juego',font=("Impact",16))],
-			[sg.Button("Records",font=("Impact",16))],
-			[sg.Button('Salir',font=("Impact",16))]]
+	layout=[[sg.Button('Nuevo Juego',font=("Current",16))],
+			[sg.Button('Cargar Juego',font=("Current",16))],
+			[sg.Button("Records",font=("Current",16))],
+			[sg.Button('Salir',font=("Current",16))]]
 	
 	window=sg.Window('Scrabble',layout)
 	

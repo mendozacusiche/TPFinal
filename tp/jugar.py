@@ -4,6 +4,7 @@ import random, sys, time, json, threading, ventana_bienvenida, Fichas, Tablero, 
 from pattern.es import parse, conjugate, INFINITIVE
 
 def evaluar(palabra, dificultad):
+    '''evalua según el nivel si la palabra es válida'''
     ok=False
     if palabra != "No es palabra":
         if (dificultad == "Facil") and (parse(palabra).split("/")[1] in ("JJ","NN","VB")):

@@ -26,6 +26,7 @@ class Tablero():
 		return self.__confirmadas
 
 	def get_no_confirmadas(self):
+		'''con esto se obtienen las casillas no ocupadas por letras a traves de una lista de tuplas'''
 		fichas=[]
 		for x in range(self.__tamanio):
 			for y in range(self.__tamanio):

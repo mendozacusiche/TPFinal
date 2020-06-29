@@ -6,8 +6,8 @@ def ventana():
 	columna1=[[sg.Text("tablero")]]
 				
 	columna2=[[sg.Text("descripción configuración predeterminada")],
-			[sg.Button('Configuracion',font=("Impact",10))],
-			[sg.Button('Jugar',font=("Impact",10)), sg.Button('Atras',font=("Impact",10))]
+			[sg.Button('Configuracion',font=("Current",10))],
+			[sg.Button('Jugar',font=("Current",10)), sg.Button('Atras',font=("Current",10))]
 			]
 	
 	layout=[[sg.Column(columna1),sg.Column(columna2)]]

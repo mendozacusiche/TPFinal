@@ -2,6 +2,7 @@ import PySimpleGUI as sg
 import json
 
 def aplicar(vals, punts, cants):
+	'''Aplica los cambios hechos en la configuración'''
 	archivo=open("config.txt","r+")
 
 	config=json.load(archivo)

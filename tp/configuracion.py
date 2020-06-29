@@ -21,6 +21,7 @@ def aplicar(vals, punts, cants):
 	archivo.close()
 
 def restaurar(win):
+	'''Vuelve a la configuración predeterminada''' 
 	archivo=open("config.txt","w")
 
 	puntaje_fichas= { 'A' : 1 ,   'B' : 3 ,   'C' : 2 , 'D' : 2 ,

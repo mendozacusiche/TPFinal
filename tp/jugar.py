@@ -125,6 +125,7 @@ def crear_layout(tablero, tiempos, jugador):
     return layout     
 
 def checkear_ficha(event, fichas, window, n):
+    '''Selecciona y deselecciona la ficha'''
     if (fichas.get_checked()[n]==False):
         fichas.descheckear_todas(window)
         fichas.checkear(n)
@@ -159,6 +160,7 @@ def clickear_ficha(event, fichas, window):
         return 6
 
 def devolver_letra(window,tablero,fichas,x,y):
+    '''devuelve una letra del tablero al atril de fichas'''
     pos=0
     while (fichas.get_letras()[pos]!= ""):
         pos+=1
@@ -194,6 +196,7 @@ def colocar_letra(event,fichas,tablero,window,pos):
                     window[event].update("")
 
 def confirmar(window,tablero,puntos,turnoIA=False):
+    '''confirma la palabra, suma los puntos y los devuelve'''
     nuevos_puntos=tablero.confirmar_letras()
     puntos=puntos+nuevos_puntos
     if turnoIA:

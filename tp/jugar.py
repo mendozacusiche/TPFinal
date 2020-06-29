@@ -79,17 +79,17 @@ def iniciar(iniciado, t, window, config, tiempo_turno, tablero):
     return True, fichas_jugador, bolsa, Inteligencia
 
 def crear_botones(n, tablero):
-    return [[sg.Button(" ",font=("Impact", 9),size=(3,0),pad=(0,0),key=("b_"+str(n)+"_"+str(i)))]for i in range(tablero.get_tamanio())]
+    return [[sg.Button(" ",font=("Current", 9),size=(3,0),pad=(0,0),key=("b_"+str(n)+"_"+str(i)))]for i in range(tablero.get_tamanio())]
 
 def crear_layout(tablero, tiempos, jugador):
 
-    layout_fichasIA=[[sg.Button("#",font=("Impact",14), button_color=color_button, key=("-letraIA"+str(i)+"-")) for i in range(7)]]
-    layout_fichas_jugador=[[sg.Button(" ",font=("Impact",14), button_color=color_button, key=("-letra"+str(i)+"-")) for i in range(7)]]
+    layout_fichasIA=[[sg.Button("#",font=("Current",14), button_color=color_button, key=("-letraIA"+str(i)+"-")) for i in range(7)]]
+    layout_fichas_jugador=[[sg.Button(" ",font=("Current",14), button_color=color_button, key=("-letra"+str(i)+"-")) for i in range(7)]]
 
     columna_1 = [
                 [sg.Frame('FICHAS COMPUTADORA',layout_fichasIA)],
                 [sg.Column(crear_botones(i, tablero), pad=(0,0)) for i in range(tablero.get_tamanio())],
-                [sg.Frame('FICHAS JUGADOR',layout_fichas_jugador),sg.Button('CAMBIAR',font=("Impact",12))]
+                [sg.Frame('FICHAS JUGADOR',layout_fichas_jugador),sg.Button('CAMBIAR',font=("Current",12))]
             ]
 
 
@@ -102,18 +102,18 @@ def crear_layout(tablero, tiempos, jugador):
               ]
 
     columna_2 = [
-                [sg.Button('INICIAR',font=("Impact",14))],
+                [sg.Button('INICIAR',font=("Current",14))],
                 [sg.Frame('DURACION DEL JUEGO',Tiempo_juego, pad=(10,10), relief= 'solid'), sg.Frame('DURACION DEL TURNO',T_turno, pad= (10, 10), relief= 'solid')],
                 [sg.Image(filename='imagenes/playerlogo.png', pad=(5, 0)), sg.Text(jugador)],
                 [sg.Text('PUNTAJE'), sg.Text('0000000',key=("-puntos-")) ],
                 [sg.Image(filename='imagenes/computerlogo.png', pad=(5, 0)), sg.Text('PC')],
                 [sg.Text('PUNTAJE'), sg.Text('0000000',key=("-puntosIA-"))],
                 [sg.Text('FICHAS EN BOLSA:'), sg.Text("000", key=("-CantFichas-"))],
-                [sg.Button('Pasar',font=("Impact",10))],
-                [sg.Button("Evaluar Palabra",font=("Impact",10))], 
-                [sg.Button('Posponer',font=("Impact",10))],
-                [sg.Button('Terminar',font=("Impact",10))],
-                [sg.Button('Exit',font=("Impact",10))]
+                [sg.Button('Pasar',font=("Current",10))],
+                [sg.Button("Evaluar Palabra",font=("Current",10))], 
+                [sg.Button('Posponer',font=("Current",10))],
+                [sg.Button('Terminar',font=("Current",10))],
+                [sg.Button('Exit',font=("Current",10))]
                 ]
 
     layout = [  

@@ -14,7 +14,7 @@ def crear():
 	return datos
 	
 def actualizar(dic,nivel):
-	'''actualizo los records en el nivel que corresponda''
+	'''actualizo los records en el nivel que corresponda'''
 	with open('topten.txt','r') as p:
 		datos=json.load(p)
 	if nivel in datos.keys():

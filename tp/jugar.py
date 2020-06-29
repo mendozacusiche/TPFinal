@@ -85,7 +85,7 @@ def crear_botones(n, tablero):
     return [[sg.Button(" ",font=("Current", 9),size=(3,0),pad=(0,0),key=("b_"+str(n)+"_"+str(i)))]for i in range(tablero.get_tamanio())]
 
 def crear_layout(tablero, tiempos, jugador):
-
+    '''Creación de la ventana de juego'''
     layout_fichasIA=[[sg.Button("#",font=("Current",14), button_color=color_button, key=("-letraIA"+str(i)+"-")) for i in range(7)]]
     layout_fichas_jugador=[[sg.Button(" ",font=("Current",14), button_color=color_button, key=("-letra"+str(i)+"-")) for i in range(7)]]
 

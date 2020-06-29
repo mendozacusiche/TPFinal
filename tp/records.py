@@ -1,7 +1,11 @@
 import json
+import PySimpleGUI as sg
 
-#def  ventana ():
-#	pass
+def  ventana ():
+	layout=[[sg.Text('Acá van los records')]]
+	window=sg.Window('record',layout)
+	event,values=window.Read()
+
 
 def crear():
 	datos={'Facil':{},'Medio':{},'Dificil':{}}

@@ -32,12 +32,12 @@ def imprimir(nivel):
 		print(json.dumps(datos,indent=4))
 		
 
-nom='pepe'
-punt=0
-dic={nom:punt}
-nivel='Dificil'
+#nom='pepe'
+#punt=0
+#dic={nom:punt}
+#nivel='Dificil'
 #datos=crear() #ojo que cada vez que ejecuta borra todo
-datos={}
-datos=actualizar(dic,nivel)
-guardarDatos(datos)
-imprimir(nivel)
+#datos={}
+#datos=actualizar(dic,nivel)
+#guardarDatos(datos)
+#imprimir(nivel)

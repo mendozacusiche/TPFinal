@@ -21,6 +21,7 @@ def terminar():
     pass
 
 def recargar_fichas(fichas, bolsa, window, turnoIA=False):
+    ''se entrega la misma cantidad de fichas usadas por el jugador''
     usadas=fichas.get_usadas()
     for i in range(7):
         if usadas[i]:
@@ -38,10 +39,11 @@ def pasar(tablero,fichas,tiempos,tiempo_turno,Intel,bolsa,window,turnoIA=False):
     Intel.set_mi_turno(not turnoIA)
 
 def segundo(tablero,fichas_jugador, Intel, tiempo_turno, bolsa, window, t):
+    '''Se reducen las variables de tiempo total y tiempo del turno por segundo, cuando llega el tiempo del turno a 0 se pasa el turno'''
     while (t[0]>0):
         time.sleep(1)
-        t[0]-=1
-        t[1]-=1
+        t[0]-=1 #tiempo total
+        t[1]-=1 #tiempo turno
         if(t[1]== 0):
             if Intel.get_mi_turno():
                 pasar(tablero,Intel.get_fichas(),t,tiempo_turno,Intel,bolsa,window,True)

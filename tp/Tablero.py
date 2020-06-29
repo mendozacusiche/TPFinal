@@ -1,5 +1,6 @@
 class Tablero():
 	def __init__(self, nivel):
+		'''Seteamos el tamaño por nivel e inicializamos el tablero como vacio'''
 		if nivel == "Facil":
 			self.__tamanio=23
 		elif nivel == "Medio":
@@ -89,4 +90,4 @@ class Tablero():
 			for y in range(self.__tamanio):
 				if ((not self.__confirmadas[x][y]) and (self.__letras[x][y]!="")):
 					self.__confirmadas[x][y]=True
-		return 10
+		return 10 #por ahora solo devuelve 10 puntos en todas las palabras

@@ -21,7 +21,7 @@ def terminar():
     pass
 
 def recargar_fichas(fichas, bolsa, window, turnoIA=False):
-    ''se entrega la misma cantidad de fichas usadas por el jugador''
+    '''se entrega la misma cantidad de fichas usadas por el jugador'''
     usadas=fichas.get_usadas()
     for i in range(7):
         if usadas[i]:

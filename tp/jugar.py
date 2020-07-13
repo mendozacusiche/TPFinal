@@ -88,6 +88,7 @@ def crear_botones(tablero, dificultad):
         return [[sg.Button(" ", button_color=(None, '#a6a3a2'), size=(0,0), pad=(0, 0), key=("b_"+str(x)+"_"+str(y))) for x in range(tablero.get_tamanio())] for y in range(tablero.get_tamanio())]
     else:
         return [[sg.Button(" ", button_color=(None, '#a6a3a2'), size=(2,2), pad=(0, 0), key=("b_"+str(x)+"_"+str(y))) for x in range(tablero.get_tamanio())] for y in range(tablero.get_tamanio())]
+
 def diseño_facil(window):
     # Agrega todos los cuadrados premium que influyen en la puntuación de la palabra.
     uno= (('b_0_6'), ('b_1_7'), ('b_2_8'), ('b_3_9'), ('b_4_10'), ('b_5_11'), ('b_6_12'), ('b_7_13'),('b_8_14'), ('b_9_15'), ('b_10_16'),('b_11_17'), ('b_12_18'), ('b_13_19'),('b_14_20'),('b_15_21'),('b_16_22'))
@@ -174,19 +175,19 @@ def crear_layout(tablero, tiempos, jugador, dificultad):
               ]
 
     columna_2 = [
-                [sg.T(' '*4),sg.Button('INICIAR',font=("Current",9), size=(10, 0),pad=(0, 0)), sg.Button('TERMINAR',font=("Current",9),size=(10, 0), pad=(0, 0)),sg.Button('EXIT',font=("Current", 9), size=(10, 0), pad=(0, 0))],
+                [sg.T(' '*4),sg.Button('INICIAR',font=("Current",10), size=(10, 0),pad=(0, 0)), sg.Button('TERMINAR',font=("Current",10),size=(10, 0), pad=(0, 0)),sg.Button('EXIT',font=("Current", 10), size=(10, 0), pad=(0, 0))],
                 [sg.Frame('DURACION DEL JUEGO',Tiempo_juego, pad=(10,10), relief= 'solid'), sg.Frame('DURACION DEL TURNO',T_turno, pad= (10, 10), relief= 'solid')],
                 [sg.Image(filename='imagenes/playerlogo.png', pad=(5, 0)), sg.Text(jugador)],
                 [sg.Text('PUNTAJE'), sg.Text('0000000',key=("-puntos-")) ],
                 [sg.Image(filename='imagenes/computerlogo.png', pad=(5, 0)), sg.Text('PC')],
                 [sg.Text('PUNTAJE'), sg.Text('0000000',key=("-puntosIA-"))],
                 [sg.Text('FICHAS EN BOLSA:'), sg.Text("000", key=("-CantFichas-"))],
-                [sg.Button('Pasar',font=("Current",9),size=(15, 0))],
-                [sg.Button("Evaluar Palabra",font=("Current",9),size=(15, 0))], 
-                [sg.Button('Posponer',font=("Current",9), size=(15, 0))],
+                [sg.Button('Pasar',font=("Current",10),size=(15, 0))],
+                [sg.Button("Evaluar Palabra",font=("Current",10),size=(15, 0))], 
+                [sg.Button('Posponer',font=("Current",10), size=(15, 0))],
                 #[sg.Button('Terminar',font=("Current",9),size=(10, 0))],
                 #[sg.Button('Exit',font=("Current", 9), size=(10, 0))]
-                [sg.Button('Cambiar',font=("Current",9),size=(15, 0))]
+                [sg.Button('Cambiar',font=("Current",10),size=(15, 0))]
                 ]
 
     layout = [  

@@ -1,7 +1,11 @@
 import json
+import PySimpleGUI as sg
 
-#def  ventana ():
-#	pass
+def  ventana ():
+	layout=[[sg.Text('Acá van los records')]]
+	window=sg.Window('record',layout)
+	event,values=window.Read()
+
 
 def crear():
 	datos={'Facil':{},'Medio':{},'Dificil':{}}
@@ -10,6 +14,7 @@ def crear():
 	return datos
 	
 def actualizar(dic,nivel):
+	'''actualizo los records en el nivel que corresponda'''
 	with open('topten.txt','r') as p:
 		datos=json.load(p)
 	if nivel in datos.keys():
@@ -32,12 +37,12 @@ def imprimir(nivel):
 		print(json.dumps(datos,indent=4))
 		
 
-nom='pepe'
-punt=0
-dic={nom:punt}
-nivel='Dificil'
+#nom='pepe'
+#punt=0
+#dic={nom:punt}
+#nivel='Dificil'
 #datos=crear() #ojo que cada vez que ejecuta borra todo
-datos={}
-datos=actualizar(dic,nivel)
-guardarDatos(datos)
-imprimir(nivel)
+#datos={}
+#datos=actualizar(dic,nivel)
+#guardarDatos(datos)
+#imprimir(nivel)

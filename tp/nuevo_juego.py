@@ -3,11 +3,11 @@ import configuracion, jugar
 
 
 def ventana():
-	columna1=[[sg.Text("tablero")]]
+	columna1=[[sg.Text("Acá iría imagen del tablero")]]
 				
-	columna2=[[sg.Text("descripción configuración predeterminada")],
-			[sg.Button('Configuracion',font=("Current ",9), size=(29,0))],
-			[sg.Button('Jugar',font=("Current ",9),size=(12,0)), sg.Button('Atras',font=("Current ",9), size=(12,0))]
+	columna2=[[sg.Text("Acá descripción configuración actual")],
+			[sg.Button('Configuracion',font=("Current",10), size =(29, 0))],
+			[sg.Button('Jugar',font=("Current",10), size=(12, 0)), sg.Button('Atras',font=("Current",10), size=(12,0))]
 			]
 	
 	layout=[[sg.Column(columna1),sg.Column(columna2)]]

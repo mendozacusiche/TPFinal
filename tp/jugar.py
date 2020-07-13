@@ -1,19 +1,22 @@
 import PySimpleGUI as sg
 from string import ascii_uppercase as up
 import random, sys, time, json, threading, ventana_bienvenida, Fichas, Tablero, IA
-from pattern.es import parse, conjugate, INFINITIVE
+from pattern.es import *   #parse, conjugate, INFINITIVE
 
 def evaluar(palabra, dificultad):
     ok=False
+    analisis = parse(palabra).split('/')
     if palabra != "No es palabra":
-        if (dificultad == "Facil") and (parse(palabra).split("/")[1] in ("JJ","NN","VB")):
+        if (dificultad == "Facil") and (analisis[1] in ("JJ","NN","VB")):
             ok=True
-        elif (dificultad == "Medio") and (parse(palabra).split("/")[1] in ("JJ","VB")):
+        elif (dificultad == "Medio") and (analisis[1] in ("JJ","VB")):
             ok=True
-        elif (dificultad == "DificilVerbos") and (parse(palabra).split("/")[1] in ("VB")):
+        elif (dificultad == "DificilVerbos") and (analisis[1] in ("VB")):
             ok=True
-        elif (dificultad == "DificilAdjetivos") and (parse(palabra).split("/")[1] in ("JJ")):
+        elif (dificultad == "DificilAdjetivos") and (analisis[1] in ("JJ")):
             ok=True
+    else:
+        sg.popup("La Palapra Ingresada No es Valida")
     return ok
 
 def terminar():
@@ -78,42 +81,112 @@ def iniciar(iniciado, t, window, config, tiempo_turno, tablero):
     window["-CantFichas-"].update(str(contar_letras_bolsa(bolsa)))
     return True, fichas_jugador, bolsa, Inteligencia
 
-def crear_botones(n, tablero):
-    return [[sg.Button(" ",font=("Impact", 9),size=(3,0),pad=(0,0),key=("b_"+str(n)+"_"+str(i)))]for i in range(tablero.get_tamanio())]
+#def crear_botones(n, tablero):
+def crear_botones(tablero, dificultad): 
+    #return [[sg.Button(" ", button_color=('SkyBlue3', 'SkyBlue3'), size=(0,0),pad=(0,0),key=("b_"+str(n)+"_"+str(i)))]for i in range(tablero.get_tamanio())]
+    if (dificultad == "Medio" or dificultad == "Facil"):
+        return [[sg.Button(" ", button_color=(None, '#a6a3a2'), size=(0,0), pad=(0, 0), key=("b_"+str(x)+"_"+str(y))) for x in range(tablero.get_tamanio())] for y in range(tablero.get_tamanio())]
+    else:
+        return [[sg.Button(" ", button_color=(None, '#a6a3a2'), size=(2,2), pad=(0, 0), key=("b_"+str(x)+"_"+str(y))) for x in range(tablero.get_tamanio())] for y in range(tablero.get_tamanio())]
+def diseño_facil(window):
+    # Agrega todos los cuadrados premium que influyen en la puntuación de la palabra.
+    uno= (('b_0_6'), ('b_1_7'), ('b_2_8'), ('b_3_9'), ('b_4_10'), ('b_5_11'), ('b_6_12'), ('b_7_13'),('b_8_14'), ('b_9_15'), ('b_10_16'),('b_11_17'), ('b_12_18'), ('b_13_19'),('b_14_20'),('b_15_21'),('b_16_22'))
+    dos= (('b_6_0'), ('b_7_1'), ('b_8_2'), ('b_9_3'), ('b_10_4'),('b_11_5'), ('b_12_6'), ('b_13_7'), ('b_14_8'), ('b_15_9'),('b_16_10'), ('b_17_11'), ('b_18_12'),('b_19_13'), ('b_20_14'), ('b_21_15'),('b_22_16'))
+    tres= (('b_0_17'), ('b_1_16'), ('b_2_15'), ('b_3_14'), ('b_4_13'), ('b_5_12'), ('b_6_11'), ('b_7_10'), ('b_8_9'), ('b_9_8'), ('b_10_7'),('b_11_6'), ('b_12_5'),('b_13_4'), ('b_14_3'), ('b_15_2'),('b_16_1'), ('b_17_0'))
+    cuatro = (('b_6_22'), ('b_7_21'), ('b_8_20'), ('b_9_19'), ('b_10_18'), ('b_11_17'), ('b_12_16'),('b_13_15'), ('b_14_14'), ('b_15_13'), ('b_16_12'), ('b_17_11'), ('b_18_10'), ('b_19_9'), ('b_20_8'), ('b_21_7'), ('b_22_6'))
+    cinco = (('b_1_5'), ('b_2_4'), ('b_3_3'), ('b_4_2'), ('b_5_1'), ('b_1_18'), ('b_2_19'),('b_3_20'), ('b_4_21'), ('b_5_22'), ('b_18_1'), ('b_19_2'), ('b_20_3'), ('b_21_4'), ('b_22_5'), ('b_17_22'), ('b_18_21'),('b_19_20'), ('b_20_19'),('b_21_18'), ('b_22_17'))
+    seis = (('b_6_5'), ('b_17_5'), ('b_11_11'), ('b_6_17'),('b_17_17'),('b_0_0'), ('b_11_0'), ('b_22_0'),('b_0_11'), ('b_22_11'), ('b_0_22'),('b_11_22'),('b_22_22'))
+    
+    for i in range(len(uno)):
+        window[uno[i]].update(button_color=(None, 'red'))
+    for j in range(len(dos)):
+        window[dos[j]].update(button_color=(None, 'blue'))
+    for y in range(len(tres)):
+        window[tres[y]].update(button_color=(None, 'yellow'))
+    for z in range(len(cuatro)):
+        window[cuatro[z]].update(button_color=(None, 'green'))
+    for w in range(len(cinco)):
+        window[cinco[w]].update(button_color=(None, '#00b7ff'))
+    for x in range(len(seis)):
+        window[seis[x]].update(button_color=(None, '#ff8c00'))
+    
 
-def crear_layout(tablero, tiempos, jugador):
+def diseño_medio(window):
+    # Agrega todos los cuadrados premium que influyen en la puntuación de la palabra.
+    uno =(('b_0_0'), ('b_0_9'), ('b_0_18'), ('b_9_0'), ('b_9_9'), ('b_9_18'), ('b_18_0'), ('b_18_9'), ('b_18_18'))
+    dos =(('b_1_1'), ('b_2_2'), ('b_3_3'), ('b_4_4'), ('b_5_5'), ('b_6_6'), ('b_7_7'), ('b_8_8'), ('b_10_10'), ('b_11_11'), ('b_12_12'), ('b_13_13'), ('b_14_14'), ('b_15_15'), ('b_16_16'), ('b_17_17'),
+          ('b_17_1'), ('b_16_2'), ('b_15_3'), ('b_14_4'), ('b_13_5'), ('b_12_6'), ('b_11_7'), ('b_10_8'), ('b_8_10'), ('b_7_11'), ('b_6_12'), ('b_5_13'), ('b_4_14'), ('b_3_15'), ('b_2_16'), ('b_1_17'))
+    tres =(('b_4_9'),('b_9_4'),('b_14_9'),('b_9_14'))
+    
+    for i in range(len(uno)):
+         window[uno[i]].update(button_color=(None, 'green'))
+    for j in range(len(dos)):
+         window[dos[j]].update(button_color=(None, 'IndianRed1'))
+    for x in range(len(tres)):
+         window[tres[x]].update(button_color=(None, 'orange3'))
 
-    layout_fichasIA=[[sg.Button("#",font=("Impact",14), button_color=color_button, key=("-letraIA"+str(i)+"-")) for i in range(7)]]
-    layout_fichas_jugador=[[sg.Button(" ",font=("Impact",14), button_color=color_button, key=("-letra"+str(i)+"-")) for i in range(7)]]
+def diseño_dificil(window):
+    # Agrega todos los cuadrados premium que influyen en la puntuación de la palabra.
+    uno= (('b_0_0'), ('b_7_0'), ('b_14_0'), ('b_0_7'), ('b_14_7'), ('b_0_14'), ('b_7_14'), ('b_14_14'))
+    dos= (('b_1_1'),   ('b_2_2'), ('b_3_3'), ('b_4_4'), ('b_1_13'),('b_2_12'), ('b_3_11'), ('b_4_10'), ('b_13_1'), ('b_12_2'),('b_11_3'), ('b_10_4'), ('b_13_13'),('b_12_12'), ('b_11_11'), ('b_10_10'))
+    tres= (('b_1_5'), ('b_1_9'), ('b_5_1'), ('b_5_5'), ('b_5_9'), ('b_5_13'), ('b_9_1'), ('b_9_5'), ('b_9_9'), ('b_9_13'), ('b_13_5'), ('b_13_9'), ('b_7_7'))
+    cuatro = (('b_0_3'), ('b_0_11'), ('b_2_6'), ('b_2_8'), ('b_3_0'), ('b_3_7'), ('b_3_14'),('b_6_2'), ('b_6_6'), ('b_6_8'), ('b_6_12'), ('b_7_3'), ('b_7_11'), ('b_8_2'), ('b_8_6'), ('b_8_8'), ('b_8_12'), ('b_11_0'), ('b_11_7'), ('b_11_14'), ('b_12_6'), ('b_12_8'), ('b_14_3'), ('b_14_11'))
 
+    for i in range(len(uno)):
+        window[uno[i]].update(button_color=(None, '#fc2a00'))
+    for j in range(len(dos)):
+        window[dos[j]].update(button_color=(None, '#f09605'))
+    for x in range(len(tres)):
+        window[tres[x]].update(button_color=(None,'#4fb304'))
+    for y in range(len(cuatro)):
+        window[cuatro[y]].update(button_color=(None, '#007eb0'))
+    
+
+def cambiar_colores(window, dificultad):
+    
+    if(dificultad == "Facil"):
+        diseño_facil(window)
+    elif(dificultad == "Medio"):
+        diseño_medio(window)
+    else:
+        diseño_dificil(window)
+
+def crear_layout(tablero, tiempos, jugador, dificultad):
+
+    layout_fichasIA=[[sg.Button("#",font=("Current",9),size=(0,0), pad=(20, 0), button_color=color_button, key=("-letraIA"+str(i)+"-")) for i in range(7)]]
+    layout_fichas_jugador=[[sg.Button(" ",font=("Current",9),size=(1,1), pad=(20, 0), button_color=color_button, key=("-letra"+str(i)+"-")) for i in range(7)]]
+
+    
     columna_1 = [
                 [sg.Frame('FICHAS COMPUTADORA',layout_fichasIA)],
-                [sg.Column(crear_botones(i, tablero), pad=(0,0)) for i in range(tablero.get_tamanio())],
-                [sg.Frame('FICHAS JUGADOR',layout_fichas_jugador),sg.Button('CAMBIAR',font=("Impact",12))]
+                #[sg.Column(crear_botones(i, tablero), pad=(0,0)) for i in range(tablero.get_tamanio())],
+                [sg.Column(crear_botones(tablero, dificultad), background_color= 'grey40', justification='center', )],
+                [sg.Frame('FICHAS JUGADOR',layout_fichas_jugador)]
             ]
 
 
-    Tiempo_juego= [
-                    [sg.Text(f"{tiempos[0] // 60}:{tiempos[0]%60:02d}",size=(10, 2), font=('Helvetica', 20), justification='center', key='-TURNO-')],
+    Tiempo_juego= [       
+                    [sg.Text(f"{tiempos[0] // 60}:{tiempos[0]%60:02d}",size=(10, 2), text_color='white',font=('Digital-7',20), justification='center', key='-TURNO-')],
                   ]
 
-    T_turno = [
-                [sg.Text(f"{tiempos[1] // 60}:{tiempos[1]%60:02d}",size=(10, 2), font=('Helvetica', 20), justification='center', key='-DURACION-')],
+    T_turno = [                                                                  #'Helvetica'
+                [sg.Text(f"{tiempos[1] // 60}:{tiempos[1]%60:02d}",size=(10, 2), font=('Digital-7', 20), text_color='white',justification='center', key='-DURACION-')],
               ]
 
     columna_2 = [
-                [sg.Button('INICIAR',font=("Impact",14))],
+                [sg.T(' '*4),sg.Button('INICIAR',font=("Current",9), size=(10, 0),pad=(0, 0)), sg.Button('TERMINAR',font=("Current",9),size=(10, 0), pad=(0, 0)),sg.Button('EXIT',font=("Current", 9), size=(10, 0), pad=(0, 0))],
                 [sg.Frame('DURACION DEL JUEGO',Tiempo_juego, pad=(10,10), relief= 'solid'), sg.Frame('DURACION DEL TURNO',T_turno, pad= (10, 10), relief= 'solid')],
                 [sg.Image(filename='imagenes/playerlogo.png', pad=(5, 0)), sg.Text(jugador)],
                 [sg.Text('PUNTAJE'), sg.Text('0000000',key=("-puntos-")) ],
                 [sg.Image(filename='imagenes/computerlogo.png', pad=(5, 0)), sg.Text('PC')],
                 [sg.Text('PUNTAJE'), sg.Text('0000000',key=("-puntosIA-"))],
                 [sg.Text('FICHAS EN BOLSA:'), sg.Text("000", key=("-CantFichas-"))],
-                [sg.Button('Pasar',font=("Impact",10))],
-                [sg.Button("Evaluar Palabra",font=("Impact",10))], 
-                [sg.Button('Posponer',font=("Impact",10))],
-                [sg.Button('Terminar',font=("Impact",10))],
-                [sg.Button('Exit',font=("Impact",10))]
+                [sg.Button('Pasar',font=("Current",9),size=(15, 0))],
+                [sg.Button("Evaluar Palabra",font=("Current",9),size=(15, 0))], 
+                [sg.Button('Posponer',font=("Current",9), size=(15, 0))],
+                #[sg.Button('Terminar',font=("Current",9),size=(10, 0))],
+                #[sg.Button('Exit',font=("Current", 9), size=(10, 0))]
+                [sg.Button('Cambiar',font=("Current",9),size=(15, 0))]
                 ]
 
     layout = [  
@@ -121,7 +194,7 @@ def crear_layout(tablero, tiempos, jugador):
              ]
     return layout     
 
-def checkear_ficha(event, fichas, window, n):
+def checkear_ficha(event, fichas, window, n):  
     if (fichas.get_checked()[n]==False):
         fichas.descheckear_todas(window)
         fichas.checkear(n)
@@ -201,15 +274,24 @@ def confirmar(window,tablero,puntos,turnoIA=False):
 
 def juego(cargar=False):
     if cargar:
-        archivo= open("guardado.txt","r")
-        config = json.load(archivo)
-        jugador = config["jugador"]
-        ventana_bienvenida.ventana(jugador) 
-        puntos=config["puntos"]
-        puntosIA=config["puntosIA"]
+        try:
+            archivo= open("guardado.txt","r")
+            config = json.load(archivo)
+            jugador = config["jugador"]
+            ventana_bienvenida.ventana(jugador) 
+            puntos=config["puntos"]
+            puntosIA=config["puntosIA"]
+        except FileNotFoundError as ex:
+            print('Nose encontro el  archivo.......')
+        
     else:
-        archivo= open("config.txt","r")
-        config = json.load(archivo)
+        try:
+            archivo= open("config.txt","r")
+            config = json.load(archivo)
+        except FileNotFoundError as ex:
+            print(ex)
+            print('Nose encontro el archivo')
+        
         jugador = ventana_bienvenida.ventana()
         puntos=0
         puntosIA=0
@@ -225,9 +307,9 @@ def juego(cargar=False):
 
     tablero = Tablero.Tablero(dificultad)
 
-    layout = crear_layout(tablero, tiempos, jugador)    
+    layout = crear_layout(tablero, tiempos, jugador, dificultad)    
 
-    window = sg.Window('ScrabbleAR',resizable= True,).Layout(layout).Finalize()
+    window = sg.Window('ScrabbleAR',resizable= True,element_justification='center',).Layout(layout).Finalize()
 
     iniciado=False
     pos_letra= -1
@@ -235,11 +317,13 @@ def juego(cargar=False):
     while True:                    
         event, values = window.Read(timeout=250)
         print(event, values)
-        if event in (None,'Exit'):
+        if event in (None,'EXIT'):
             break
         elif event == "INICIAR":
             if not iniciado:
                 iniciado, fichas_jugador, bolsa, Inteligencia = iniciar(iniciado, tiempos, window, config, tiempo_turno, tablero)
+                #actualiza el tablero con las casillas de primio  por nivel
+                cambiar_colores(window,dificultad)
         elif event == sg.TIMEOUT_KEY:
             window["-TURNO-"].update(f"{tiempos[0] // 60}:{tiempos[0]%60:02d}")
             window["-DURACION-"].update(f"{tiempos[1] // 60}:{tiempos[1]%60:02d}")

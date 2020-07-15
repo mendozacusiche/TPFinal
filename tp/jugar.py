@@ -84,10 +84,16 @@ def iniciar(iniciado, t, window, config, tiempo_turno, tablero):
 #def crear_botones(n, tablero):
 def crear_botones(tablero, dificultad): 
     #return [[sg.Button(" ", button_color=('SkyBlue3', 'SkyBlue3'), size=(0,0),pad=(0,0),key=("b_"+str(n)+"_"+str(i)))]for i in range(tablero.get_tamanio())]
-    if (dificultad == "Medio" or dificultad == "Facil"):
-        return [[sg.Button(" ", button_color=(None, '#a6a3a2'), size=(0,0), pad=(0, 0), key=("b_"+str(x)+"_"+str(y))) for x in range(tablero.get_tamanio())] for y in range(tablero.get_tamanio())]
+    if sys.platform == "win32":
+        if (dificultad == "Medio" or dificultad == "Facil"):
+            return [[sg.Button(" ", button_color=(None, '#a6a3a2'), size=(2,0), pad=(0, 0), key=("b_"+str(x)+"_"+str(y))) for x in range(tablero.get_tamanio())] for y in range(tablero.get_tamanio())]
+        else:
+            return [[sg.Button(" ", button_color=(None, '#a6a3a2'), size=(4,2), pad=(0, 0), key=("b_"+str(x)+"_"+str(y))) for x in range(tablero.get_tamanio())] for y in range(tablero.get_tamanio())]
     else:
-        return [[sg.Button(" ", button_color=(None, '#a6a3a2'), size=(2,2), pad=(0, 0), key=("b_"+str(x)+"_"+str(y))) for x in range(tablero.get_tamanio())] for y in range(tablero.get_tamanio())]
+        if (dificultad == "Medio" or dificultad == "Facil"):
+            return [[sg.Button(" ", button_color=(None, '#a6a3a2'), size=(0,0), pad=(0, 0), key=("b_"+str(x)+"_"+str(y))) for x in range(tablero.get_tamanio())] for y in range(tablero.get_tamanio())]
+        else:
+            return [[sg.Button(" ", button_color=(None, '#a6a3a2'), size=(2,2), pad=(0, 0), key=("b_"+str(x)+"_"+str(y))) for x in range(tablero.get_tamanio())] for y in range(tablero.get_tamanio())]
 
 def diseño_facil(window):
     # Agrega todos los cuadrados premium que influyen en la puntuación de la palabra.

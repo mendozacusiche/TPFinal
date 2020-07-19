@@ -1,3 +1,5 @@
+import jugar
+
 class Tablero():
 	def __init__(self, nivel):
 		'''Seteamos el tamaño por nivel e inicializamos el tablero como vacio'''
@@ -92,3 +94,45 @@ class Tablero():
 				if ((not self.__confirmadas[x][y]) and (self.__letras[x][y]!="")):
 					self.__confirmadas[x][y]=True
 		return 10 #por ahora solo devuelve 10 puntos en todas las palabras
+
+	def insertar_palabra(self,palabra,window,puntos):
+		casillas=[]
+		ok=False
+		for i in range(self.__tamanio):
+			for j in range(self.__tamanio):
+				if(not self.__confirmadas[j][i]):
+					casillas.append((j,i))
+					if(len(casillas)==len(palabra.split())):
+						ok=True
+						break
+				else:
+					casillas=[]
+			if(ok):
+				break
+			else:
+				casillas=[]
+
+		if(not ok):
+			for i in range(self.__tamanio):
+				for j in range(self.__tamanio):
+					if(not self.__confirmadas[i][j]):
+						casillas.append((i,j))
+						if(len(casillas)==len(palabra.split())):
+							ok=True
+							break
+					else:
+						casillas=[]
+				if(ok):
+					break
+				else:
+					casillas=[]
+
+		if(ok):
+			i=0
+			for c in casillas:
+				self.__letras[c[0]][c[1]]=palabra.split()[i]
+				window["b_"+str(c[0])+"_"+str(c[1])].update(palabra.split()[i])
+				i+=1
+			puntos=jugar.confirmar(window,self,puntos,True)
+
+		return ok, puntos

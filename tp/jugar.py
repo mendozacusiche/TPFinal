@@ -66,9 +66,18 @@ def sacar_letra_bolsa(bolsa):
     bolsa[letra]-=1
     return letra
 
-def iniciar(iniciado, t, window, config, tiempo_turno, tablero):
+def cambiar_fichas(window,fichas,bolsa,tablero,turnoIA=False):
+    if(not turnoIA):
+        devolver_fichas(window,tablero,fichas)
+    for i in range(7):
+        bolsa[fichas.get_letras()[i]]+=1
+        fichas.set_letra(sacar_letra_bolsa(bolsa),i)
+        if(not turnoIA):
+            window["-letra"+str(i)+"-"].update(fichas.get_letra(i))
+
+def iniciar(iniciado, t, window, config, tiempo_turno, tablero, dificultad):
     bolsa=config["cant_fichas"]
-    Inteligencia = IA.IA (bolsa)
+    Inteligencia = IA.IA (bolsa,dificultad)
     nuevas=[]
     for i in range(7):
         l=sacar_letra_bolsa(bolsa)
@@ -82,8 +91,7 @@ def iniciar(iniciado, t, window, config, tiempo_turno, tablero):
     return True, fichas_jugador, bolsa, Inteligencia
 
 #def crear_botones(n, tablero):
-def crear_botones(tablero, dificultad): 
-    #return [[sg.Button(" ", button_color=('SkyBlue3', 'SkyBlue3'), size=(0,0),pad=(0,0),key=("b_"+str(n)+"_"+str(i)))]for i in range(tablero.get_tamanio())]
+def crear_botones(tablero, dificultad):
     if sys.platform == "win32":
         if (dificultad == "Medio" or dificultad == "Facil"):
             return [[sg.Button(" ", button_color=(None, '#a6a3a2'), size=(2,0), pad=(0, 0), key=("b_"+str(x)+"_"+str(y))) for x in range(tablero.get_tamanio())] for y in range(tablero.get_tamanio())]
@@ -193,7 +201,7 @@ def crear_layout(tablero, tiempos, jugador, dificultad):
                 [sg.Button('Posponer',font=("Current",10), size=(15, 0))],
                 #[sg.Button('Terminar',font=("Current",9),size=(10, 0))],
                 #[sg.Button('Exit',font=("Current", 9), size=(10, 0))]
-                [sg.Button('Cambiar',font=("Current",10),size=(15, 0))]
+                [sg.Button('Cambiar letras',font=("Current",10),size=(15, 0))]
                 ]
 
     layout = [  
@@ -288,8 +296,9 @@ def juego(cargar=False):
             ventana_bienvenida.ventana(jugador) 
             puntos=config["puntos"]
             puntosIA=config["puntosIA"]
+            cambios=config["cambios"]
         except FileNotFoundError as ex:
-            print('Nose encontro el  archivo.......')
+            print('No se encontro el  archivo.......')
         
     else:
         try:
@@ -297,11 +306,12 @@ def juego(cargar=False):
             config = json.load(archivo)
         except FileNotFoundError as ex:
             print(ex)
-            print('Nose encontro el archivo')
+            print('No se encontro el archivo')
         
         jugador = ventana_bienvenida.ventana()
         puntos=0
         puntosIA=0
+        cambios=3
 
     tiempo_total= int(config["tiempo_total"]) * 60
     tiempo_turno= int(config["tiempo_turno"]) * 60
@@ -328,7 +338,7 @@ def juego(cargar=False):
             break
         elif event == "INICIAR":
             if not iniciado:
-                iniciado, fichas_jugador, bolsa, Inteligencia = iniciar(iniciado, tiempos, window, config, tiempo_turno, tablero)
+                iniciado, fichas_jugador, bolsa, Inteligencia = iniciar(iniciado, tiempos, window, config, tiempo_turno, tablero, dificultad)
                 #actualiza el tablero con las casillas de primio  por nivel
                 cambiar_colores(window,dificultad)
         elif event == sg.TIMEOUT_KEY:
@@ -337,8 +347,13 @@ def juego(cargar=False):
         elif event in ("-letra0-","-letra1-","-letra2-","-letra3-","-letra4-","-letra5-","-letra6-"):
             if iniciado:
             	pos_letra = clickear_ficha(event, fichas_jugador, window)
-        elif event == "CAMBIAR":
-            pass
+        elif event == "Cambiar letras":
+            if iniciado and cambios>0:
+                cambiar_fichas(window,fichas_jugador,bolsa,tablero)
+                cambios-=1
+                pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
+                puntosIA=Inteligencia.turno(bolsa,window,tablero,puntosIA)
+                pasar(tablero,Inteligencia.get_fichas(),tiempos,tiempo_turno,Inteligencia,bolsa,window,True)
         elif event == "Posponer":
             pass
         elif event == "Terminar":
@@ -352,14 +367,17 @@ def juego(cargar=False):
                 if ok:
                     puntos=confirmar(window,tablero,puntos)
                     pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
-                    Inteligencia.turno()
+                    puntosIA=Inteligencia.turno(bolsa,window,tablero,puntosIA)
                     pasar(tablero,Inteligencia.get_fichas(),tiempos,tiempo_turno,Inteligencia,bolsa,window,True)
                 else:
                     devolver_fichas(window,tablero,fichas_jugador)
+                    pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
+                    puntosIA=Inteligencia.turno(bolsa,window,tablero,puntosIA)
+                    pasar(tablero,Inteligencia.get_fichas(),tiempos,tiempo_turno,Inteligencia,bolsa,window,True)
         elif event == "Pasar":
             if iniciado and not Inteligencia.get_mi_turno():
                 pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
-                Inteligencia.turno()
+                puntosIA=Inteligencia.turno(bolsa,window,tablero,puntosIA)
                 pasar(tablero,Inteligencia.get_fichas(),tiempos,tiempo_turno,Inteligencia,bolsa,window,True)
         else:
         	if iniciado:

@@ -12,6 +12,9 @@ class Fichas():
 	def get_letras(self):
 		return self.__letras
 
+	def get_letra(self,i):
+		return self.__letras[i]
+
 	def set_letra(self, l, i):
 		self.__letras[i] = l
 

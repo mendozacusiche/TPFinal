@@ -183,16 +183,43 @@ def definir_descripcion(dif,opcion=None):
 		descr="Palabras permitidas: "+opcion
 	return descr
 
+def definir_especiales(dif):
+	if dif=='Facil':
+		lay=[
+			[sg.Button(button_color=(None, 'red'),size=(2,1)),sg.Text("Duplica el valor de la letra")],
+			[sg.Button(button_color=(None, 'blue'),size=(2,1)),sg.Text("Triplica el valor de la letra")],
+			[sg.Button(button_color=(None, 'green'),size=(2,1)),sg.Text("Duplica el valor de la palabra")],
+			[sg.Button(button_color=(None, 'yellow'),size=(2,1)),sg.Text("Triplica el valor de la palabra")],
+			[sg.Button(button_color=(None, '#ff8c00'),size=(2,1)),sg.Text("Resta 2 al valor de la palabra")],
+			[sg.Button(button_color=(None, '#00b7ff'),size=(2,1)),sg.Text("Resa 3 al valor de la palabra")]
+		]
+	elif dif=='Medio':
+		lay=[
+			[sg.Button(button_color=(None,'IndianRed1'),size=(2,1)),sg.Text("Duplica el valor de la letra")],
+			[sg.Button(button_color=(None,'orange3'),size=(2,1)),sg.Text("Resta 2 al valor de la palabra")],
+			[sg.Button(button_color=(None,'green'),size=(2,1)),sg.Text("Resta 3 al valor de la palabra")]
+		]
+	else:
+		lay=[
+			[sg.Button(button_color=(None,'#007eb0'),size=(2,1)),sg.Text("Duplica el valor de la letra")],
+			[sg.Button(button_color=(None,'#fc2a00'),size=(2,1)),sg.Text("Triplica el valor de la letra")],
+			[sg.Button(button_color=(None,'#4fb304'),size=(2,1)),sg.Text("Resta 2 al valor de la palabra")],
+			[sg.Button(button_color=(None,'#f09605'),size=(2,1)),sg.Text("Resta 3 al valor de la palabra")]
+		]
+	return lay
+
 def crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion=None):
 
 	descr=definir_descripcion(dificultad,opcion)
+	lay=definir_especiales(dificultad)
 		
-	layout_fichasIA=[[sg.Button("#",font=("Current",9),size=(0,0), pad=(20, 0), button_color=color_button, key=("-letraIA"+str(i)+"-")) for i in range(7)]]
-	layout_fichas_jugador=[[sg.Button(" ",font=("Current",9),size=(2,1), pad=(20, 0), button_color=color_button, key=("-letra"+str(i)+"-")) for i in range(7)]]
+	layout_fichasIA=[[sg.Button("#",font=("Current",9),size=(0,0), pad=(20, 0), button_color=color_button, key=("-letraIA"+str(i)+"-")) for i in range(7)]]#,sg.Text('',key='-PC-')]]
+	layout_fichas_jugador=[[sg.Button(" ",font=("Current",9),size=(2,1), pad=(20, 0), button_color=color_button, key=("-letra"+str(i)+"-")) for i in range(7)]]#,sg.Text('',key='-Jug-')]]
    
 	columna_0 = [
-					[sg.Text('acá van los casilleros especiales')],
-					[sg.Text('acá van los mensajes de la partida')]
+					[sg.Column(lay)],
+					[sg.Text('Mensajes del sistema: ')], 
+					[sg.Text('',key='-turno-',font=("Current",10), size=(10, 0),pad=(0, 0))]
 					]
     
 	columna_1 =	[
@@ -399,13 +426,18 @@ def juego(cargar=False):
 				else:
 					devolver_fichas(window,tablero,fichas_jugador)
 				pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
+				window['-turno-'].update('Turno PC')
 				Inteligencia.turno(bolsa,window,tablero)
 				pasar(tablero,Inteligencia.get_fichas(),tiempos,tiempo_turno,Inteligencia,bolsa,window,True)
+				window['-turno-'].update('Tu turno')
 		elif event == "Pasar":
 			if iniciado and not Inteligencia.get_mi_turno():
 				pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
+				window['-turno-'].update('Turno PC')
+				
 				Inteligencia.turno(bolsa,window,tablero)
 				pasar(tablero,Inteligencia.get_fichas(),tiempos,tiempo_turno,Inteligencia,bolsa,window,True)
+				window['-turno-'].update('Tu turno')
 		else:
 			if iniciado:
 				colocar_letra(event,fichas_jugador,tablero,window,pos_letra)

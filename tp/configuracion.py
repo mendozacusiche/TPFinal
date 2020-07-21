@@ -124,6 +124,7 @@ def ventana(wind):
 
 		if evento == "Aplicar":
 			aplicar(valores, nuevos_puntajes, nuevas_cantidades,wind)
+			break
 
 		elif evento == "Restaurar":
 			restaurar(window)

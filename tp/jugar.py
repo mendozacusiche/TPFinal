@@ -170,7 +170,11 @@ def crear_layout(tablero, tiempos, jugador, dificultad):
 
     layout_fichasIA=[[sg.Button("#",font=("Current",9),size=(0,0), pad=(20, 0), button_color=color_button, key=("-letraIA"+str(i)+"-")) for i in range(7)]]
     layout_fichas_jugador=[[sg.Button(" ",font=("Current",9),size=(1,1), pad=(20, 0), button_color=color_button, key=("-letra"+str(i)+"-")) for i in range(7)]]
-
+    
+    columna_0 = [
+                    [sg.Text('acá van los casilleros especiales')],
+                    [sg.Text('acá van los mensajes de la partida')]
+                    ]
     
     columna_1 = [
                 [sg.Frame('FICHAS COMPUTADORA',layout_fichasIA)],
@@ -204,8 +208,9 @@ def crear_layout(tablero, tiempos, jugador, dificultad):
                 [sg.Button('Cambiar letras',font=("Current",10),size=(15, 0))]
                 ]
 
+    
     layout = [  
-                [sg.Column(columna_1, pad=(0,0)), sg.Frame('CONFIGURACION', columna_2, pad=(20, 50), relief= 'solid')],
+                [sg.Column(columna_0),sg.Column(columna_1, pad=(0,0)), sg.Frame('CONFIGURACION', columna_2, pad=(20, 50), relief= 'solid')],
              ]
     return layout     
 

@@ -2,16 +2,17 @@ import jugar, Fichas, Tablero
 
 class IA():
 
-	def __init__(self,bolsa,dificultad):
+	def __init__(self,bolsa,dificultad,puntos):
 		nuevas=[]
 		for i in range(7):
 			l=jugar.sacar_letra_bolsa(bolsa)
 			nuevas.append(l)
 		self.__fichas=Fichas.Fichas(nuevas)
 		self.__mi_turno=False
+		self.__procesando=False
 		self.__dificultad=dificultad
 		self.__cambios_letras=3
-		self.__puntos=0
+		self.__puntos=puntos
 
 	def combinaciones(self,combs,pal,marcas,letras,largo):
 		if (largo>0):
@@ -40,11 +41,13 @@ class IA():
 			n-=1
 		return palabra
 
-	def turno(self,bolsa,window,tablero):
+	def turno(self,bolsa,window,tablero,puntos):
+		self.__procesando=True
 		palabra=self.buscar_palabra()
 
 		if (palabra!=""):
-			ok, self.__puntos = tablero.insertar_palabra(palabra,window,self.__puntos)
+			ok = tablero.insertar_palabra(palabra,window,puntos)
+			self.__puntos=puntos[1]
 			if(ok):
 				for l in palabra.split():
 					i=0
@@ -58,7 +61,11 @@ class IA():
 			if self.__cambios_letras > 0:
 				jugar.cambiar_fichas(window,self.__fichas,bolsa,tablero,True)
 				self.__cambios_letras-=1
+		self.__procesando=False
 
+	def get_procesando(self):
+		return self.__procesando
+		
 	def get_mi_turno(self):
 		return self.__mi_turno
 

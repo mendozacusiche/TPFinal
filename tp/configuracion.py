@@ -1,7 +1,7 @@
 import PySimpleGUI as sg
 import json
 
-def aplicar(vals, punts, cants):
+def aplicar(vals, punts, cants,wind):
 	try:
 		archivo=open("config.txt","r+")
 
@@ -18,7 +18,12 @@ def aplicar(vals, punts, cants):
 		archivo.seek(0)
 		json.dump(config,archivo)
 		archivo.truncate()
-
+		if config["dificultad"]=="Facil":
+			wind["-imagen-"].update(filename='imagenes/tabfacil.png')
+		elif config["dificultad"]=="Medio":
+			wind["-imagen-"].update(filename='imagenes/tabmedio.png')
+		else:
+			wind["-imagen-"].update(filename='imagenes/tabdificil.png')
 		archivo.close()
 	except FileNotFoundError as ex:
 		print('No se encontro el archivo "config.txt" en el directorio actual...')
@@ -72,7 +77,7 @@ def actualizar_descripcion(win,val):
 	elif (val["-dif-"]=="Dificil"):
 		win["-desc-"].update("Dificil: al azar adjetivos o verbos. Tablero 15x15.")
 
-def ventana():
+def ventana(wind):
 
 	try:
 		archivo= open("config.txt","r")
@@ -109,7 +114,7 @@ def ventana():
 		evento,valores = window.read()
 
 		if evento == "Aplicar":
-			aplicar(valores, nuevos_puntajes, nuevas_cantidades)
+			aplicar(valores, nuevos_puntajes, nuevas_cantidades,wind)
 
 		elif evento == "Restaurar":
 			restaurar(window)

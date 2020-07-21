@@ -365,12 +365,10 @@ def juego(cargar=False):
                 ok = evaluar(palabra, dificultad)
                 if ok:
                     puntos=confirmar(window,tablero,puntos)
-                    pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
-                    Inteligencia.turno(bolsa,window,tablero)
                 else:
                     devolver_fichas(window,tablero,fichas_jugador)
-                    pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
-                    Inteligencia.turno(bolsa,window,tablero)
+                pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
+                Inteligencia.turno(bolsa,window,tablero)
                 pasar(tablero,Inteligencia.get_fichas(),tiempos,tiempo_turno,Inteligencia,bolsa,window,True)
         elif event == "Pasar":
             if iniciado and not Inteligencia.get_mi_turno():

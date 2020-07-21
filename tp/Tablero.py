@@ -133,6 +133,6 @@ class Tablero():
 				self.__letras[c[0]][c[1]]=palabra.split()[i]
 				window["b_"+str(c[0])+"_"+str(c[1])].update(palabra.split()[i])
 				i+=1
-			puntos=jugar.confirmar(window,self,puntos,True)
+			jugar.confirmar(window,self,puntos,True)
 
-		return ok, puntos
+		return ok

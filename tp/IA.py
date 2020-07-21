@@ -11,6 +11,7 @@ class IA():
 		self.__mi_turno=False
 		self.__dificultad=dificultad
 		self.__cambios_letras=3
+		self.__puntos=0
 
 	def combinaciones(self,combs,pal,marcas,letras,largo):
 		if (largo>0):
@@ -39,11 +40,11 @@ class IA():
 			n-=1
 		return palabra
 
-	def turno(self,bolsa,window,tablero,puntos):
+	def turno(self,bolsa,window,tablero):
 		palabra=self.buscar_palabra()
 
 		if (palabra!=""):
-			ok, puntos = tablero.insertar_palabra(palabra,window,puntos)
+			ok, self.__puntos = tablero.insertar_palabra(palabra,window,self.__puntos)
 			if(ok):
 				for l in palabra.split():
 					i=0
@@ -57,7 +58,6 @@ class IA():
 			if self.__cambios_letras > 0:
 				jugar.cambiar_fichas(window,self.__fichas,bolsa,tablero,True)
 				self.__cambios_letras-=1
-		return puntos
 
 	def get_mi_turno(self):
 		return self.__mi_turno
@@ -70,3 +70,9 @@ class IA():
 
 	def get_dificultad(self):
 		return self.__dificultad
+
+	def get_puntos(self):
+		return self.__puntos
+
+	def set_puntos(self, p):
+		self.__puntos=p

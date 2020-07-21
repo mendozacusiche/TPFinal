@@ -193,7 +193,7 @@ def crear_layout(tablero, tiempos, jugador, dificultad):
               ]
 
     columna_2 = [
-                [sg.T(' '*4),sg.Button('INICIAR',font=("Current",10), size=(10, 0),pad=(0, 0)), sg.Button('TERMINAR',font=("Current",10),size=(10, 0), pad=(0, 0)),sg.Button('EXIT',font=("Current", 10), size=(10, 0), pad=(0, 0))],
+                [sg.T(' '*4),sg.Button('INICIAR',key=("INICIAR"),font=("Current",10), size=(10, 0),pad=(0, 0)), sg.Button('TERMINAR',font=("Current",10),size=(10, 0), pad=(0, 0)),sg.Button('EXIT',font=("Current", 10), size=(10, 0), pad=(0, 0))],
                 [sg.Frame('DURACION DEL JUEGO',Tiempo_juego, pad=(10,10), relief= 'solid'), sg.Frame('DURACION DEL TURNO',T_turno, pad= (10, 10), relief= 'solid')],
                 [sg.Image(filename='imagenes/playerlogo.png', pad=(5, 0)), sg.Text(jugador)],
                 [sg.Text('PUNTAJE'), sg.Text('0000000',key=("-puntos-")) ],
@@ -342,6 +342,7 @@ def juego(cargar=False):
             break
         elif event == "INICIAR":
             if not iniciado:
+                window["INICIAR"].update(disabled=True)
                 iniciado, fichas_jugador, bolsa, Inteligencia = iniciar(iniciado, tiempos, window, config, tiempo_turno, tablero, dificultad)
                 #actualiza el tablero con las casillas de primio  por nivel
                 cambiar_colores(window,dificultad)
@@ -350,7 +351,7 @@ def juego(cargar=False):
             window["-DURACION-"].update(f"{tiempos[1] // 60}:{tiempos[1]%60:02d}")
         elif event in ("-letra0-","-letra1-","-letra2-","-letra3-","-letra4-","-letra5-","-letra6-"):
             if iniciado:
-            	pos_letra = clickear_ficha(event, fichas_jugador, window)
+                pos_letra = clickear_ficha(event, fichas_jugador, window)
         elif event == "Cambiar letras":
             if iniciado and cambios>0:
                 cambiar_fichas(window,fichas_jugador,bolsa,tablero)
@@ -381,8 +382,8 @@ def juego(cargar=False):
                 Inteligencia.turno(bolsa,window,tablero)
                 pasar(tablero,Inteligencia.get_fichas(),tiempos,tiempo_turno,Inteligencia,bolsa,window,True)
         else:
-        	if iniciado:
-        		colocar_letra(event,fichas_jugador,tablero,window,pos_letra)
+            if iniciado:
+                colocar_letra(event,fichas_jugador,tablero,window,pos_letra)
 
     window.close()
 

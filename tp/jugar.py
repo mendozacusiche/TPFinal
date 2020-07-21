@@ -49,7 +49,7 @@ def segundo(tablero,fichas_jugador, Intel, tiempo_turno, bolsa, window, t):
                 pasar(tablero,Intel.get_fichas(),t,tiempo_turno,Intel,bolsa,window,True)
             else:
                 pasar(tablero,fichas_jugador,t,tiempo_turno,Intel,bolsa,window)
-                Intel.turno()
+                Intel.turno(bolsa,window,tablero)
                 pasar(tablero,Intel.get_fichas(),t,tiempo_turno,Intel,bolsa,window,True)
     terminar()
 
@@ -352,7 +352,7 @@ def juego(cargar=False):
                 cambiar_fichas(window,fichas_jugador,bolsa,tablero)
                 cambios-=1
                 pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
-                puntosIA=Inteligencia.turno(bolsa,window,tablero,puntosIA)
+                Inteligencia.turno(bolsa,window,tablero)
                 pasar(tablero,Inteligencia.get_fichas(),tiempos,tiempo_turno,Inteligencia,bolsa,window,True)
         elif event == "Posponer":
             pass
@@ -367,17 +367,17 @@ def juego(cargar=False):
                 if ok:
                     puntos=confirmar(window,tablero,puntos)
                     pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
-                    puntosIA=Inteligencia.turno(bolsa,window,tablero,puntosIA)
+                    Inteligencia.turno(bolsa,window,tablero)
                     pasar(tablero,Inteligencia.get_fichas(),tiempos,tiempo_turno,Inteligencia,bolsa,window,True)
                 else:
                     devolver_fichas(window,tablero,fichas_jugador)
                     pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
-                    puntosIA=Inteligencia.turno(bolsa,window,tablero,puntosIA)
+                    Inteligencia.turno(bolsa,window,tablero)
                     pasar(tablero,Inteligencia.get_fichas(),tiempos,tiempo_turno,Inteligencia,bolsa,window,True)
         elif event == "Pasar":
             if iniciado and not Inteligencia.get_mi_turno():
                 pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
-                puntosIA=Inteligencia.turno(bolsa,window,tablero,puntosIA)
+                Inteligencia.turno(bolsa,window,tablero)
                 pasar(tablero,Inteligencia.get_fichas(),tiempos,tiempo_turno,Inteligencia,bolsa,window,True)
         else:
         	if iniciado:

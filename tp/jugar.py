@@ -173,7 +173,7 @@ def cambiar_colores(window, dificultad):
     else:
         diseño_dificil(window)
 
-def crear_layout(tablero, tiempos, jugador, dificultad):
+def crear_layout(tablero, tiempos, jugador, dificultad,cambios):
 
     layout_fichasIA=[[sg.Button("#",font=("Current",9),size=(0,0), pad=(20, 0), button_color=color_button, key=("-letraIA"+str(i)+"-")) for i in range(7)]]
     layout_fichas_jugador=[[sg.Button(" ",font=("Current",9),size=(2,1), pad=(20, 0), button_color=color_button, key=("-letra"+str(i)+"-")) for i in range(7)]]
@@ -212,7 +212,7 @@ def crear_layout(tablero, tiempos, jugador, dificultad):
                 [sg.Button('Posponer',font=("Current",10), size=(15, 0))],
                 #[sg.Button('Terminar',font=("Current",9),size=(10, 0))],
                 #[sg.Button('Exit',font=("Current", 9), size=(10, 0))]
-                [sg.Button('Cambiar letras',font=("Current",10),size=(15, 0))]
+                [sg.Button('Cambiar letras',font=("Current",10),size=(15, 0)),sg.Text('Cambios disponibles: '),sg.Text(cambios,key='-cambios-')]
                 ]
 
     
@@ -335,7 +335,7 @@ def juego(cargar=False):
 
     tablero = Tablero.Tablero(dificultad)
 
-    layout = crear_layout(tablero, tiempos, jugador, dificultad)    
+    layout = crear_layout(tablero, tiempos, jugador, dificultad,cambios)    
 
     window = sg.Window('ScrabbleAR',resizable= True,element_justification='center',).Layout(layout).Finalize()
 
@@ -366,6 +366,7 @@ def juego(cargar=False):
                 pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
                 Inteligencia.turno(bolsa,window,tablero)
                 pasar(tablero,Inteligencia.get_fichas(),tiempos,tiempo_turno,Inteligencia,bolsa,window,True)
+                window['-cambios-'].update(cambios)
         elif event == "Posponer":
             pass
         elif event == "TERMINAR":

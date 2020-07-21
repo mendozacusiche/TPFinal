@@ -19,8 +19,15 @@ def evaluar(palabra, dificultad):
         sg.popup("La Palapra Ingresada No es Valida")
     return ok
 
-def terminar():
-    pass
+def terminar(puntos,puntosIA):
+	layout1=[
+			[sg.Text('FIN DEL JUEGO')],
+			[sg.Text('Puntos jugador: '),sg.Text(puntos)],
+			[sg.Text('Puntos computadora: '),sg.Text(puntosIA)]
+			]
+	wind= sg.Window('TERMINAR',layout1)
+	event,values=wind.Read()
+
 
 def recargar_fichas(fichas, bolsa, window, turnoIA=False):
     usadas=fichas.get_usadas()
@@ -169,7 +176,7 @@ def cambiar_colores(window, dificultad):
 def crear_layout(tablero, tiempos, jugador, dificultad):
 
     layout_fichasIA=[[sg.Button("#",font=("Current",9),size=(0,0), pad=(20, 0), button_color=color_button, key=("-letraIA"+str(i)+"-")) for i in range(7)]]
-    layout_fichas_jugador=[[sg.Button(" ",font=("Current",9),size=(1,1), pad=(20, 0), button_color=color_button, key=("-letra"+str(i)+"-")) for i in range(7)]]
+    layout_fichas_jugador=[[sg.Button(" ",font=("Current",9),size=(2,1), pad=(20, 0), button_color=color_button, key=("-letra"+str(i)+"-")) for i in range(7)]]
     
     columna_0 = [
                     [sg.Text('acá van los casilleros especiales')],
@@ -361,8 +368,9 @@ def juego(cargar=False):
                 pasar(tablero,Inteligencia.get_fichas(),tiempos,tiempo_turno,Inteligencia,bolsa,window,True)
         elif event == "Posponer":
             pass
-        elif event == "Terminar":
-            pass
+        elif event == "TERMINAR":
+            terminar(puntos,puntosIA)
+            break
         elif event in ("-letraIA0-","-letraIA1-","-letraIA2-","-letraIA3-","-letraIA4-","-letraIA5-","-letraIA6-"):
             pass
         elif event == "Evaluar Palabra":

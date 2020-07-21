@@ -173,53 +173,66 @@ def cambiar_colores(window, dificultad):
     else:
         diseño_dificil(window)
 
-def crear_layout(tablero, tiempos, jugador, dificultad,cambios):
+def definir_descripcion(dif,opcion=None):
+	if dif=="Facil":
+		descr= "Palabras permitidas: sustantivos, adjetivos y verbos." 
+		
+	elif dif=="Medio":
+		descr="Palabras permitidas: adjetivos y verbos. "
+	else:
+		descr="Palabras permitidas: "+opcion
+	return descr
 
-    layout_fichasIA=[[sg.Button("#",font=("Current",9),size=(0,0), pad=(20, 0), button_color=color_button, key=("-letraIA"+str(i)+"-")) for i in range(7)]]
-    layout_fichas_jugador=[[sg.Button(" ",font=("Current",9),size=(2,1), pad=(20, 0), button_color=color_button, key=("-letra"+str(i)+"-")) for i in range(7)]]
+def crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion=None):
+
+	descr=definir_descripcion(dificultad,opcion)
+		
+	layout_fichasIA=[[sg.Button("#",font=("Current",9),size=(0,0), pad=(20, 0), button_color=color_button, key=("-letraIA"+str(i)+"-")) for i in range(7)]]
+	layout_fichas_jugador=[[sg.Button(" ",font=("Current",9),size=(2,1), pad=(20, 0), button_color=color_button, key=("-letra"+str(i)+"-")) for i in range(7)]]
+   
+	columna_0 = [
+					[sg.Text('acá van los casilleros especiales')],
+					[sg.Text('acá van los mensajes de la partida')]
+					]
     
-    columna_0 = [
-                    [sg.Text('acá van los casilleros especiales')],
-                    [sg.Text('acá van los mensajes de la partida')]
-                    ]
-    
-    columna_1 = [
-                [sg.Frame('FICHAS COMPUTADORA',layout_fichasIA)],
-                #[sg.Column(crear_botones(i, tablero), pad=(0,0)) for i in range(tablero.get_tamanio())],
-                [sg.Column(crear_botones(tablero, dificultad), background_color= 'grey40', justification='center', )],
-                [sg.Frame('FICHAS JUGADOR',layout_fichas_jugador)]
-            ]
+	columna_1 =	[
+				[sg.Frame('FICHAS COMPUTADORA',layout_fichasIA)],
+				#[sg.Column(crear_botones(i, tablero), pad=(0,0)) for i in range(tablero.get_tamanio())],
+				[sg.Column(crear_botones(tablero, dificultad), background_color= 'grey40', justification='center', )],
+				[sg.Frame('FICHAS JUGADOR',layout_fichas_jugador)]
+				]
 
 
-    Tiempo_juego= [       
-                    [sg.Text(f"{tiempos[0] // 60}:{tiempos[0]%60:02d}",size=(10, 2), text_color='white',font=('Digital-7',20), justification='center', key='-TURNO-')],
-                  ]
+	Tiempo_juego=[       
+				[sg.Text(f"{tiempos[0] // 60}:{tiempos[0]%60:02d}",size=(10, 2), text_color='white',font=('Digital-7',20), justification='center', key='-TURNO-')],
+				]
 
-    T_turno = [                                                                  #'Helvetica'
-                [sg.Text(f"{tiempos[1] // 60}:{tiempos[1]%60:02d}",size=(10, 2), font=('Digital-7', 20), text_color='white',justification='center', key='-DURACION-')],
-              ]
+	T_turno = [                                                                  #'Helvetica'
+				[sg.Text(f"{tiempos[1] // 60}:{tiempos[1]%60:02d}",size=(10, 2), font=('Digital-7', 20), text_color='white',justification='center', key='-DURACION-')],
+				]
 
-    columna_2 = [
-                [sg.T(' '*4),sg.Button('INICIAR',key=("INICIAR"),font=("Current",10), size=(10, 0),pad=(0, 0)), sg.Button('TERMINAR',font=("Current",10),size=(10, 0), pad=(0, 0)),sg.Button('EXIT',font=("Current", 10), size=(10, 0), pad=(0, 0))],
-                [sg.Frame('DURACION DEL JUEGO',Tiempo_juego, pad=(10,10), relief= 'solid'), sg.Frame('DURACION DEL TURNO',T_turno, pad= (10, 10), relief= 'solid')],
-                [sg.Image(filename='imagenes/playerlogo.png', pad=(5, 0)), sg.Text(jugador)],
-                [sg.Text('PUNTAJE'), sg.Text('0000000',key=("-puntos-")) ],
-                [sg.Image(filename='imagenes/computerlogo.png', pad=(5, 0)), sg.Text('PC')],
-                [sg.Text('PUNTAJE'), sg.Text('0000000',key=("-puntosIA-"))],
-                [sg.Text('FICHAS EN BOLSA:'), sg.Text("000", key=("-CantFichas-"))],
-                [sg.Button('Pasar',font=("Current",10),size=(15, 0))],
-                [sg.Button("Evaluar Palabra",font=("Current",10),size=(15, 0))], 
-                [sg.Button('Posponer',font=("Current",10), size=(15, 0))],
-                #[sg.Button('Terminar',font=("Current",9),size=(10, 0))],
-                #[sg.Button('Exit',font=("Current", 9), size=(10, 0))]
-                [sg.Button('Cambiar letras',font=("Current",10),size=(15, 0)),sg.Text('Cambios disponibles: '),sg.Text(cambios,key='-cambios-')]
-                ]
+	columna_2 = [
+				[sg.Text(descr)],
+				[sg.T(' '*4),sg.Button('INICIAR',key=("INICIAR"),font=("Current",10), size=(10, 0),pad=(0, 0)), sg.Button('TERMINAR',font=("Current",10),size=(10, 0), pad=(0, 0)),sg.Button('EXIT',font=("Current", 10), size=(10, 0), pad=(0, 0))],
+				[sg.Frame('DURACION DEL JUEGO',Tiempo_juego, pad=(10,10), relief= 'solid'), sg.Frame('DURACION DEL TURNO',T_turno, pad= (10, 10), relief= 'solid')],
+				[sg.Image(filename='imagenes/playerlogo.png', pad=(5, 0)), sg.Text(jugador)],
+				[sg.Text('PUNTAJE'), sg.Text('0000000',key=("-puntos-")) ],
+				[sg.Image(filename='imagenes/computerlogo.png', pad=(5, 0)), sg.Text('PC')],
+				[sg.Text('PUNTAJE'), sg.Text('0000000',key=("-puntosIA-"))],
+				[sg.Text('FICHAS EN BOLSA:'), sg.Text("000", key=("-CantFichas-"))],
+				[sg.Button('Pasar',font=("Current",10),size=(15, 0))],
+				[sg.Button("Evaluar Palabra",font=("Current",10),size=(15, 0))], 
+				[sg.Button('Posponer',font=("Current",10), size=(15, 0))],
+				#[sg.Button('Terminar',font=("Current",9),size=(10, 0))],
+				#[sg.Button('Exit',font=("Current", 9), size=(10, 0))]
+				[sg.Button('Cambiar letras',font=("Current",10),size=(15, 0)),sg.Text('Cambios disponibles: '),sg.Text(cambios,key='-cambios-')]
+				]
 
     
-    layout = [  
-                [sg.Column(columna_0),sg.Column(columna_1, pad=(0,0)), sg.Frame('CONFIGURACION', columna_2, pad=(20, 50), relief= 'solid')],
-             ]
-    return layout     
+	layout = [  
+				[sg.Column(columna_0),sg.Column(columna_1, pad=(0,0)), sg.Frame('CONFIGURACION', columna_2, pad=(20, 50), relief= 'solid')],
+				]
+	return layout     
 
 def checkear_ficha(event, fichas, window, n):  
     if (fichas.get_checked()[n]==False):
@@ -300,101 +313,104 @@ def confirmar(window,tablero,puntos,turnoIA=False):
     return puntos
 
 def juego(cargar=False):
-    if cargar:
-        try:
-            archivo= open("guardado.txt","r")
-            config = json.load(archivo)
-            jugador = config["jugador"]
-            ventana_bienvenida.ventana(jugador) 
-            puntos=config["puntos"]
-            puntosIA=config["puntosIA"]
-            cambios=config["cambios"]
-        except FileNotFoundError as ex:
-            print('No se encontro el  archivo.......')
-    else:
-        try:
-            archivo= open("config.txt","r")
-            config = json.load(archivo)
-        except FileNotFoundError as ex:
-            print(ex)
-            print('No se encontro el archivo')
+	if cargar:
+		try:
+			archivo= open("guardado.txt","r")
+			config = json.load(archivo)
+			jugador = config["jugador"]
+			ventana_bienvenida.ventana(jugador) 
+			puntos=config["puntos"]
+			puntosIA=config["puntosIA"]
+			cambios=config["cambios"]
+		except FileNotFoundError as ex:
+			print('No se encontro el  archivo.......')
+	else:
+		try:
+			archivo= open("config.txt","r")
+			config = json.load(archivo)
+		except FileNotFoundError as ex:
+			print(ex)
+			print('No se encontro el archivo')
         
-        jugador = ventana_bienvenida.ventana()
-        puntos=0
-        puntosIA=0
-        cambios=3
+		jugador = ventana_bienvenida.ventana()
+		puntos=0
+		puntosIA=0
+		cambios=3
+        
+	tiempo_total= int(config["tiempo_total"]) * 60
+	tiempo_turno= int(config["tiempo_turno"]) * 60
+	tiempos=[tiempo_total,tiempo_turno]
 
-    tiempo_total= int(config["tiempo_total"]) * 60
-    tiempo_turno= int(config["tiempo_turno"]) * 60
-    tiempos=[tiempo_total,tiempo_turno]
+	dificultad=config["dificultad"]
+	if dificultad == "Dificil":
+		opciones=["Adjetivos", "Verbos"]
+		opcion=random.choice(opciones)
 
-    dificultad=config["dificultad"]
-    if dificultad == "Dificil":
-        opciones=["Adjetivos", "Verbos"]
-        dificultad = dificultad+random.choice(opciones)
+	tablero = Tablero.Tablero(dificultad)
+	
+	if dificultad == "Dificil":
+		layout = crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion)    
+	else:
+		layout = crear_layout(tablero, tiempos, jugador, dificultad,cambios)    
+		
+	window = sg.Window('ScrabbleAR',resizable= True,element_justification='center',).Layout(layout).Finalize()
 
-    tablero = Tablero.Tablero(dificultad)
+	iniciado=False
+	pos_letra= -1
 
-    layout = crear_layout(tablero, tiempos, jugador, dificultad,cambios)    
+	while True:                    
+		event, values = window.Read(timeout=250)
+		print(event, values)
+		if event in (None,'EXIT'):
+			break
+		elif event == "INICIAR":
+			if not iniciado:
+				window["INICIAR"].update(disabled=True)
+				iniciado, fichas_jugador, bolsa, Inteligencia = iniciar(iniciado, tiempos, window, config, tiempo_turno, tablero, dificultad)
+				#actualiza el tablero con las casillas de primio  por nivel
+				cambiar_colores(window,dificultad)
+		elif event == sg.TIMEOUT_KEY:
+			window["-TURNO-"].update(f"{tiempos[0] // 60}:{tiempos[0]%60:02d}")
+			window["-DURACION-"].update(f"{tiempos[1] // 60}:{tiempos[1]%60:02d}")
+		elif event in ("-letra0-","-letra1-","-letra2-","-letra3-","-letra4-","-letra5-","-letra6-"):
+			if iniciado:
+				pos_letra = clickear_ficha(event, fichas_jugador, window)
+		elif event == "Cambiar letras":
+			if iniciado and cambios>0:
+				cambiar_fichas(window,fichas_jugador,bolsa,tablero)
+				cambios-=1
+				pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
+				Inteligencia.turno(bolsa,window,tablero)
+				pasar(tablero,Inteligencia.get_fichas(),tiempos,tiempo_turno,Inteligencia,bolsa,window,True)
+				window['-cambios-'].update(cambios)
+		elif event == "Posponer":
+			pass
+		elif event == "TERMINAR":
+			terminar(puntos,puntosIA)
+			break
+		elif event in ("-letraIA0-","-letraIA1-","-letraIA2-","-letraIA3-","-letraIA4-","-letraIA5-","-letraIA6-"):
+			pass
+		elif event == "Evaluar Palabra":
+			if iniciado:
+				palabra = tablero.buscar_palabra()
+				ok = evaluar(palabra, dificultad)
+				if ok:
+					puntos=confirmar(window,tablero,puntos)
+				else:
+					devolver_fichas(window,tablero,fichas_jugador)
+				pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
+				Inteligencia.turno(bolsa,window,tablero)
+				pasar(tablero,Inteligencia.get_fichas(),tiempos,tiempo_turno,Inteligencia,bolsa,window,True)
+		elif event == "Pasar":
+			if iniciado and not Inteligencia.get_mi_turno():
+				pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
+				Inteligencia.turno(bolsa,window,tablero)
+				pasar(tablero,Inteligencia.get_fichas(),tiempos,tiempo_turno,Inteligencia,bolsa,window,True)
+		else:
+			if iniciado:
+				colocar_letra(event,fichas_jugador,tablero,window,pos_letra)
 
-    window = sg.Window('ScrabbleAR',resizable= True,element_justification='center',).Layout(layout).Finalize()
-
-    iniciado=False
-    pos_letra= -1
-
-    while True:                    
-        event, values = window.Read(timeout=250)
-        print(event, values)
-        if event in (None,'EXIT'):
-            break
-        elif event == "INICIAR":
-            if not iniciado:
-                window["INICIAR"].update(disabled=True)
-                iniciado, fichas_jugador, bolsa, Inteligencia = iniciar(iniciado, tiempos, window, config, tiempo_turno, tablero, dificultad)
-                #actualiza el tablero con las casillas de primio  por nivel
-                cambiar_colores(window,dificultad)
-        elif event == sg.TIMEOUT_KEY:
-            window["-TURNO-"].update(f"{tiempos[0] // 60}:{tiempos[0]%60:02d}")
-            window["-DURACION-"].update(f"{tiempos[1] // 60}:{tiempos[1]%60:02d}")
-        elif event in ("-letra0-","-letra1-","-letra2-","-letra3-","-letra4-","-letra5-","-letra6-"):
-            if iniciado:
-                pos_letra = clickear_ficha(event, fichas_jugador, window)
-        elif event == "Cambiar letras":
-            if iniciado and cambios>0:
-                cambiar_fichas(window,fichas_jugador,bolsa,tablero)
-                cambios-=1
-                pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
-                Inteligencia.turno(bolsa,window,tablero)
-                pasar(tablero,Inteligencia.get_fichas(),tiempos,tiempo_turno,Inteligencia,bolsa,window,True)
-                window['-cambios-'].update(cambios)
-        elif event == "Posponer":
-            pass
-        elif event == "TERMINAR":
-            terminar(puntos,puntosIA)
-            break
-        elif event in ("-letraIA0-","-letraIA1-","-letraIA2-","-letraIA3-","-letraIA4-","-letraIA5-","-letraIA6-"):
-            pass
-        elif event == "Evaluar Palabra":
-            if iniciado:
-                palabra = tablero.buscar_palabra()
-                ok = evaluar(palabra, dificultad)
-                if ok:
-                    puntos=confirmar(window,tablero,puntos)
-                else:
-                    devolver_fichas(window,tablero,fichas_jugador)
-                pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
-                Inteligencia.turno(bolsa,window,tablero)
-                pasar(tablero,Inteligencia.get_fichas(),tiempos,tiempo_turno,Inteligencia,bolsa,window,True)
-        elif event == "Pasar":
-            if iniciado and not Inteligencia.get_mi_turno():
-                pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
-                Inteligencia.turno(bolsa,window,tablero)
-                pasar(tablero,Inteligencia.get_fichas(),tiempos,tiempo_turno,Inteligencia,bolsa,window,True)
-        else:
-            if iniciado:
-                colocar_letra(event,fichas_jugador,tablero,window,pos_letra)
-
-    window.close()
+	window.close()
 
 
 color_button = ('white','OrangeRed3')

@@ -32,7 +32,7 @@ def ventana():
 		print("No se encontro el archivo config.txt")
 		columna1=[[sg.Text('No hay tablero actual')]]
 				
-	columna2=[[sg.Text(descr,key='-descr-')],
+	columna2=[[sg.Text(descr,key='-descr-', size = (12, 0))],
 			[sg.Button('Configuracion',font=("Current",10), size =(29, 0))],
 			[sg.Button('Jugar',font=("Current",10), size=(12, 0)), sg.Button('Atras',font=("Current",10), size=(12,0))]
 			]

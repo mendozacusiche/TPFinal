@@ -299,7 +299,6 @@ def juego(cargar=False):
             cambios=config["cambios"]
         except FileNotFoundError as ex:
             print('No se encontro el  archivo.......')
-        
     else:
         try:
             archivo= open("config.txt","r")
@@ -368,12 +367,11 @@ def juego(cargar=False):
                     puntos=confirmar(window,tablero,puntos)
                     pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
                     Inteligencia.turno(bolsa,window,tablero)
-                    pasar(tablero,Inteligencia.get_fichas(),tiempos,tiempo_turno,Inteligencia,bolsa,window,True)
                 else:
                     devolver_fichas(window,tablero,fichas_jugador)
                     pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
                     Inteligencia.turno(bolsa,window,tablero)
-                    pasar(tablero,Inteligencia.get_fichas(),tiempos,tiempo_turno,Inteligencia,bolsa,window,True)
+                pasar(tablero,Inteligencia.get_fichas(),tiempos,tiempo_turno,Inteligencia,bolsa,window,True)
         elif event == "Pasar":
             if iniciado and not Inteligencia.get_mi_turno():
                 pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)

@@ -18,14 +18,30 @@ def evaluar(palabra, dificultad): #CONCURRENCIA
     return ok
 
 def terminar(puntos,tiempos): #CONCURRENCIA
-    tiempos[2] = False
-    layout1=[
-            [sg.Text('FIN DEL JUEGO')],
-            [sg.Text('Puntos jugador: '),sg.Text(puntos[0])],
-            [sg.Text('Puntos computadora: '),sg.Text(puntos[1])]
-            ]
-    wind= sg.Window('TERMINAR',layout1)
-    event,values=wind.Read()
+	tiempos[2] = False
+	
+	layout0=[
+			[sg.Text('¿Está seguro que desea salir?')],
+			[sg.Button('SI'),sg.Button('NO')]
+			]
+    
+	win=sg.Window('',layout0)
+	ev,val=win.Read()
+    
+	if ev=='SI':
+		layout1=[
+				[sg.Text('FIN DEL JUEGO')],
+				[sg.Text('Puntos jugador: '),sg.Text(puntos[0])],
+				[sg.Text('Puntos computadora: '),sg.Text(puntos[1])],
+				[sg.Button('Guardar partida', key='GUARDAR'),sg.Button('Salir sin guardar')] #si apreta sin guardar se debe verificar si corresponde guardar o no el puntaje
+				]
+		wind= sg.Window('TERMINAR',layout1)
+		event,values=wind.Read()
+		return True
+	else:
+		win.close()
+		return False
+
 
 def recargar_fichas(fichas, bolsa, window, turnoIA=False):
     usadas=fichas.get_usadas()
@@ -430,8 +446,8 @@ def juego(cargar=False):
 		elif event == "Posponer":
 			pass
 		elif event == "TERMINAR":
-			terminar(puntos,tiempos)
-			break
+			if terminar(puntos,tiempos):
+				break
 		elif event in ("-letraIA0-","-letraIA1-","-letraIA2-","-letraIA3-","-letraIA4-","-letraIA5-","-letraIA6-"):
 			pass
 		elif event == "Evaluar Palabra" and not Inteligencia.get_mi_turno():

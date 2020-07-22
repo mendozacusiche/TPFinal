@@ -338,6 +338,10 @@ def confirmar(window,tablero,puntos,turnoIA=False):
         puntos[0]=puntos[0]+nuevos_puntos
         window["-puntos-"].update(puntos[0])
 
+def deshabilitar_habilitar_botones(window,b):
+	for i in range(7):
+		window["-letra"+str(i)+"-"].update(disabled=b)
+
 def juego(cargar=False):
 	if cargar:
 		try:
@@ -422,7 +426,7 @@ def juego(cargar=False):
 		elif event == "Posponer":
 			pass
 		elif event == "TERMINAR":
-			terminar(puntos,puntosIA)
+			terminar(puntos,tiempos)
 			break
 		elif event in ("-letraIA0-","-letraIA1-","-letraIA2-","-letraIA3-","-letraIA4-","-letraIA5-","-letraIA6-"):
 			pass
@@ -452,10 +456,12 @@ def juego(cargar=False):
 				window['-turno-'].update('Turno PC')
 				window["-dotIA-"].update(filename='imagenes/greendot.png',visible=True)
 				window["-dot-"].update(filename='imagenes/greendot.png',visible=False)
+				deshabilitar_habilitar_botones(window,True)
 			else:
 				window['-turno-'].update('Tu turno')
 				window["-dotIA-"].update(filename='imagenes/greendot.png',visible=False)
 				window["-dot-"].update(filename='imagenes/greendot.png',visible=True)
+				deshabilitar_habilitar_botones(window,False)
 
 	window.close()
 

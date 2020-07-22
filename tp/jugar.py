@@ -338,12 +338,13 @@ def confirmar(window,tablero,puntos,turnoIA=False):
         puntos[0]=puntos[0]+nuevos_puntos
         window["-puntos-"].update(puntos[0])
 
-def deshabilitar_habilitar_botones(window,b):
+def deshabilitar_habilitar_botones(window,b,cambios):
 	for i in range(7):
 		window["-letra"+str(i)+"-"].update(disabled=b)
 	window["Evaluar Palabra"].update(disabled=b)
 	window['Pasar'].update(disabled=b)
-	window['Cambiar letras'].update(disabled=b)
+	if (cambios>0):
+		window['Cambiar letras'].update(disabled=b)
 
 def juego(cargar=False):
 	if cargar:
@@ -459,12 +460,12 @@ def juego(cargar=False):
 				window['-turno-'].update('Turno PC')
 				window["-dotIA-"].update(filename='imagenes/greendot.png',visible=True)
 				window["-dot-"].update(filename='imagenes/greendot.png',visible=False)
-				deshabilitar_habilitar_botones(window,True)
+				deshabilitar_habilitar_botones(window,True,cambios)
 			else:
 				window['-turno-'].update('Tu turno')
 				window["-dotIA-"].update(filename='imagenes/greendot.png',visible=False)
 				window["-dot-"].update(filename='imagenes/greendot.png',visible=True)
-				deshabilitar_habilitar_botones(window,False)
+				deshabilitar_habilitar_botones(window,False,cambios)
 
 	window.close()
 

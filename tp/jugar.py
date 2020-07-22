@@ -57,7 +57,7 @@ def segundo(tablero,fichas_jugador, Intel, tiempo_turno, bolsa, window, t, punto
                 pasar(tablero,Intel.get_fichas(),t,tiempo_turno,Intel,bolsa,window,True,True)
             else:
                 pasar(tablero,fichas_jugador,t,tiempo_turno,Intel,bolsa,window,timer=True)
-                Intel.set_mi_turno(True)
+                threading.Thread(target= Intel.turno, args=(bolsa,window,tablero,puntos)).start()
     if (t[2]):
         terminar(puntos,t)
 
@@ -334,10 +334,8 @@ def colocar_letra(event,fichas,tablero,window,pos):
 def confirmar(window,tablero,puntos,turnoIA=False):
     nuevos_puntos=tablero.confirmar_letras()
     if turnoIA:
-        print(puntos)
         puntos[1]=puntos[1]+nuevos_puntos
         window["-puntosIA-"].update(puntos[1])
-        print(puntos)
     else:
         puntos[0]=puntos[0]+nuevos_puntos
         window["-puntos-"].update(puntos[0])
@@ -402,7 +400,7 @@ def juego(cargar=False):
                 window["Cambiar letras"].update(disabled=False)
                 window['-cambios-'].update(visible=True)
                 iniciado, fichas_jugador, bolsa, Inteligencia = iniciar(iniciado, tiempos, window, config, tiempo_turno, tablero, dificultad, puntos)
-                jugar_IA= threading.Thread(target= Inteligencia.turno, args=(bolsa,window,tablero,puntos), daemon=True)
+                jugar_IA= threading.Thread(target= Inteligencia.turno, args=(bolsa,window,tablero,puntos))
                 #actualiza el tablero con las casillas de primio  por nivel
                 cambiar_colores(window,dificultad)
         elif event == sg.TIMEOUT_KEY:
@@ -438,8 +436,8 @@ def juego(cargar=False):
                 else:
                     devolver_fichas(window,tablero,fichas_jugador)
                 pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
-        	#	window['-turno-'].update('Turno PC')
                 jugar_IA.start()
+        	#	window['-turno-'].update('Turno PC')
         		#window['-turno-'].update('Tu turno')
         		# if Inteligencia.get_mi_turno():
         			# window['-turno-'].update('Turno PC')
@@ -448,8 +446,8 @@ def juego(cargar=False):
         elif event == "Pasar":
             if iniciado and not Inteligencia.get_mi_turno():
                 pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
-            #	window['-turno-'].update('Turno PC')
                 jugar_IA.start()
+            #	window['-turno-'].update('Turno PC')
             #	window['-turno-'].update('Tu turno')
             # if Inteligencia.get_mi_turno():
                 # window['-turno-'].update('Turno PC')

@@ -2,6 +2,7 @@ import PySimpleGUI as sg
 from string import ascii_uppercase as up
 import random, sys, time, json, threading, ventana_bienvenida, Fichas, Tablero, IA
 from pattern.es import *   #parse, conjugate, INFINITIVE
+import records
 
 def evaluar(palabra, dificultad): #CONCURRENCIA
     ok=False
@@ -17,7 +18,7 @@ def evaluar(palabra, dificultad): #CONCURRENCIA
             ok=True
     return ok
 
-def terminar(puntos,tiempos): #CONCURRENCIA
+def terminar(puntos,tiempos,jugador,dif): #CONCURRENCIA
 	tiempos[2] = False
 	
 	layout0=[
@@ -33,10 +34,13 @@ def terminar(puntos,tiempos): #CONCURRENCIA
 				[sg.Text('FIN DEL JUEGO')],
 				[sg.Text('Puntos jugador: '),sg.Text(puntos[0])],
 				[sg.Text('Puntos computadora: '),sg.Text(puntos[1])],
-				[sg.Button('Guardar partida', key='GUARDAR'),sg.Button('Salir sin guardar')] #si apreta sin guardar se debe verificar si corresponde guardar o no el puntaje
+				[sg.Button('Guardar partida', key='GUARDAR'),sg.Button('Salir sin guardar',key='SALIR')] #si apreta sin guardar se debe verificar si corresponde guardar o no el puntaje
 				]
 		wind= sg.Window('TERMINAR',layout1)
 		event,values=wind.Read()
+		if event== 'SALIR':
+			dic={jugador:puntos[0]}
+			records.actualizar(dic,dif)
 		return True
 	else:
 		win.close()
@@ -426,7 +430,7 @@ def juego(cargar=False):
 				window['-cambios-'].update(visible=True)
 				iniciado, fichas_jugador, bolsa, Inteligencia = iniciar(iniciado, tiempos, window, config, tiempo_turno, tablero, dificultad, puntos)
 				jugar_IA= threading.Thread(target= Inteligencia.turno, args=(bolsa,window,tablero,puntos))
-				#actualiza el tablero con las casillas de primio  por nivel
+				#actualiza el tablero con las casillas de premio  por nivel
 				cambiar_colores(window,dificultad)
 		elif event == sg.TIMEOUT_KEY:
 			window["-TURNO-"].update(f"{tiempos[0] // 60}:{tiempos[0]%60:02d}")
@@ -446,7 +450,7 @@ def juego(cargar=False):
 		elif event == "Posponer":
 			pass
 		elif event == "TERMINAR":
-			if terminar(puntos,tiempos):
+			if terminar(puntos,tiempos,jugador,dificultad):
 				break
 		elif event in ("-letraIA0-","-letraIA1-","-letraIA2-","-letraIA3-","-letraIA4-","-letraIA5-","-letraIA6-"):
 			pass

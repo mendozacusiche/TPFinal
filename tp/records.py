@@ -33,12 +33,13 @@ def actualizar(dic,nivel):
 	if nivel in datos.keys():
 		if  len(datos[nivel])<10 :
 			datos[nivel].update(dic)
+			print(datos[nivel])
 		elif datos[nivel][datos.keys()[-1]]< dic[1]:
 			datos[nivel].pop(datos.keys()[-1])
 			datos[nivel]=dic
 	else :
 		datos[nivel]=dic
-	return datos
+	guardarDatos(datos)
 
 def guardarDatos(datos):
 	with open('topten.txt','w') as p:

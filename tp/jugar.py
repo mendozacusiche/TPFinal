@@ -185,25 +185,25 @@ def definir_descripcion(dif,opcion=None):
 def definir_especiales(dif):
 	if dif=='Facil':
 		lay=[
-			[sg.Button(button_color=(None, 'red'),size=(2,1)),sg.Text("Duplica el valor de la letra")],
-			[sg.Button(button_color=(None, 'blue'),size=(2,1)),sg.Text("Triplica el valor de la letra")],
-			[sg.Button(button_color=(None, 'green'),size=(2,1)),sg.Text("Duplica el valor de la palabra")],
-			[sg.Button(button_color=(None, 'yellow'),size=(2,1)),sg.Text("Triplica el valor de la palabra")],
-			[sg.Button(button_color=(None, '#ff8c00'),size=(2,1)),sg.Text("Resta 2 al valor de la palabra")],
-			[sg.Button(button_color=(None, '#00b7ff'),size=(2,1)),sg.Text("Resa 3 al valor de la palabra")]
+			[sg.Button(button_color=(None, 'red'),size=(2,1),disabled=True),sg.Text("Duplica el valor de la letra")],
+			[sg.Button(button_color=(None, 'blue'),size=(2,1),disabled=True),sg.Text("Triplica el valor de la letra")],
+			[sg.Button(button_color=(None, 'green'),size=(2,1),disabled=True),sg.Text("Duplica el valor de la palabra")],
+			[sg.Button(button_color=(None, 'yellow'),size=(2,1),disabled=True),sg.Text("Triplica el valor de la palabra")],
+			[sg.Button(button_color=(None, '#ff8c00'),size=(2,1),disabled=True),sg.Text("Resta 2 al valor de la palabra")],
+			[sg.Button(button_color=(None, '#00b7ff'),size=(2,1),disabled=True),sg.Text("Resta 3 al valor de la palabra")]
 		]
 	elif dif=='Medio':
 		lay=[
-			[sg.Button(button_color=(None,'IndianRed1'),size=(2,1)),sg.Text("Duplica el valor de la letra")],
-			[sg.Button(button_color=(None,'orange3'),size=(2,1)),sg.Text("Resta 2 al valor de la palabra")],
-			[sg.Button(button_color=(None,'green'),size=(2,1)),sg.Text("Resta 3 al valor de la palabra")]
+			[sg.Button(button_color=(None,'IndianRed1'),size=(2,1),disabled=True),sg.Text("Duplica el valor de la letra")],
+			[sg.Button(button_color=(None,'orange3'),size=(2,1),disabled=True),sg.Text("Resta 2 al valor de la palabra")],
+			[sg.Button(button_color=(None,'green'),size=(2,1),disabled=True),sg.Text("Resta 3 al valor de la palabra")]
 		]
 	else:
 		lay=[
-			[sg.Button(button_color=(None,'#007eb0'),size=(2,1)),sg.Text("Duplica el valor de la letra")],
-			[sg.Button(button_color=(None,'#fc2a00'),size=(2,1)),sg.Text("Triplica el valor de la letra")],
-			[sg.Button(button_color=(None,'#4fb304'),size=(2,1)),sg.Text("Resta 2 al valor de la palabra")],
-			[sg.Button(button_color=(None,'#f09605'),size=(2,1)),sg.Text("Resta 3 al valor de la palabra")]
+			[sg.Button(button_color=(None,'#007eb0'),size=(2,1),disabled=True),sg.Text("Duplica el valor de la letra")],
+			[sg.Button(button_color=(None,'#fc2a00'),size=(2,1),disabled=True),sg.Text("Triplica el valor de la letra")],
+			[sg.Button(button_color=(None,'#4fb304'),size=(2,1),disabled=True),sg.Text("Resta 2 al valor de la palabra")],
+			[sg.Button(button_color=(None,'#f09605'),size=(2,1),disabled=True),sg.Text("Resta 3 al valor de la palabra")]
 		]
 	return lay
 

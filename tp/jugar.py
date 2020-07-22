@@ -432,7 +432,7 @@ def juego(cargar=False):
 				palabra = tablero.buscar_palabra()
 				ok = evaluar(palabra, dificultad)
 				if ok:
-					puntos=confirmar(window,tablero,puntos)
+					confirmar(window,tablero,puntos)
 				else:
 					devolver_fichas(window,tablero,fichas_jugador)
 				pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)

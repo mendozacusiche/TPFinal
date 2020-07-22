@@ -107,7 +107,7 @@ def crear_botones(tablero, dificultad):
             return [[sg.Button(" ", button_color=(None, '#a6a3a2'), size=(4,2), pad=(0, 0), key=("b_"+str(x)+"_"+str(y))) for x in range(tablero.get_tamanio())] for y in range(tablero.get_tamanio())]
     else:
         if (dificultad == "Medio" or dificultad == "Facil"):
-            return [[sg.Button(" ", button_color=(None, '#a6a3a2'), size=(1,1), pad=(0, 0), key=("b_"+str(x)+"_"+str(y))) for x in range(tablero.get_tamanio())] for y in range(tablero.get_tamanio())]
+            return [[sg.Button(" ", button_color=(None, '#a6a3a2'), size=(0,0), pad=(0, 0), key=("b_"+str(x)+"_"+str(y))) for x in range(tablero.get_tamanio())] for y in range(tablero.get_tamanio())]
         else:
             return [[sg.Button(" ", button_color=(None, '#a6a3a2'), size=(2,2), pad=(0, 0), key=("b_"+str(x)+"_"+str(y))) for x in range(tablero.get_tamanio())] for y in range(tablero.get_tamanio())]
 
@@ -218,7 +218,7 @@ def crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion=None):
 	layout_fichas_jugador=[[sg.Button(" ",font=("Current",9),size=(2,1), pad=(20, 0), button_color=color_button, key=("-letra"+str(i)+"-")) for i in range(7)]]#,sg.Text('',key='-Jug-')]]
    
 	columna_0 = [
-					[sg.Column(lay)],
+					[sg.Column(lay)],#no se si está bien esto
 					[sg.Text('Mensajes del sistema: ')], 
 					[sg.Text('',key='-turno-',font=("Current",10), size=(10, 0),pad=(0, 0))]
 					]
@@ -241,19 +241,19 @@ def crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion=None):
 
 	columna_2 = [
 				[sg.Text(descr)],
-				[sg.T(' '*4),sg.Button('INICIAR',key=("INICIAR"),font=("Current",10), size=(10, 0),pad=(0, 0)), sg.Button('TERMINAR',font=("Current",10),size=(10, 0), pad=(0, 0)),sg.Button('EXIT',font=("Current", 10), size=(10, 0), pad=(0, 0))],
+				[sg.T(' '*4),sg.Button('INICIAR',key=("INICIAR"),font=("Current",10), size=(10, 0),pad=(0, 0)), sg.Button('TERMINAR',key='TERMINAR',font=("Current",10),size=(10, 0), pad=(0, 0),disabled=True),sg.Button('EXIT',font=("Current", 10), size=(10, 0), pad=(0, 0))],
 				[sg.Frame('DURACION DEL JUEGO',Tiempo_juego, pad=(10,10), relief= 'solid'), sg.Frame('DURACION DEL TURNO',T_turno, pad= (10, 10), relief= 'solid')],
-				[sg.Image(filename='imagenes/playerlogo.png', pad=(5, 0)), sg.Text(jugador)],
+				[sg.Image(filename='imagenes/playerlogo.png', pad=(5, 0)), sg.Text(jugador), sg.Image(filename='imagenes/greendot.png',visible=False, key="-dot-")],
 				[sg.Text('PUNTAJE'), sg.Text('0000000',key=("-puntos-")) ],
-				[sg.Image(filename='imagenes/computerlogo.png', pad=(5, 0)), sg.Text('PC')],
+				[sg.Image(filename='imagenes/computerlogo.png', pad=(5, 0)), sg.Text('PC'), sg.Image(filename='imagenes/greendot.png',visible=False, key="-dotIA-")],
 				[sg.Text('PUNTAJE'), sg.Text('0000000',key=("-puntosIA-"))],
 				[sg.Text('FICHAS EN BOLSA:'), sg.Text("000", key=("-CantFichas-"))],
-				[sg.Button('Pasar',font=("Current",10),size=(15, 0))],
-				[sg.Button("Evaluar Palabra",font=("Current",10),size=(15, 0))], 
-				[sg.Button('Posponer',font=("Current",10), size=(15, 0))],
+				[sg.Button('Pasar',key='Pasar',font=("Current",10),size=(15, 0),disabled=True)],
+				[sg.Button("Evaluar Palabra",key="Evaluar Palabra",font=("Current",10),size=(15, 0),disabled=True)], 
+				[sg.Button('Posponer',key='Posponer',font=("Current",10), size=(15, 0),disabled=True)],
 				#[sg.Button('Terminar',font=("Current",9),size=(10, 0))],
 				#[sg.Button('Exit',font=("Current", 9), size=(10, 0))]
-				[sg.Button('Cambiar letras',font=("Current",10),size=(15, 0)),sg.Text('Cambios disponibles: '),sg.Text(cambios,key='-cambios-')]
+				[sg.Button('Cambiar letras',key='Cambiar letras',font=("Current",10),size=(15, 0),disabled=True),sg.Text('Cambios disponibles: '),sg.Text(cambios,key='-cambios-',visible=False)]
 				]
 
     
@@ -403,7 +403,7 @@ def juego(cargar=False):
 				window['-cambios-'].update(visible=True)
 				iniciado, fichas_jugador, bolsa, Inteligencia = iniciar(iniciado, tiempos, window, config, tiempo_turno, tablero, dificultad, puntos)
 				jugar_IA= threading.Thread(target= Inteligencia.turno, args=(bolsa,window,tablero,puntos))
-				#actualiza el tablero con las casillas de premio  por nivel
+				#actualiza el tablero con las casillas de primio  por nivel
 				cambiar_colores(window,dificultad)
 		elif event == sg.TIMEOUT_KEY:
 			window["-TURNO-"].update(f"{tiempos[0] // 60}:{tiempos[0]%60:02d}")
@@ -412,16 +412,14 @@ def juego(cargar=False):
 			if iniciado:
 				pos_letra = clickear_ficha(event, fichas_jugador, window)
 		elif event == "Cambiar letras" and not Inteligencia.get_mi_turno():
-			if iniciado and cambios>0:
+			if iniciado:
 				cambiar_fichas(window,fichas_jugador,bolsa,tablero)
 				cambios-=1
 				pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
 				jugar_IA.start()
 				window['-cambios-'].update(cambios)
-        		# if Inteligencia.get_mi_turno():
-        			# window['-turno-'].update('Turno PC')
-        		# else:
-        			# window['-turno-'].update('Tu turno')
+				if cambios==0:
+					window["Cambiar letras"].update(disabled=True)
 		elif event == "Posponer":
 			pass
 		elif event == "TERMINAR":
@@ -439,38 +437,25 @@ def juego(cargar=False):
 					devolver_fichas(window,tablero,fichas_jugador)
 				pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
 				jugar_IA.start()
-        	#	window['-turno-'].update('Turno PC')
-        		#window['-turno-'].update('Tu turno')
-        		# if Inteligencia.get_mi_turno():
-        			# window['-turno-'].update('Turno PC')
-        		# else:
-        			# window['-turno-'].update('Tu turno')
 		elif event == "Pasar":
 			if iniciado and not Inteligencia.get_mi_turno():
 				pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
 				jugar_IA.start()
-            #	window['-turno-'].update('Turno PC')
-            #	window['-turno-'].update('Tu turno')
-            # if Inteligencia.get_mi_turno():
-                # window['-turno-'].update('Turno PC')
-            # else:
-                # window['-turno-'].update('Tu turno')
 		else:
 			if iniciado:
 				colocar_letra(event,fichas_jugador,tablero,window,pos_letra)
-                # if Inteligencia.get_mi_turno():
-                    # window['-turno-'].update('Turno PC')
-                # else:
-                    # window['-turno-'].update('Tu turno')   
 		if(iniciado and not Inteligencia.get_procesando() and Inteligencia.get_mi_turno()):
-			window['-turno-'].update('Turno PC') #CAMBIA TARDE PERO CAMBIA
 			jugar_IA= threading.Thread(target= Inteligencia.turno, args=(bolsa,window,tablero,puntos))
 			pasar(tablero,Inteligencia.get_fichas(),tiempos,tiempo_turno,Inteligencia,bolsa,window,True)
-			
-			#print(Inteligencia.get_mi_turno())
-		elif iniciado and Inteligencia.get_mi_turno()==False and not Inteligencia.get_procesando():
-			print(Inteligencia.get_mi_turno())
-			window['-turno-'].update('Tu turno')
+		if (iniciado) and (tiempos[1]==60):
+			if Inteligencia.get_mi_turno():
+				window['-turno-'].update('Turno PC')
+				window["-dotIA-"].update(filename='imagenes/greendot.png',visible=True)
+				window["-dot-"].update(filename='imagenes/greendot.png',visible=False)
+			else:
+				window['-turno-'].update('Tu turno')
+				window["-dotIA-"].update(filename='imagenes/greendot.png',visible=False)
+				window["-dot-"].update(filename='imagenes/greendot.png',visible=True)
 
 	window.close()
 

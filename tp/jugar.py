@@ -28,6 +28,7 @@ def terminar(puntos,tiempos,jugador,dif): #CONCURRENCIA
     
 	win=sg.Window('',layout0)
 	ev,val=win.Read()
+	win.close()
     
 	if ev=='SI':
 		layout1=[
@@ -38,12 +39,12 @@ def terminar(puntos,tiempos,jugador,dif): #CONCURRENCIA
 				]
 		wind= sg.Window('TERMINAR',layout1)
 		event,values=wind.Read()
+		wind.close()
 		if event== 'SALIR':
 			dic={jugador:puntos[0]}
 			records.actualizar(dic,dif)
 		return True
 	else:
-		win.close()
 		return False
 
 

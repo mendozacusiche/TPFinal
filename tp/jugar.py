@@ -341,6 +341,9 @@ def confirmar(window,tablero,puntos,turnoIA=False):
 def deshabilitar_habilitar_botones(window,b):
 	for i in range(7):
 		window["-letra"+str(i)+"-"].update(disabled=b)
+	window["Evaluar Palabra"].update(disabled=b)
+	window['Pasar'].update(disabled=b)
+	window['Cambiar letras'].update(disabled=b)
 
 def juego(cargar=False):
 	if cargar:

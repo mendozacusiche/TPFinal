@@ -3,7 +3,7 @@ from string import ascii_uppercase as up
 import random, sys, time, json, threading, ventana_bienvenida, Fichas, Tablero, IA
 from pattern.es import *   #parse, conjugate, INFINITIVE
 
-def evaluar(palabra, dificultad):
+def evaluar(palabra, dificultad): #CONCURRENCIA
     ok=False
     analisis = parse(palabra).split('/')
     if palabra != "No es palabra":
@@ -15,11 +15,9 @@ def evaluar(palabra, dificultad):
             ok=True
         elif (dificultad == "DificilAdjetivos") and (analisis[1] in ("JJ")):
             ok=True
-    else:
-        sg.popup("La Palapra Ingresada No es Valida")
     return ok
 
-def terminar(puntos,tiempos):
+def terminar(puntos,tiempos): #CONCURRENCIA
     tiempos[2] = False
     layout1=[
             [sg.Text('FIN DEL JUEGO')],
@@ -39,7 +37,7 @@ def recargar_fichas(fichas, bolsa, window, turnoIA=False):
             fichas.set_letra(l,i)
             usadas[i]=False
 
-def pasar(tablero,fichas,tiempos,tiempo_turno,Intel,bolsa,window,turnoIA=False,timer=False):
+def pasar(tablero,fichas,tiempos,tiempo_turno,Intel,bolsa,window,turnoIA=False,timer=False):#CONCURRENCIA
     if not timer:
         window["-CantFichas-"].update(str(contar_letras_bolsa(bolsa)))
     devolver_fichas(window,tablero,fichas)
@@ -47,7 +45,7 @@ def pasar(tablero,fichas,tiempos,tiempo_turno,Intel,bolsa,window,turnoIA=False,t
     tiempos[1]=tiempo_turno
     Intel.set_mi_turno(not turnoIA)
 
-def segundo(tablero,fichas_jugador, Intel, tiempo_turno, bolsa, window, t, puntos):
+def segundo(tablero,fichas_jugador, Intel, tiempo_turno, bolsa, window, t, puntos): #CONCURRENCIA
     while (t[0]>0 and t[2]):
         time.sleep(1)
         t[0]-=1
@@ -74,7 +72,7 @@ def sacar_letra_bolsa(bolsa):
     bolsa[letra]-=1
     return letra
 
-def cambiar_fichas(window,fichas,bolsa,tablero,turnoIA=False):
+def cambiar_fichas(window,fichas,bolsa,tablero,turnoIA=False): #CONCURRENCIA
     if(not turnoIA):
         devolver_fichas(window,tablero,fichas)
     for i in range(7):
@@ -377,6 +375,7 @@ def juego(cargar=False):
 	if dificultad == "Dificil":
 		opciones=["Adjetivos", "Verbos"]
 		opcion=random.choice(opciones)
+		dificultad=dificultad+opcion
 		layout = crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion)    
 	else:
 		layout = crear_layout(tablero, tiempos, jugador, dificultad,cambios)    
@@ -435,6 +434,7 @@ def juego(cargar=False):
 					confirmar(window,tablero,puntos)
 				else:
 					devolver_fichas(window,tablero,fichas_jugador)
+					sg.popup("La palapra ingresada no es valida")
 				pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
 				jugar_IA.start()
 		elif event == "Pasar":

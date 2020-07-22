@@ -2,9 +2,18 @@ import json
 import PySimpleGUI as sg
 
 def  ventana ():
-	layout=[[sg.Text('Acá van los records')]]
+	opciones=('Facil','Medio','Dificil')
+	layout=[
+		[sg.Text('Elija el nivel para ver el TOP TEN: ')],
+		[sg.Listbox(opciones,size=(15,len(opciones)))],
+		[sg.Button('OK')]
+		]
 	window=sg.Window('record',layout)
 	event,values=window.Read()
+	if event=='OK':
+		#print(values[0][0])
+		imprimir(values[0][0])
+		window.close()
 
 
 def crear():
@@ -34,8 +43,10 @@ def guardarDatos(datos):
 def imprimir(nivel):
 	with open('topten.txt','r') as p:
 		datos=json.load(p)
-		print(json.dumps(datos,indent=4))
-		
+		try:
+			print(json.dumps(datos[nivel],indent=4))
+		except KeyError:
+			print('No hay registros del nivel seleccionado')
 
 #nom='pepe'
 #punt=0

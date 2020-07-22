@@ -21,18 +21,18 @@ def aplicar(vals, punts, cants,wind):
 		if config["dificultad"]=="Facil":
 			wind["-imagen-"].update(filename='imagenes/tabfacil.png')
 			wind["-descr-"].update("""Nivel fácil: 
-		Palabras permitidas: sustantivos, adjetivos y verbos. 
-		Tamaño del tablero 23x23.""")
+Palabras permitidas: sustantivos, adjetivos y verbos. 
+Tamaño del tablero: 23x23.""")
 		elif config["dificultad"]=="Medio":
 			wind["-imagen-"].update(filename='imagenes/tabmedio.png')
 			wind["-descr-"].update("""Nivel medio: 
-		Palabras permitidas: adjetivos y verbos. 
-		Tamaño del tablero 19x19.""")
+Palabras permitidas: adjetivos y verbos. 
+Tamaño del tablero: 19x19.""")
 		else:
 			wind["-imagen-"].update(filename='imagenes/tabdificil.png')
 			wind["-descr-"].update("""Nivel dificil: 
-		Palabras permitidas: son elegidas al azar entre adjetivos y verbos. 
-		Tablero 15x15.""")
+Palabras permitidas: son elegidas al azar entre adjetivos y verbos. 
+Tamaño del tablero: 15x15.""")
 		archivo.close()
 	except FileNotFoundError as ex:
 		print('No se encontro el archivo "config.txt" en el directorio actual...')

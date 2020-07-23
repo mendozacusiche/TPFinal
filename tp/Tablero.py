@@ -1,4 +1,5 @@
 import jugar
+import json
 
 class Tablero():
 	def __init__(self, nivel):
@@ -88,12 +89,36 @@ class Tablero():
 		
 		return palabra
 
+	# def calcular_puntaje(letra,puntaje):
+		# try:
+			# with open ("config.txt","r") as c:
+				# config= json.load(c)
+			# puntaje_letras=config["puntaje_fichas"]
+			# if letra in puntaje_letras.keys():
+				# puntaje=puntaje+puntaje_letras[letra]
+		# except FileNotFoundError as ex:
+			# print("No se encontro el archivo config.txt")
+		# return puntaje
+
 	def confirmar_letras(self):
+		puntaje=0
+		puntaje_letras={}
 		for x in range(self.__tamanio):
 			for y in range(self.__tamanio):
 				if ((not self.__confirmadas[x][y]) and (self.__letras[x][y]!="")):
 					self.__confirmadas[x][y]=True
-		return 10 #por ahora solo devuelve 10 puntos en todas las palabras
+					letra=self.__letras[x][y]
+					print(letra)
+					try:
+						with open ("config.txt","r") as c:
+							config= json.load(c)
+						puntaje_letras=config["puntaje_fichas"]
+						if letra in puntaje_letras.keys():
+							puntaje=puntaje+puntaje_letras[letra]
+					except FileNotFoundError as ex:
+						print("No se encontro el archivo config.txt")
+					#puntaje=calcular_puntaje(letra,puntaje)
+		return puntaje 
 
 	def insertar_palabra(self,palabra,window,puntos):
 		casillas=[]

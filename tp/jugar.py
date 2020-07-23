@@ -2,8 +2,9 @@ import PySimpleGUI as sg
 from string import ascii_uppercase as up
 import random, sys, time, json, threading, ventana_bienvenida, Fichas, Tablero, IA
 from pattern.es import *   #parse, conjugate, INFINITIVE
+import records
 
-def evaluar(palabra, dificultad):
+def evaluar(palabra, dificultad): #CONCURRENCIA
     ok=False
     analisis = parse(palabra).split('/')
     if palabra != "No es palabra":
@@ -15,19 +16,37 @@ def evaluar(palabra, dificultad):
             ok=True
         elif (dificultad == "DificilAdjetivos") and (analisis[1] in ("JJ")):
             ok=True
-    else:
-        sg.popup("La Palapra Ingresada No es Valida")
     return ok
 
-def terminar(puntos,tiempos):
-    tiempos[2] = False
-    layout1=[
-            [sg.Text('FIN DEL JUEGO')],
-            [sg.Text('Puntos jugador: '),sg.Text(puntos[0])],
-            [sg.Text('Puntos computadora: '),sg.Text(puntos[1])]
-            ]
-    wind= sg.Window('TERMINAR',layout1)
-    event,values=wind.Read()
+def terminar(puntos,tiempos,jugador,dif): #CONCURRENCIA
+	tiempos[2] = False
+	
+	layout0=[
+			[sg.Text('¿Está seguro que desea salir?')],
+			[sg.Button('SI'),sg.Button('NO')]
+			]
+    
+	win=sg.Window('',layout0)
+	ev,val=win.Read()
+    
+	if ev=='SI':
+		layout1=[
+				[sg.Text('FIN DEL JUEGO')],
+				[sg.Text('Puntos jugador: '),sg.Text(puntos[0])],
+				[sg.Text('Puntos computadora: '),sg.Text(puntos[1])],
+				[sg.Button('Guardar partida', key='GUARDAR'),sg.Button('Salir sin guardar',key='SALIR')] #si apreta sin guardar se debe verificar si corresponde guardar o no el puntaje
+				]
+		wind= sg.Window('TERMINAR',layout1)
+		event,values=wind.Read()
+		if event== 'SALIR':
+			dic={jugador:puntos[0]}
+			records.actualizar(dic,dif)
+			wind.close()
+		return True
+	else:
+		win.close()
+		return False
+
 
 def recargar_fichas(fichas, bolsa, window, turnoIA=False):
     usadas=fichas.get_usadas()
@@ -39,7 +58,7 @@ def recargar_fichas(fichas, bolsa, window, turnoIA=False):
             fichas.set_letra(l,i)
             usadas[i]=False
 
-def pasar(tablero,fichas,tiempos,tiempo_turno,Intel,bolsa,window,turnoIA=False,timer=False):
+def pasar(tablero,fichas,tiempos,tiempo_turno,Intel,bolsa,window,turnoIA=False,timer=False):#CONCURRENCIA
     if not timer:
         window["-CantFichas-"].update(str(contar_letras_bolsa(bolsa)))
     devolver_fichas(window,tablero,fichas)
@@ -47,7 +66,23 @@ def pasar(tablero,fichas,tiempos,tiempo_turno,Intel,bolsa,window,turnoIA=False,t
     tiempos[1]=tiempo_turno
     Intel.set_mi_turno(not turnoIA)
 
-def segundo(tablero,fichas_jugador, Intel, tiempo_turno, bolsa, window, t, puntos):
+def terminar_por_tiempo(puntos,tiempos,jugador,dif):
+	tiempos[2] = False
+	layout1=[
+				[sg.Text('FIN DEL JUEGO')],
+				[sg.Text('Puntos jugador: '),sg.Text(puntos[0])],
+				[sg.Text('Puntos computadora: '),sg.Text(puntos[1])],
+				[sg.Button('OK')]
+				]
+	wind= sg.Window('',layout1)
+	event,values=wind.Read()
+	dic={jugador:puntos[0]}
+	records.actualizar(dic,dif)
+	if event=='OK':
+		wind.Finalize()
+
+
+def segundo(tablero,fichas_jugador, Intel, tiempo_turno, bolsa, window, t, puntos,jugador,dif): #CONCURRENCIA
     while (t[0]>0 and t[2]):
         time.sleep(1)
         t[0]-=1
@@ -59,7 +94,7 @@ def segundo(tablero,fichas_jugador, Intel, tiempo_turno, bolsa, window, t, punto
                 pasar(tablero,fichas_jugador,t,tiempo_turno,Intel,bolsa,window,timer=True)
                 threading.Thread(target= Intel.turno, args=(bolsa,window,tablero,puntos)).start()
     if (t[2]):
-        terminar(puntos,t)
+        terminar_por_tiempo(puntos,t,jugador,dif)
 
 def contar_letras_bolsa(bolsa):
     cant=0
@@ -74,7 +109,7 @@ def sacar_letra_bolsa(bolsa):
     bolsa[letra]-=1
     return letra
 
-def cambiar_fichas(window,fichas,bolsa,tablero,turnoIA=False):
+def cambiar_fichas(window,fichas,bolsa,tablero,turnoIA=False): #CONCURRENCIA
     if(not turnoIA):
         devolver_fichas(window,tablero,fichas)
     for i in range(7):
@@ -83,7 +118,7 @@ def cambiar_fichas(window,fichas,bolsa,tablero,turnoIA=False):
         if(not turnoIA):
             window["-letra"+str(i)+"-"].update(fichas.get_letra(i))
 
-def iniciar(iniciado, t, window, config, tiempo_turno, tablero, dificultad, puntos):
+def iniciar(iniciado, t, window, config, tiempo_turno, tablero, dificultad, puntos,jugador):
     bolsa=config["cant_fichas"]
     Inteligencia = IA.IA (bolsa,dificultad,puntos[1])
     nuevas=[]
@@ -92,7 +127,7 @@ def iniciar(iniciado, t, window, config, tiempo_turno, tablero, dificultad, punt
         nuevas.append(l)
         window["-letra"+str(i)+"-"].update(l)
     fichas_jugador= Fichas.Fichas(nuevas)
-    timers= threading.Thread(target= segundo, args=(tablero,fichas_jugador,Inteligencia,tiempo_turno,bolsa,window,t,puntos))
+    timers= threading.Thread(target= segundo, args=(tablero,fichas_jugador,Inteligencia,tiempo_turno,bolsa,window,t,puntos,jugador,dificultad))
     if __name__ == 'jugar':
         timers.start()
     window["-CantFichas-"].update(str(contar_letras_bolsa(bolsa)))
@@ -187,25 +222,25 @@ def definir_descripcion(dif,opcion=None):
 def definir_especiales(dif):
 	if dif=='Facil':
 		lay=[
-			[sg.Button(button_color=(None, 'red'),size=(2,1)),sg.Text("Duplica el valor de la letra")],
-			[sg.Button(button_color=(None, 'blue'),size=(2,1)),sg.Text("Triplica el valor de la letra")],
-			[sg.Button(button_color=(None, 'green'),size=(2,1)),sg.Text("Duplica el valor de la palabra")],
-			[sg.Button(button_color=(None, 'yellow'),size=(2,1)),sg.Text("Triplica el valor de la palabra")],
-			[sg.Button(button_color=(None, '#ff8c00'),size=(2,1)),sg.Text("Resta 2 al valor de la palabra")],
-			[sg.Button(button_color=(None, '#00b7ff'),size=(2,1)),sg.Text("Resa 3 al valor de la palabra")]
+			[sg.Button(button_color=(None, 'red'),size=(2,1),disabled=True),sg.Text("Duplica el valor de la letra")],
+			[sg.Button(button_color=(None, 'blue'),size=(2,1),disabled=True),sg.Text("Triplica el valor de la letra")],
+			[sg.Button(button_color=(None, 'green'),size=(2,1),disabled=True),sg.Text("Duplica el valor de la palabra")],
+			[sg.Button(button_color=(None, 'yellow'),size=(2,1),disabled=True),sg.Text("Triplica el valor de la palabra")],
+			[sg.Button(button_color=(None, '#ff8c00'),size=(2,1),disabled=True),sg.Text("Resta 2 al valor de la palabra")],
+			[sg.Button(button_color=(None, '#00b7ff'),size=(2,1),disabled=True),sg.Text("Resta 3 al valor de la palabra")]
 		]
 	elif dif=='Medio':
 		lay=[
-			[sg.Button(button_color=(None,'IndianRed1'),size=(2,1)),sg.Text("Duplica el valor de la letra")],
-			[sg.Button(button_color=(None,'orange3'),size=(2,1)),sg.Text("Resta 2 al valor de la palabra")],
-			[sg.Button(button_color=(None,'green'),size=(2,1)),sg.Text("Resta 3 al valor de la palabra")]
+			[sg.Button(button_color=(None,'IndianRed1'),size=(2,1),disabled=True),sg.Text("Duplica el valor de la letra")],
+			[sg.Button(button_color=(None,'orange3'),size=(2,1),disabled=True),sg.Text("Resta 2 al valor de la palabra")],
+			[sg.Button(button_color=(None,'green'),size=(2,1),disabled=True),sg.Text("Resta 3 al valor de la palabra")]
 		]
 	else:
 		lay=[
-			[sg.Button(button_color=(None,'#007eb0'),size=(2,1)),sg.Text("Duplica el valor de la letra")],
-			[sg.Button(button_color=(None,'#fc2a00'),size=(2,1)),sg.Text("Triplica el valor de la letra")],
-			[sg.Button(button_color=(None,'#4fb304'),size=(2,1)),sg.Text("Resta 2 al valor de la palabra")],
-			[sg.Button(button_color=(None,'#f09605'),size=(2,1)),sg.Text("Resta 3 al valor de la palabra")]
+			[sg.Button(button_color=(None,'#007eb0'),size=(2,1),disabled=True),sg.Text("Duplica el valor de la letra")],
+			[sg.Button(button_color=(None,'#fc2a00'),size=(2,1),disabled=True),sg.Text("Triplica el valor de la letra")],
+			[sg.Button(button_color=(None,'#4fb304'),size=(2,1),disabled=True),sg.Text("Resta 2 al valor de la palabra")],
+			[sg.Button(button_color=(None,'#f09605'),size=(2,1),disabled=True),sg.Text("Resta 3 al valor de la palabra")]
 		]
 	return lay
 
@@ -340,6 +375,14 @@ def confirmar(window,tablero,puntos,turnoIA=False):
         puntos[0]=puntos[0]+nuevos_puntos
         window["-puntos-"].update(puntos[0])
 
+def deshabilitar_habilitar_botones(window,b,cambios):
+	for i in range(7):
+		window["-letra"+str(i)+"-"].update(disabled=b)
+	window["Evaluar Palabra"].update(disabled=b)
+	window['Pasar'].update(disabled=b)
+	if (cambios>0):
+		window['Cambiar letras'].update(disabled=b)
+
 def juego(cargar=False):
 	if cargar:
 		try:
@@ -376,6 +419,7 @@ def juego(cargar=False):
 	if dificultad == "Dificil":
 		opciones=["Adjetivos", "Verbos"]
 		opcion=random.choice(opciones)
+		dificultad=dificultad+opcion
 		layout = crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion)    
 	else:
 		layout = crear_layout(tablero, tiempos, jugador, dificultad,cambios)    
@@ -400,9 +444,9 @@ def juego(cargar=False):
 				window['Posponer'].update(disabled=False)
 				window["Cambiar letras"].update(disabled=False)
 				window['-cambios-'].update(visible=True)
-				iniciado, fichas_jugador, bolsa, Inteligencia = iniciar(iniciado, tiempos, window, config, tiempo_turno, tablero, dificultad, puntos)
+				iniciado, fichas_jugador, bolsa, Inteligencia = iniciar(iniciado, tiempos, window, config, tiempo_turno, tablero, dificultad, puntos,jugador)
 				jugar_IA= threading.Thread(target= Inteligencia.turno, args=(bolsa,window,tablero,puntos))
-				#actualiza el tablero con las casillas de primio  por nivel
+				#actualiza el tablero con las casillas de premio  por nivel
 				cambiar_colores(window,dificultad)
 		elif event == sg.TIMEOUT_KEY:
 			window["-TURNO-"].update(f"{tiempos[0] // 60}:{tiempos[0]%60:02d}")
@@ -422,8 +466,8 @@ def juego(cargar=False):
 		elif event == "Posponer":
 			pass
 		elif event == "TERMINAR":
-			terminar(puntos,puntosIA)
-			break
+			if terminar(puntos,tiempos,jugador,dificultad):
+				break
 		elif event in ("-letraIA0-","-letraIA1-","-letraIA2-","-letraIA3-","-letraIA4-","-letraIA5-","-letraIA6-"):
 			pass
 		elif event == "Evaluar Palabra" and not Inteligencia.get_mi_turno():
@@ -434,6 +478,7 @@ def juego(cargar=False):
 					confirmar(window,tablero,puntos)
 				else:
 					devolver_fichas(window,tablero,fichas_jugador)
+					sg.popup("La palapra ingresada no es valida")
 				pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
 				jugar_IA.start()
 		elif event == "Pasar":
@@ -451,10 +496,12 @@ def juego(cargar=False):
 				window['-turno-'].update('Turno PC')
 				window["-dotIA-"].update(filename='imagenes/greendot.png',visible=True)
 				window["-dot-"].update(filename='imagenes/greendot.png',visible=False)
+				deshabilitar_habilitar_botones(window,True,cambios)
 			else:
 				window['-turno-'].update('Tu turno')
 				window["-dotIA-"].update(filename='imagenes/greendot.png',visible=False)
 				window["-dot-"].update(filename='imagenes/greendot.png',visible=True)
+				deshabilitar_habilitar_botones(window,False,cambios)
 
 	window.close()
 

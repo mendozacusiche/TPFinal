@@ -66,7 +66,7 @@ def pasar(tablero,fichas,tiempos,tiempo_turno,Intel,bolsa,window,turnoIA=False,t
     tiempos[1]=tiempo_turno
     Intel.set_mi_turno(not turnoIA)
 
-def terminar_por_tiempo(puntos,jugador,dif,win):
+def terminar_por_tiempo(puntos,jugador,dif):
 	layout1=[
 				[sg.Text('FIN DEL JUEGO')],
 				[sg.Text('Puntos jugador: '),sg.Text(puntos[0])],
@@ -504,7 +504,7 @@ def juego(cargar=False):
 				deshabilitar_habilitar_botones(window,False,cambios)
 		if tiempos[0]==0:
 			#print('FIN')
-			terminar_por_tiempo(puntos,jugador,dificultad,window)
+			terminar_por_tiempo(puntos,jugador,dificultad)
 			break
 	window.close()
 

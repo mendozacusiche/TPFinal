@@ -66,8 +66,7 @@ def pasar(tablero,fichas,tiempos,tiempo_turno,Intel,bolsa,window,turnoIA=False,t
     tiempos[1]=tiempo_turno
     Intel.set_mi_turno(not turnoIA)
 
-def terminar_por_tiempo(puntos,tiempos,jugador,dif):
-	tiempos[2] = False
+def terminar_por_tiempo(puntos,jugador,dif):
 	layout1=[
 				[sg.Text('FIN DEL JUEGO')],
 				[sg.Text('Puntos jugador: '),sg.Text(puntos[0])],
@@ -76,25 +75,25 @@ def terminar_por_tiempo(puntos,tiempos,jugador,dif):
 				]
 	wind= sg.Window('',layout1)
 	event,values=wind.Read()
+	print('FIN DEL JUEGO')
 	dic={jugador:puntos[0]}
 	records.actualizar(dic,dif)
 	if event=='OK':
-		wind.Finalize()
+		wind.close()
 
 
 def segundo(tablero,fichas_jugador, Intel, tiempo_turno, bolsa, window, t, puntos,jugador,dif): #CONCURRENCIA
-    while (t[0]>0 and t[2]):
-        time.sleep(1)
-        t[0]-=1
-        t[1]-=1
-        if(t[1]== 0):
-            if Intel.get_mi_turno():
-                pasar(tablero,Intel.get_fichas(),t,tiempo_turno,Intel,bolsa,window,True,True)
-            else:
-                pasar(tablero,fichas_jugador,t,tiempo_turno,Intel,bolsa,window,timer=True)
-                threading.Thread(target= Intel.turno, args=(bolsa,window,tablero,puntos)).start()
-    if (t[2]):
-        terminar_por_tiempo(puntos,t,jugador,dif)
+	while (t[0]>0 and t[2]):
+		time.sleep(1)
+		t[0]-=1
+		t[1]-=1
+		if(t[1]== 0):
+			if Intel.get_mi_turno():
+				pasar(tablero,Intel.get_fichas(),t,tiempo_turno,Intel,bolsa,window,True,True)
+			else:
+				pasar(tablero,fichas_jugador,t,tiempo_turno,Intel,bolsa,window,timer=True)
+				threading.Thread(target= Intel.turno, args=(bolsa,window,tablero,puntos)).start()
+
 
 def contar_letras_bolsa(bolsa):
     cant=0
@@ -119,19 +118,19 @@ def cambiar_fichas(window,fichas,bolsa,tablero,turnoIA=False): #CONCURRENCIA
             window["-letra"+str(i)+"-"].update(fichas.get_letra(i))
 
 def iniciar(iniciado, t, window, config, tiempo_turno, tablero, dificultad, puntos,jugador):
-    bolsa=config["cant_fichas"]
-    Inteligencia = IA.IA (bolsa,dificultad,puntos[1])
-    nuevas=[]
-    for i in range(7):
-        l=sacar_letra_bolsa(bolsa)
-        nuevas.append(l)
-        window["-letra"+str(i)+"-"].update(l)
-    fichas_jugador= Fichas.Fichas(nuevas)
-    timers= threading.Thread(target= segundo, args=(tablero,fichas_jugador,Inteligencia,tiempo_turno,bolsa,window,t,puntos,jugador,dificultad))
-    if __name__ == 'jugar':
-        timers.start()
-    window["-CantFichas-"].update(str(contar_letras_bolsa(bolsa)))
-    return True, fichas_jugador, bolsa, Inteligencia
+	bolsa=config["cant_fichas"]
+	Inteligencia = IA.IA (bolsa,dificultad,puntos[1])
+	nuevas=[]
+	for i in range(7):
+		l=sacar_letra_bolsa(bolsa)
+		nuevas.append(l)
+		window["-letra"+str(i)+"-"].update(l)
+	fichas_jugador= Fichas.Fichas(nuevas)
+	timers= threading.Thread(target= segundo, args=(tablero,fichas_jugador,Inteligencia,tiempo_turno,bolsa,window,t,puntos,jugador,dificultad))
+	if __name__ == 'jugar':
+		timers.start()
+	window["-CantFichas-"].update(str(contar_letras_bolsa(bolsa)))
+	return True, fichas_jugador, bolsa, Inteligencia
 
 #def crear_botones(n, tablero):
 def crear_botones(tablero, dificultad):
@@ -433,7 +432,7 @@ def juego(cargar=False):
 		event, values = window.Read(timeout=250)
 		print(event, values)
 		if event in (None,'EXIT'):
-			tiempos[2]=False
+			tiempos[2]=False #se deberían guardar los puntajes acá?
 			break
 		elif event == "INICIAR":
 			if not iniciado:
@@ -445,9 +444,13 @@ def juego(cargar=False):
 				window["Cambiar letras"].update(disabled=False)
 				window['-cambios-'].update(visible=True)
 				iniciado, fichas_jugador, bolsa, Inteligencia = iniciar(iniciado, tiempos, window, config, tiempo_turno, tablero, dificultad, puntos,jugador)
+				primer_turnoIA=random.choice([True,False])
 				jugar_IA= threading.Thread(target= Inteligencia.turno, args=(bolsa,window,tablero,puntos))
 				#actualiza el tablero con las casillas de premio  por nivel
 				cambiar_colores(window,dificultad)
+				if primer_turnoIA:
+					pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
+					jugar_IA.start()
 		elif event == sg.TIMEOUT_KEY:
 			window["-TURNO-"].update(f"{tiempos[0] // 60}:{tiempos[0]%60:02d}")
 			window["-DURACION-"].update(f"{tiempos[1] // 60}:{tiempos[1]%60:02d}")
@@ -502,7 +505,10 @@ def juego(cargar=False):
 				window["-dotIA-"].update(filename='imagenes/greendot.png',visible=False)
 				window["-dot-"].update(filename='imagenes/greendot.png',visible=True)
 				deshabilitar_habilitar_botones(window,False,cambios)
-
+		if tiempos[0]==0:
+			#print('FIN')
+			terminar_por_tiempo(puntos,jugador,dificultad)
+			break
 	window.close()
 
 

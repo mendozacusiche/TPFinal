@@ -28,7 +28,6 @@ def terminar(puntos,tiempos,jugador,dif): #CONCURRENCIA
     
 	win=sg.Window('',layout0)
 	ev,val=win.Read()
-	win.close()
     
 	if ev=='SI':
 		layout1=[
@@ -39,12 +38,13 @@ def terminar(puntos,tiempos,jugador,dif): #CONCURRENCIA
 				]
 		wind= sg.Window('TERMINAR',layout1)
 		event,values=wind.Read()
-		wind.close()
 		if event== 'SALIR':
 			dic={jugador:puntos[0]}
 			records.actualizar(dic,dif)
+			wind.close()
 		return True
 	else:
+		win.close()
 		return False
 
 
@@ -66,7 +66,23 @@ def pasar(tablero,fichas,tiempos,tiempo_turno,Intel,bolsa,window,turnoIA=False,t
     tiempos[1]=tiempo_turno
     Intel.set_mi_turno(not turnoIA)
 
-def segundo(tablero,fichas_jugador, Intel, tiempo_turno, bolsa, window, t, puntos): #CONCURRENCIA
+def terminar_por_tiempo(puntos,tiempos,jugador,dif):
+	tiempos[2] = False
+	layout1=[
+				[sg.Text('FIN DEL JUEGO')],
+				[sg.Text('Puntos jugador: '),sg.Text(puntos[0])],
+				[sg.Text('Puntos computadora: '),sg.Text(puntos[1])],
+				[sg.Button('OK')]
+				]
+	wind= sg.Window('',layout1)
+	event,values=wind.Read()
+	dic={jugador:puntos[0]}
+	records.actualizar(dic,dif)
+	if event=='OK':
+		wind.Finalize()
+
+
+def segundo(tablero,fichas_jugador, Intel, tiempo_turno, bolsa, window, t, puntos,jugador,dif): #CONCURRENCIA
     while (t[0]>0 and t[2]):
         time.sleep(1)
         t[0]-=1
@@ -78,7 +94,7 @@ def segundo(tablero,fichas_jugador, Intel, tiempo_turno, bolsa, window, t, punto
                 pasar(tablero,fichas_jugador,t,tiempo_turno,Intel,bolsa,window,timer=True)
                 threading.Thread(target= Intel.turno, args=(bolsa,window,tablero,puntos)).start()
     if (t[2]):
-        terminar(puntos,t)
+        terminar_por_tiempo(puntos,t,jugador,dif)
 
 def contar_letras_bolsa(bolsa):
     cant=0
@@ -102,7 +118,7 @@ def cambiar_fichas(window,fichas,bolsa,tablero,turnoIA=False): #CONCURRENCIA
         if(not turnoIA):
             window["-letra"+str(i)+"-"].update(fichas.get_letra(i))
 
-def iniciar(iniciado, t, window, config, tiempo_turno, tablero, dificultad, puntos):
+def iniciar(iniciado, t, window, config, tiempo_turno, tablero, dificultad, puntos,jugador):
     bolsa=config["cant_fichas"]
     Inteligencia = IA.IA (bolsa,dificultad,puntos[1])
     nuevas=[]
@@ -111,7 +127,7 @@ def iniciar(iniciado, t, window, config, tiempo_turno, tablero, dificultad, punt
         nuevas.append(l)
         window["-letra"+str(i)+"-"].update(l)
     fichas_jugador= Fichas.Fichas(nuevas)
-    timers= threading.Thread(target= segundo, args=(tablero,fichas_jugador,Inteligencia,tiempo_turno,bolsa,window,t,puntos))
+    timers= threading.Thread(target= segundo, args=(tablero,fichas_jugador,Inteligencia,tiempo_turno,bolsa,window,t,puntos,jugador,dificultad))
     if __name__ == 'jugar':
         timers.start()
     window["-CantFichas-"].update(str(contar_letras_bolsa(bolsa)))
@@ -429,7 +445,7 @@ def juego(cargar=False):
 				window['Posponer'].update(disabled=False)
 				window["Cambiar letras"].update(disabled=False)
 				window['-cambios-'].update(visible=True)
-				iniciado, fichas_jugador, bolsa, Inteligencia = iniciar(iniciado, tiempos, window, config, tiempo_turno, tablero, dificultad, puntos)
+				iniciado, fichas_jugador, bolsa, Inteligencia = iniciar(iniciado, tiempos, window, config, tiempo_turno, tablero, dificultad, puntos,jugador)
 				jugar_IA= threading.Thread(target= Inteligencia.turno, args=(bolsa,window,tablero,puntos))
 				#actualiza el tablero con las casillas de premio  por nivel
 				cambiar_colores(window,dificultad)

@@ -39,14 +39,14 @@ def terminar(puntos,tiempos,jugador,dif): #CONCURRENCIA
 		wind= sg.Window('TERMINAR',layout1)
 		event,values=wind.Read()
 		if event== 'SALIR':
-			dic={jugador:puntos[0]}
-			records.actualizar(dic,dif)
+			#dic={jugador:puntos[0]}
+			records.actualizar(jugador,puntos[0],dif)
 			wind.close()
+			win.close()
 		return True
 	else:
 		win.close()
 		return False
-
 
 def recargar_fichas(fichas, bolsa, window, turnoIA=False):
     usadas=fichas.get_usadas()
@@ -77,10 +77,9 @@ def terminar_por_tiempo(puntos,jugador,dif):
 	event,values=wind.Read()
 	print('FIN DEL JUEGO')
 	dic={jugador:puntos[0]}
-	records.actualizar(dic,dif)
+	records.actualizar(jugador,puntos[0],dif)
 	if event=='OK':
 		wind.close()
-
 
 def segundo(tablero,fichas_jugador, Intel, tiempo_turno, bolsa, window, t, puntos,jugador,dif): #CONCURRENCIA
 	while (t[0]>0 and t[2]):
@@ -93,7 +92,6 @@ def segundo(tablero,fichas_jugador, Intel, tiempo_turno, bolsa, window, t, punto
 			else:
 				pasar(tablero,fichas_jugador,t,tiempo_turno,Intel,bolsa,window,timer=True)
 				threading.Thread(target= Intel.turno, args=(bolsa,window,tablero,puntos)).start()
-
 
 def contar_letras_bolsa(bolsa):
     cant=0
@@ -132,7 +130,6 @@ def iniciar(iniciado, t, window, config, tiempo_turno, tablero, dificultad, punt
 	window["-CantFichas-"].update(str(contar_letras_bolsa(bolsa)))
 	return True, fichas_jugador, bolsa, Inteligencia
 
-#def crear_botones(n, tablero):
 def crear_botones(tablero, dificultad):
     if sys.platform == "win32":
         if (dificultad == "Medio" or dificultad == "Facil"):
@@ -198,9 +195,7 @@ def diseño_dificil(window):
     for y in range(len(cuatro)):
         window[cuatro[y]].update(button_color=(None, '#007eb0'))
     
-
-def cambiar_colores(window, dificultad):
-    
+def cambiar_colores(window, dificultad):   
     if(dificultad == "Facil"):
         diseño_facil(window)
     elif(dificultad == "Medio"):
@@ -259,11 +254,9 @@ def crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion=None):
     
 	columna_1 =	[
 				[sg.Frame('FICHAS COMPUTADORA',layout_fichasIA)],
-				#[sg.Column(crear_botones(i, tablero), pad=(0,0)) for i in range(tablero.get_tamanio())],
-				[sg.Column(crear_botones(tablero, dificultad), background_color= 'grey40', justification='center', )],
+				[sg.Column(crear_botones(tablero, dificultad), background_color= 'grey40', justification='center')],
 				[sg.Frame('FICHAS JUGADOR',layout_fichas_jugador)]
 				]
-
 
 	Tiempo_juego=[       
 				[sg.Text(f"{tiempos[0] // 60}:{tiempos[0]%60:02d}",size=(10, 2), text_color='white',font=('Digital-7',20), justification='center', key='-TURNO-')],
@@ -285,11 +278,8 @@ def crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion=None):
 				[sg.Button('Pasar',key='Pasar',font=("Current",10),size=(15, 0),disabled=True)],
 				[sg.Button("Evaluar Palabra",key="Evaluar Palabra",font=("Current",10),size=(15, 0),disabled=True)], 
 				[sg.Button('Posponer',key='Posponer',font=("Current",10), size=(15, 0),disabled=True)],
-				#[sg.Button('Terminar',font=("Current",9),size=(10, 0))],
-				#[sg.Button('Exit',font=("Current", 9), size=(10, 0))]
 				[sg.Button('Cambiar letras',key='Cambiar letras',font=("Current",10),size=(15, 0),disabled=True),sg.Text('Cambios disponibles: '),sg.Text(cambios,key='-cambios-',visible=False)]
 				]
-
     
 	layout = [  
 				[sg.Column(columna_0),sg.Column(columna_1, pad=(0,0)), sg.Frame('CONFIGURACION', columna_2, pad=(20, 50), relief= 'solid')],
@@ -304,7 +294,6 @@ def checkear_ficha(event, fichas, window, n):
     else:
         fichas.descheckear(n)
         window["-letra"+str(n)+"-"].update(button_color=('white','OrangeRed3'))
-
 
 def clickear_ficha(event, fichas, window):
 
@@ -385,7 +374,7 @@ def deshabilitar_habilitar_botones(window,b,cambios):
 def juego(cargar=False):
 	if cargar:
 		try:
-			archivo= open("guardado.txt","r")
+			archivo= open("guardado.json","r")#falta crear archivo
 			config = json.load(archivo)
 			jugador = config["jugador"]
 			ventana_bienvenida.ventana(jugador)
@@ -395,7 +384,7 @@ def juego(cargar=False):
 			print('No se encontro el  archivo.......')
 	else:
 		try:
-			archivo= open("config.txt","r")
+			archivo= open("archivos/config.json","r")
 			config = json.load(archivo)
 		except FileNotFoundError as ex:
 			print(ex)
@@ -410,9 +399,6 @@ def juego(cargar=False):
 	tiempos=[tiempo_total,tiempo_turno,True]
 
 	dificultad=config["dificultad"]
-	# if dificultad == "Dificil":
-		# opciones=["Adjetivos", "Verbos"]
-		# opcion=random.choice(opciones)
 
 	tablero = Tablero.Tablero(dificultad)
 	
@@ -447,8 +433,8 @@ def juego(cargar=False):
 				iniciado, fichas_jugador, bolsa, Inteligencia = iniciar(iniciado, tiempos, window, config, tiempo_turno, tablero, dificultad, puntos,jugador)
 				primer_turnoIA=random.choice([True,False])
 				jugar_IA= threading.Thread(target= Inteligencia.turno, args=(bolsa,window,tablero,puntos))
-				#actualiza el tablero con las casillas de premio  por nivel
-				cambiar_colores(window,dificultad)
+				
+				cambiar_colores(window,dificultad) #actualiza el tablero con las casillas de premio  por nivel
 				if primer_turnoIA:
 					pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
 					jugar_IA.start()
@@ -507,7 +493,6 @@ def juego(cargar=False):
 				window["-dot-"].update(filename='imagenes/greendot.png',visible=True)
 				deshabilitar_habilitar_botones(window,False,cambios)
 		if tiempos[0]==0:
-			#print('FIN')
 			terminar_por_tiempo(puntos,jugador,dificultad)
 			break
 	window.close()

@@ -2,10 +2,9 @@ import PySimpleGUI as sg
 import configuracion, jugar
 import json
 
-def ventana():
-	
+def ventana():	
 	try:
-		archivo= open("config.txt","r")
+		archivo= open("archivos/config.json","r")
 		config= json.load(archivo)
 	
 		dificultad=config["dificultad"]
@@ -26,10 +25,9 @@ Palabras permitidas: son elegidas al azar entre adjetivos y verbos.
 Tamaño del tablero: 15x15."""
 
 		columna1=[[imag]]
-		
-		
+				
 	except FileNotFoundError as ex:
-		print("No se encontro el archivo config.txt")
+		print("No se encontro el archivo config.json")
 		columna1=[[sg.Text('No hay tablero actual')]]
 				
 	columna2=[[sg.Text(descr,key='-descr-',font=("Current",10), size = (30, 0),justification='ljust')],
@@ -41,7 +39,6 @@ Tamaño del tablero: 15x15."""
 	
 	window=sg.Window('Scrabble',layout)
 	
-
 	while True:
 		event,values=window.Read()
 		

@@ -15,7 +15,7 @@ def main(args):
 
 	while True:
 		event,values=window.Read()
-		
+
 		if (event== 'Nuevo Juego'):
 			window.Hide()
 			nuevo_juego.ventana()

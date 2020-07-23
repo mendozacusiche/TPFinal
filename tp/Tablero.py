@@ -89,17 +89,6 @@ class Tablero():
 		
 		return palabra
 
-	# def calcular_puntaje(letra,puntaje):
-		# try:
-			# with open ("config.txt","r") as c:
-				# config= json.load(c)
-			# puntaje_letras=config["puntaje_fichas"]
-			# if letra in puntaje_letras.keys():
-				# puntaje=puntaje+puntaje_letras[letra]
-		# except FileNotFoundError as ex:
-			# print("No se encontro el archivo config.txt")
-		# return puntaje
-
 	def confirmar_letras(self):
 		puntaje=0
 		puntaje_letras={}
@@ -110,7 +99,7 @@ class Tablero():
 					letra=self.__letras[x][y]
 					print(letra)
 					try:
-						with open ("config.txt","r") as c:
+						with open ("archivos/config.json","r") as c:
 							config= json.load(c)
 						puntaje_letras=config["puntaje_fichas"]
 						if letra in puntaje_letras.keys():

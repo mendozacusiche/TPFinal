@@ -107,7 +107,7 @@ def crear_botones(tablero, dificultad):
             return [[sg.Button(" ", button_color=(None, '#a6a3a2'), size=(4,2), pad=(0, 0), key=("b_"+str(x)+"_"+str(y))) for x in range(tablero.get_tamanio())] for y in range(tablero.get_tamanio())]
     else:
         if (dificultad == "Medio" or dificultad == "Facil"):
-            return [[sg.Button(" ", button_color=(None, '#a6a3a2'), size=(0,0), pad=(0, 0), key=("b_"+str(x)+"_"+str(y))) for x in range(tablero.get_tamanio())] for y in range(tablero.get_tamanio())]
+            return [[sg.Button(" ", button_color=(None, '#a6a3a2'), size=(1,1), pad=(0, 0), key=("b_"+str(x)+"_"+str(y))) for x in range(tablero.get_tamanio())] for y in range(tablero.get_tamanio())]
         else:
             return [[sg.Button(" ", button_color=(None, '#a6a3a2'), size=(2,2), pad=(0, 0), key=("b_"+str(x)+"_"+str(y))) for x in range(tablero.get_tamanio())] for y in range(tablero.get_tamanio())]
 
@@ -369,11 +369,10 @@ def juego(cargar=False):
 
 	dificultad=config["dificultad"]
 	# if dificultad == "Dificil":
-		# opciones=["Adjetivos", "Verbos"]
-		# opcion=random.choice(opciones)
-
+	    # opciones=["Adjetivos", "Verbos"]
+	    # opcion=random.choice(opciones)   
 	tablero = Tablero.Tablero(dificultad)
-	
+ 
 	if dificultad == "Dificil":
 		opciones=["Adjetivos", "Verbos"]
 		opcion=random.choice(opciones)

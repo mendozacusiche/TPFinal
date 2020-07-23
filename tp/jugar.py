@@ -446,9 +446,13 @@ def juego(cargar=False):
 				window["Cambiar letras"].update(disabled=False)
 				window['-cambios-'].update(visible=True)
 				iniciado, fichas_jugador, bolsa, Inteligencia = iniciar(iniciado, tiempos, window, config, tiempo_turno, tablero, dificultad, puntos,jugador)
+				primer_turnoIA=random.choice([True,False])
 				jugar_IA= threading.Thread(target= Inteligencia.turno, args=(bolsa,window,tablero,puntos))
 				#actualiza el tablero con las casillas de premio  por nivel
 				cambiar_colores(window,dificultad)
+				if primer_turnoIA:
+					pasar(tablero,fichas_jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
+					jugar_IA.start()
 		elif event == sg.TIMEOUT_KEY:
 			window["-TURNO-"].update(f"{tiempos[0] // 60}:{tiempos[0]%60:02d}")
 			window["-DURACION-"].update(f"{tiempos[1] // 60}:{tiempos[1]%60:02d}")

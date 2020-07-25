@@ -83,7 +83,7 @@ class Tablero():
 					es_horizontal=False
 
 		#Verifico que no tenga espacios
-		if(len(fichas)>0):
+		if(len(fichas)>1):
 			if es_vertical:
 				fichas=sorted(fichas, key = lambda item: item[2])
 				x=fichas[0][2]

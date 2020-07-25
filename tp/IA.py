@@ -25,7 +25,7 @@ class IA():
 		palabra=""
 		marcas=[False for i in range(len(self.__fichas.get_letras()))]
 		n=7
-		while(palabra=="" and n>0):
+		while(palabra=="" and n>1):
 			combs=[]
 			self.combinaciones(combs,palabra,marcas,self.__fichas.get_letras(),n)
 			for i in range(len(combs)):

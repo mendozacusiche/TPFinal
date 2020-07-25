@@ -3,7 +3,7 @@ import json
 
 def aplicar(vals, punts, cants,wind):
 	try:
-		archivo=open("config.txt","r+")
+		archivo=open("archivos/config.json","r+")
 
 		config=json.load(archivo)
 
@@ -35,14 +35,13 @@ Palabras permitidas: son elegidas al azar entre adjetivos y verbos.
 Tamaño del tablero: 15x15.""")
 		archivo.close()
 	except FileNotFoundError as ex:
-		print('No se encontro el archivo "config.txt" en el directorio actual...')
+		print('No se encontro el archivo "config.json" en el directorio actual...')
 		print(ex)
   		
-
 def restaurar(win):
 	
 	try:
-		archivo=open("config.txt","w")
+		archivo=open("archivos/config.json","w")
 
 		puntaje_fichas= { 'A' : 1 ,   'B' : 3 ,   'C' : 2 , 'D' : 2 ,
 					      'E' : 1 ,   'F' : 4 ,   'G' : 2 , 'H' : 4 ,
@@ -66,7 +65,7 @@ def restaurar(win):
 
 		archivo.close()
 	except FileNotFoundError as ex:
-		print("NO se encontro el archivo confi.txt")
+		print("NO se encontro el archivo confi.json")
 
 	win["-tot-"].update(j["tiempo_total"])
 	win["-turn-"].update(j["tiempo_turno"])
@@ -76,7 +75,6 @@ def restaurar(win):
 	win["-l2-"].update("")
 	win["-t1-"].update("")
 	win["-t2-"].update("")
-
 
 def actualizar_descripcion(win,val):
 	if(val["-dif-"]=="Facil"):
@@ -89,13 +87,10 @@ def actualizar_descripcion(win,val):
 def ventana(wind):
 
 	try:
-		archivo= open("config.txt","r")
+		archivo= open("archivos/config.json","r")
 		config= json.load(archivo)
 	except FileNotFoundError as ex:
 		print("NO se encontro el archivo config.txt")
-
-	
-	
 
 	letras=["A","B","C","D","E","F","G","H","I","J","K","L","LL","M","N","Ñ","O","P","Q","R","RR","S","T","U","V","W","X","Y","Z"]
 

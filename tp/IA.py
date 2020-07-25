@@ -2,16 +2,13 @@ import jugar, Fichas, Tablero
 
 class IA():
 
-	def __init__(self,bolsa,dificultad,puntos):
-		nuevas=[]
-		for i in range(7):
-			l=jugar.sacar_letra_bolsa(bolsa)
-			nuevas.append(l)
-		self.__fichas=Fichas.Fichas(nuevas)
-		self.__mi_turno=False
-		self.__procesando=False
+	def __init__(self,fichas,primer_turno,dificultad,puntos,mi_turno=False,procesando=False,cambios_letras=3):
+		self.__fichas=fichas
+		self.__mi_turno=mi_turno
+		self.__primer_turno=primer_turno
+		self.__procesando=procesando
 		self.__dificultad=dificultad
-		self.__cambios_letras=3
+		self.__cambios_letras=cambios_letras
 		self.__puntos=puntos
 
 	def combinaciones(self,combs,pal,marcas,letras,largo):
@@ -41,13 +38,12 @@ class IA():
 			n-=1
 		return palabra
 
-	def turno(self,bolsa,window,tablero,puntos):
+	def turno(self,bolsa,window,tablero,jugador,tiempos,tiempo_turno):
 		self.__procesando=True
 		palabra=self.buscar_palabra()
 
 		if (palabra!=""):
-			ok = tablero.insertar_palabra(palabra,window,puntos)
-			self.__puntos=puntos[1]
+			ok = tablero.insertar_palabra(palabra,window,jugador,self)
 			if(ok):
 				for l in palabra.split():
 					i=0
@@ -62,9 +58,16 @@ class IA():
 				jugar.cambiar_fichas(window,self.__fichas,bolsa,tablero,True)
 				self.__cambios_letras-=1
 		self.__procesando=False
+		jugar.pasar(tablero,jugador,tiempos,tiempo_turno,self,bolsa,window)
 
 	def get_procesando(self):
 		return self.__procesando
+
+	def get_primer_turno(self):
+		return self.__primer_turno
+
+	def set_primer_turno(self,b):
+		self.__primer_turno=b
 		
 	def get_mi_turno(self):
 		return self.__mi_turno
@@ -83,3 +86,6 @@ class IA():
 
 	def set_puntos(self, p):
 		self.__puntos=p
+
+	def get_cambios_letras(self):
+		return self.__cambios_letras

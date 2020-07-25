@@ -2,16 +2,41 @@ import jugar
 import json
 
 class Tablero():
-	def __init__(self, nivel):
+	def __init__(self, nivel, letras=None, confirmadas=None):
 		'''Seteamos el tamaño por nivel e inicializamos el tablero como vacio'''
 		if nivel == "Facil":
 			self.__tamanio=23
+			self.__especiales={"uno": (('b_0_6'), ('b_1_7'), ('b_2_8'), ('b_3_9'), ('b_4_10'), ('b_5_11'), ('b_6_12'), ('b_7_13'),('b_8_14'), ('b_9_15'), ('b_10_16'),('b_11_17'), ('b_12_18'), ('b_13_19'),('b_14_20'),('b_15_21'),('b_16_22')),
+								"dos": (('b_6_0'), ('b_7_1'), ('b_8_2'), ('b_9_3'), ('b_10_4'),('b_11_5'), ('b_12_6'), ('b_13_7'), ('b_14_8'), ('b_15_9'),('b_16_10'), ('b_17_11'), ('b_18_12'),('b_19_13'), ('b_20_14'), ('b_21_15'),('b_22_16')),
+								"tres": (('b_0_17'), ('b_1_16'), ('b_2_15'), ('b_3_14'), ('b_4_13'), ('b_5_12'), ('b_6_11'), ('b_7_10'), ('b_8_9'), ('b_9_8'), ('b_10_7'),('b_11_6'), ('b_12_5'),('b_13_4'), ('b_14_3'), ('b_15_2'),('b_16_1'), ('b_17_0')),
+								"cuatro" : (('b_6_22'), ('b_7_21'), ('b_8_20'), ('b_9_19'), ('b_10_18'), ('b_11_17'), ('b_12_16'),('b_13_15'), ('b_14_14'), ('b_15_13'), ('b_16_12'), ('b_17_11'), ('b_18_10'), ('b_19_9'), ('b_20_8'), ('b_21_7'), ('b_22_6')),
+								"cinco" : (('b_1_5'), ('b_2_4'), ('b_3_3'), ('b_4_2'), ('b_5_1'), ('b_1_18'), ('b_2_19'),('b_3_20'), ('b_4_21'), ('b_5_22'), ('b_18_1'), ('b_19_2'), ('b_20_3'), ('b_21_4'), ('b_22_5'), ('b_17_22'), ('b_18_21'),('b_19_20'), ('b_20_19'),('b_21_18'), ('b_22_17')),
+								"seis" : (('b_6_5'), ('b_17_5'), ('b_11_11'), ('b_6_17'),('b_17_17'),('b_0_0'), ('b_11_0'), ('b_22_0'),('b_0_11'), ('b_22_11'), ('b_0_22'),('b_11_22'),('b_22_22'))
+							}
 		elif nivel == "Medio":
 			self.__tamanio=19
+			self.__especiales={"uno" :(('b_0_0'), ('b_0_9'), ('b_0_18'), ('b_9_0'), ('b_9_9'), ('b_9_18'), ('b_18_0'), ('b_18_9'), ('b_18_18')),
+								"dos" :(('b_1_1'), ('b_2_2'), ('b_3_3'), ('b_4_4'), ('b_5_5'), ('b_6_6'), ('b_7_7'), ('b_8_8'), ('b_10_10'), ('b_11_11'), ('b_12_12'), ('b_13_13'), ('b_14_14'), ('b_15_15'), ('b_16_16'), ('b_17_17'),('b_17_1'), ('b_16_2'), ('b_15_3'), ('b_14_4'), ('b_13_5'), ('b_12_6'), ('b_11_7'), ('b_10_8'), ('b_8_10'), ('b_7_11'), ('b_6_12'), ('b_5_13'), ('b_4_14'), ('b_3_15'), ('b_2_16'), ('b_1_17')),
+								"tres" :(('b_4_9'),('b_9_4'),('b_14_9'),('b_9_14'))
+							}
 		else:
 			self.__tamanio=15
-		self.__letras = [["" for i in range(self.__tamanio)] for j in range(self.__tamanio)]
-		self.__confirmadas = [[False for i in range(self.__tamanio)] for j in range(self.__tamanio)]
+			self.__especiales={"uno": (('b_0_0'), ('b_7_0'), ('b_14_0'), ('b_0_7'), ('b_14_7'), ('b_0_14'), ('b_7_14'), ('b_14_14')),
+								"dos": (('b_1_1'),   ('b_2_2'), ('b_3_3'), ('b_4_4'), ('b_1_13'),('b_2_12'), ('b_3_11'), ('b_4_10'), ('b_13_1'), ('b_12_2'),('b_11_3'), ('b_10_4'), ('b_13_13'),('b_12_12'), ('b_11_11'), ('b_10_10')),
+								"tres": (('b_1_5'), ('b_1_9'), ('b_5_1'), ('b_5_5'), ('b_5_9'), ('b_5_13'), ('b_9_1'), ('b_9_5'), ('b_9_9'), ('b_9_13'), ('b_13_5'), ('b_13_9'), ('b_7_7')),
+								"cuatro" : (('b_0_3'), ('b_0_11'), ('b_2_6'), ('b_2_8'), ('b_3_0'), ('b_3_7'), ('b_3_14'),('b_6_2'), ('b_6_6'), ('b_6_8'), ('b_6_12'), ('b_7_3'), ('b_7_11'), ('b_8_2'), ('b_8_6'), ('b_8_8'), ('b_8_12'), ('b_11_0'), ('b_11_7'), ('b_11_14'), ('b_12_6'), ('b_12_8'), ('b_14_3'), ('b_14_11'))
+							}
+		if letras == None:
+			self.__letras = [["" for i in range(self.__tamanio)] for j in range(self.__tamanio)]
+		else:
+			self.__letras = letras
+		if confirmadas == None:
+			self.__confirmadas = [[False for i in range(self.__tamanio)] for j in range(self.__tamanio)]
+		else:
+			self.__confirmadas = confirmadas
+
+	def get_especiales(self):
+		return self.__especiales
 
 	def get_tamanio(self):
 		return self.__tamanio
@@ -37,7 +62,7 @@ class Tablero():
 					fichas.append((x,y))
 		return fichas
 
-	def buscar_palabra(self):
+	def buscar_palabra(self,jugador):
 		fichas=[]
 		for x in range(self.__tamanio):
 			for y in range(self.__tamanio):
@@ -78,6 +103,9 @@ class Tablero():
 		else:
 			es_palabra=False
 
+		if(jugador.get_primer_turno()) and (self.__letras[self.__tamanio//2][self.__tamanio//2]== ""):
+			es_palabra=False
+
 		#Armo la palabra
 		if es_palabra:
 			palabra=""
@@ -89,17 +117,6 @@ class Tablero():
 		
 		return palabra
 
-	# def calcular_puntaje(letra,puntaje):
-		# try:
-			# with open ("config.txt","r") as c:
-				# config= json.load(c)
-			# puntaje_letras=config["puntaje_fichas"]
-			# if letra in puntaje_letras.keys():
-				# puntaje=puntaje+puntaje_letras[letra]
-		# except FileNotFoundError as ex:
-			# print("No se encontro el archivo config.txt")
-		# return puntaje
-
 	def confirmar_letras(self):
 		puntaje=0
 		puntaje_letras={}
@@ -110,7 +127,7 @@ class Tablero():
 					letra=self.__letras[x][y]
 					print(letra)
 					try:
-						with open ("config.txt","r") as c:
+						with open ("archivos/config.json","r") as c:
 							config= json.load(c)
 						puntaje_letras=config["puntaje_fichas"]
 						if letra in puntaje_letras.keys():
@@ -120,28 +137,14 @@ class Tablero():
 					#puntaje=calcular_puntaje(letra,puntaje)
 		return puntaje 
 
-	def insertar_palabra(self,palabra,window,puntos):
+	def insertar_palabra(self,palabra,window,jugador,IA):
 		casillas=[]
 		ok=False
-		for i in range(self.__tamanio):
-			for j in range(self.__tamanio):
-				if(not self.__confirmadas[j][i]):
-					casillas.append((j,i))
-					if(len(casillas)==len(palabra.split())):
-						ok=True
-						break
-				else:
-					casillas=[]
-			if(ok):
-				break
-			else:
-				casillas=[]
-
-		if(not ok):
+		if(not IA.get_primer_turno()):
 			for i in range(self.__tamanio):
 				for j in range(self.__tamanio):
-					if(not self.__confirmadas[i][j]):
-						casillas.append((i,j))
+					if(not self.__confirmadas[j][i]):
+						casillas.append((j,i))
 						if(len(casillas)==len(palabra.split())):
 							ok=True
 							break
@@ -152,12 +155,31 @@ class Tablero():
 				else:
 					casillas=[]
 
+			if(not ok):
+				for i in range(self.__tamanio):
+					for j in range(self.__tamanio):
+						if(not self.__confirmadas[i][j]):
+							casillas.append((i,j))
+							if(len(casillas)==len(palabra.split())):
+								ok=True
+								break
+						else:
+							casillas=[]
+					if(ok):
+						break
+					else:
+						casillas=[]
+		else:
+			for i in range(len(palabra.split())):
+				casillas.append((i+self.__tamanio//2,self.__tamanio//2))
+			ok=True
+
 		if(ok):
 			i=0
 			for c in casillas:
 				self.__letras[c[0]][c[1]]=palabra.split()[i]
 				window["b_"+str(c[0])+"_"+str(c[1])].update(palabra.split()[i])
 				i+=1
-			jugar.confirmar(window,self,puntos,True)
+			jugar.confirmar(window,self,jugador,IA)
 
 		return ok

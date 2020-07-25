@@ -1,13 +1,19 @@
 class Fichas():
 	
-	def __init__(self, nuevas):
-		self.__letras=[]
-		self.__usadas=[]
-		self.__checked=[]
-		for i in range(7):
-			self.__letras.append(nuevas[i])
-			self.__usadas.append(False)
-			self.__checked.append(False)
+	def __init__(self, letras, usadas=None, checked=None):
+		self.__letras=letras
+		if (usadas==None):
+			self.__usadas=[]
+			for i in range(7):
+				self.__usadas.append(False)
+		else:
+			self.__usadas=usadas
+		if (checked==None):
+			self.__checked=[]
+			for i in range(7):
+				self.__checked.append(False)
+		else:
+			self.__checked=checked
 
 	def get_letras(self):
 		return self.__letras

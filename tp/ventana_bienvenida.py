@@ -6,7 +6,7 @@ def ventana(jugador="None"):
     layout = [
               [sg.Text('Bienvenido a ScrabbleAR! ',size=(40, 1), justification='center', font='Courier 15')],
               [sg.Image(filename='imagenes/icons.png', pad=(215, 0))],
-              [sg.Text('Bienvenido de nuevo ',size=(40, 1), justification='center', font='Courier 15')],
+              [sg.Text('Bienvenido de nuevo '+jugador,size=(40, 1), justification='center', font='Courier 15')],
               [sg.Ok()]
             ]
     window = sg.Window('ScrabbleAR',element_justification='center', resizable= True).Layout(layout)

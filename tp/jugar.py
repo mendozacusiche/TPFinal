@@ -115,6 +115,8 @@ def retomar(window,jugador,tablero,Inteligencia,tiempo_turno,bolsa,t,dificultad)
 	window['TERMINAR'].update(disabled=False)
 	window['Posponer'].update(disabled=False)
 	window['-cambios-'].update(visible=True)
+	window["-puntos-"].update(jugador.get_puntos())
+	window["-puntosIA-"].update(Inteligencia.get_puntos())
 	for i in range(7):
 		window["-letra"+str(i)+"-"].update(jugador.get_fichas().get_letra(i))
 	if (Inteligencia.get_mi_turno()):
@@ -256,14 +258,15 @@ def posponer(config,tablero,bolsa,Inteligencia,jugador,tiempos,dificultad,opcion
 	config["jugador_cambios"]=jugador.get_cambios()
 	config["jugador_mi_turno"]=jugador.get_mi_turno()
 	config["jugador_primer_turno"]=jugador.get_primer_turno()
-	archivo=open("archivos/guardado.json","w")
+	archivo=open("archivos/guardado.json","w") 
 	json.dump(config,archivo)
+	sg.popup('Partida guardada con éxito')
 
 def juego(cargar=False):
 	try:
 		if cargar:
-			archivo= open("archivos/guardado.json","r")#falta crear archivo
-			config = json.load(archivo)
+			archivo= open("archivos/guardado.json","r")#falta crear archivo #poner manejo excepciones #fijarse si está vacio el archivo también 
+			config = json.load(archivo) #se podria cambiar el nombre a guardado de la var
 			nombre = config["jugador_nombre"]
 			fichas=Fichas.Fichas(config["jugador_fichas_letras"],config["jugador_fichas_usadas"],config["jugador_fichas_checked"])
 			jugador= Jugador.Jugador(nombre,fichas,config["jugador_mi_turno"],config["jugador_mi_turno"],config["jugador_cambios"],config["jugador_puntos"])
@@ -281,7 +284,7 @@ def juego(cargar=False):
 			window = sg.Window('ScrabbleAR',resizable= True,element_justification='center',).Layout(layout).Finalize()
 			iniciado = False
 		else:
-			archivo= open("archivos/config.json","r")
+			archivo= open("archivos/config.json","r") #manejo excepciones
 			config = json.load(archivo)
 			nombre = ventana_bienvenida.ventana()  
 			tiempo_total= int(config["tiempo_total"]) * 60
@@ -299,7 +302,7 @@ def juego(cargar=False):
 			window = sg.Window('ScrabbleAR',resizable= True,element_justification='center',).Layout(layout).Finalize()
 			iniciado=False
 
-		pos_letra= -1
+		pos_letra= -1 #que es esto?
 
 		while True:                    
 			event, values = window.Read(timeout=200)
@@ -342,13 +345,15 @@ def juego(cargar=False):
 				if (iniciado):
 					if (dificultad in ("Facil","Medio")):
 						posponer(config,tablero,bolsa,Inteligencia,jugador,tiempos,dificultad)
+						break
 					else:
 						posponer(config,tablero,bolsa,Inteligencia,jugador,tiempos,dificultad,opcion)
+						break
 			elif event == "TERMINAR":
 				if Layout.terminar(Inteligencia,tiempos,jugador,dificultad):
 					break
 			elif event in ("-letraIA0-","-letraIA1-","-letraIA2-","-letraIA3-","-letraIA4-","-letraIA5-","-letraIA6-"):
-				pass
+				pass #es necesario poner este evento si no hace nada?
 			elif event == "Evaluar Palabra" and not Inteligencia.get_mi_turno():
 				if iniciado:
 					palabra = tablero.buscar_palabra(jugador)
@@ -374,12 +379,12 @@ def juego(cargar=False):
 				window["-dotIA-"].update(filename='imagenes/greendot.png',visible=False)
 				window["-dot-"].update(filename='imagenes/greendot.png',visible=True)
 				deshabilitar_habilitar_botones(window,False,jugador)
-			if tiempos[0]==0:
+			if tiempos[0]==0:#acá no deberiamos preguntar si se quedo sin fichas la bolsa también?
 				Layout.terminar_por_otros(Inteligencia,jugador,dificultad)
 				break
 		window.close()
 
-	except FileNotFoundError as ex:
+	except FileNotFoundError as ex: #raro manejo de excepciones
 		print('No se encontro el  archivo.......')
 
 color_button = ('white','OrangeRed3')

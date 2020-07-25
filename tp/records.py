@@ -43,38 +43,42 @@ def crear():
 	
 def actualizar(nombre,puntaje,nivel):
 	'''actualizo los records en el nivel que corresponda'''
-	with open('archivos/topten.json','r') as p:
-		datos=json.load(p)
-	if nivel in datos.keys():
-		if (nombre in datos[nivel].keys()):
-			if puntaje> datos[nivel][nombre]:
+	try:
+		with open('archivos/topten.json','r') as p:
+			datos=json.load(p)
+		if nivel in datos.keys():
+			if (nombre in datos[nivel].keys()):
+				if puntaje> datos[nivel][nombre]:
 					datos[nivel][nombre]=puntaje
-		else:
-			if (len(datos[nivel])<10):
-				datos[nivel][nombre]=puntaje
 			else:
-				print(len(datos[nivel]))
-				minimo=min(datos[nivel], key=datos[nivel].get)
-				datos[nivel].pop(minimo)
-				datos[nivel][nombre]=puntaje
-				print('hola')
-	else :
-		datos[nivel]=dic
-	guardarDatos(datos)
+				if (len(datos[nivel])<10):
+					datos[nivel][nombre]=puntaje
+				else:
+					print(len(datos[nivel]))
+					minimo=min(datos[nivel], key=datos[nivel].get)
+					datos[nivel].pop(minimo)
+					datos[nivel][nombre]=puntaje
+					
+		else :
+			datos[nivel]=dic
+		guardarDatos(datos)
+	except FileNotFoundError:
+		sg.popup('No se encontro el archivo topten.json')
 
 def guardarDatos(datos):
 	with open('archivos/topten.json','w') as p:
 		json.dump(datos,p,indent=4)
 
 def imprimir(nivel,win):
-	with open('archivos/topten.json','r') as p:
-		datos=json.load(p)
 	try:
-		lista = sorted(datos[nivel].items(), key=lambda x: x[1],reverse=True)
+		with open('archivos/topten.json','r') as p:
+			datos=json.load(p)
+		try:
+			lista = sorted(datos[nivel].items(), key=lambda x: x[1],reverse=True)
 		
-		win['RECORDS'].update(map(lambda x: " {}: {}".format(x[0], x[1]),lista))
-	except KeyError:
-		sg.popup('No hay registros del nivel seleccionado')
-
-
-
+			win['RECORDS'].update(map(lambda x: " {}: {}".format(x[0], x[1]),lista))
+		except KeyError:
+			sg.popup('No hay registros del nivel seleccionado')
+	except FileNotFoundError:
+		sg.popup('No se encontro el archivo topten.json')
+		#win.close()#se puede poner o no

@@ -114,6 +114,8 @@ def retomar(window,jugador,tablero,Inteligencia,tiempo_turno,bolsa,t,dificultad)
 	window['TERMINAR'].update(disabled=False)
 	window['Posponer'].update(disabled=False)
 	window['-cambios-'].update(visible=True)
+	window["-puntos-"].update(jugador.get_puntos())
+	window["-puntosIA-"].update(Inteligencia.get_puntos())
 	for i in range(7):
 		window["-letra"+str(i)+"-"].update(jugador.get_fichas().get_letra(i))
 	if (Inteligencia.get_mi_turno()):

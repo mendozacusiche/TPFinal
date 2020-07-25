@@ -51,12 +51,12 @@ def crear_botones(tablero, dificultad):
 
 
 
-def crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion=None):
+def crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion=None,cargar=False):
 
 	descr=definir_descripcion(dificultad,opcion)
 	lay=definir_especiales(dificultad)
 		
-	layout_fichasIA=[[sg.Button("#",font=("Current",9),size=(0,0), pad=(20, 0), button_color=color_button, key=("-letraIA"+str(i)+"-")) for i in range(7)]]#,sg.Text('',key='-PC-')]]
+	layout_fichasIA=[[sg.Button("#",font=("Current",9),size=(2,1), pad=(20, 0), button_color=color_button, key=("-letraIA"+str(i)+"-")) for i in range(7)]]#,sg.Text('',key='-PC-')]]
 	layout_fichas_jugador=[[sg.Button(" ",font=("Current",9),size=(2,1), pad=(20, 0), button_color=color_button, key=("-letra"+str(i)+"-"), disabled=True) for i in range(7)]]#,sg.Text('',key='-Jug-')]]
    
 	columna_0 = [
@@ -93,12 +93,14 @@ def crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion=None):
 				[sg.Button('Posponer',key='Posponer',font=("Current",10), size=(15, 0),disabled=True)],
 				[sg.Button('Cambiar letras',key='Cambiar letras',font=("Current",10),size=(15, 0),disabled=True),sg.Text('Cambios disponibles: '),sg.Text(cambios,key='-cambios-',visible=False)]
 				]
-    
+
+	if cargar:
+		columna_2[1][1]=sg.Button('RETOMAR',key=("RETOMAR"),font=("Current",10), size=(10, 0),pad=(0, 0))
+
 	layout = [  
 				[sg.Column(columna_0),sg.Column(columna_1, pad=(0,0)), sg.Frame('CONFIGURACION', columna_2, pad=(20, 50), relief= 'solid')],
 				]
 	return layout   
-
 
 def terminar(Inteligencia,tiempos,jugador,dif): #CONCURRENCIA
 	tiempos[2] = False
@@ -176,5 +178,12 @@ def diseño_dificil(window,tablero):
         window[tablero.get_especiales()["tres"][x]].update(button_color=(None,'#4fb304'))
     for y in range(len(tablero.get_especiales()["cuatro"])):
         window[tablero.get_especiales()["cuatro"][y]].update(button_color=(None, '#007eb0'))
+
+def cargar_tablero(window,tablero):
+	for i in range(tablero.get_tamanio()):
+		for j in range(tablero.get_tamanio()):
+			if (tablero.get_confirmadas()[i][j]):
+				window["b_"+str(i)+"_"+str(j)].update(tablero.get_letras()[i][j])
+
 		
 color_button = ('white','OrangeRed3')

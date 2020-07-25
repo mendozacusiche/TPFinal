@@ -271,8 +271,8 @@ def juego(cargar=False):
 			jugador= Jugador.Jugador(nombre,fichas,config["jugador_mi_turno"],config["jugador_mi_turno"],config["jugador_cambios"],config["jugador_puntos"])
 			ventana_bienvenida.ventana(nombre)
 			tiempos= config["tiempos"]
-			tiempo_total=config["tiempo_total"] * 60
-			tiempo_turno=config["tiempo_turno"] * 60
+			tiempo_total=int(config["tiempo_total"]) * 60
+			tiempo_turno=int(config["tiempo_turno"]) * 60
 			dificultad=config["dificultad"]
 			opcion=config["opcion"]
 			bolsa=config["bolsa"]

@@ -213,7 +213,7 @@ def colocar_letra(event,jugador,tablero,window,pos):
                     window[event].update("")
 
 def confirmar(window,tablero,jugador,IA):
-	nuevos_puntos=tablero.confirmar_letras()
+	nuevos_puntos=tablero.confirmar_letras(window)
 	if (IA.get_primer_turno() or jugador.get_primer_turno()):
 		IA.set_primer_turno(False)
 		jugador.set_primer_turno(False)

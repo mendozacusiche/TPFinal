@@ -15,8 +15,8 @@ def evaluar(palabra, dificultad):
             ok=True
         elif (dificultad == "DificilAdjetivos") and (analisis[1] in ("JJ")):
             ok=True
-    else:
-        sg.popup("La Palapra Ingresada No es Valida")
+    # else:
+        # sg.popup("La Palapra Ingresada No es Valida")
     return ok
 
 
@@ -356,13 +356,17 @@ def juego(cargar=False):
 				pass #es necesario poner este evento si no hace nada?
 			elif event == "Evaluar Palabra" and not Inteligencia.get_mi_turno():
 				if iniciado:
-					palabra = tablero.buscar_palabra(jugador)
+					palabra,medio = tablero.buscar_palabra(jugador)
 					ok = evaluar(palabra, dificultad)
 					if ok:
 						confirmar(window,tablero,jugador,Inteligencia)
 					else:
 						devolver_fichas(window,tablero,jugador.get_fichas())
-						sg.popup("La palapra ingresada no es valida")
+						
+						if not medio:
+							sg.popup('En la primer jugada la palabra debe pasar por el medio')
+						else:
+							sg.popup("La palabra ingresada no es valida")
 					pasar(tablero,jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
 					jugar_IA.start()
 			elif event == "Pasar":

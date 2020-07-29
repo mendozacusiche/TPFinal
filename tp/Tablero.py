@@ -105,9 +105,12 @@ class Tablero():
                 es_palabra = False
         else:
             es_palabra = False
-
+    	
+        medio=True
+    	
         if(jugador.get_primer_turno()) and (self.__letras[self.__tamanio//2][self.__tamanio//2] == ""):
             es_palabra = False
+            medio=False
 
         # Armo la palabra
         if es_palabra:
@@ -118,7 +121,7 @@ class Tablero():
         else:
             palabra = "No es palabra"
 
-        return palabra
+        return palabra,medio
 
     def confirmar_letras(self, win, turno):
         puntaje = 0
@@ -218,11 +221,11 @@ class Tablero():
                 elif ("b_"+str(i[1])+"_"+str(i[2])) in amarillo:
                     # Duplica el valor de la palabra
                     puntaje = puntaje+puntaje_letras[i[0]]
-                    duplicar=True
+                    triplicar=True
                 elif("b_"+str(i[1])+"_"+str(i[2])) in verde:
                     # Triplica el valor de la palabra
                     puntaje = puntaje+puntaje_letras[i[0]]
-                    triplicar=True
+                    duplicar=True
                 elif("b_"+str(i[1])+"_"+str(i[2])) in celeste:
                     # Resta 2 al valor de la palabra"
                     puntaje = puntaje+puntaje_letras[i[0]]-2

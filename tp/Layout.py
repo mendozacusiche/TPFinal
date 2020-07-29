@@ -51,6 +51,7 @@ def crear_botones(tablero, dificultad):
 
 
 
+
 def crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion=None,cargar=False):
 
 	descr=definir_descripcion(dificultad,opcion)
@@ -131,6 +132,26 @@ def terminar(Inteligencia,tiempos,jugador,dif): #CONCURRENCIA
 	else:
 		win.close()
 		return False
+		
+# def terminar(Inteligencia,tiempos,jugador,dif): #CONCURRENCIA
+	# tiempos[2] = False
+	
+	
+	# layout1=[
+			# [sg.Text('FIN DEL JUEGO')],
+			# [sg.Text('Puntos jugador: '),sg.Text(jugador.get_puntos())],
+			# [sg.Text('Puntos computadora: '),sg.Text(Inteligencia.get_puntos())],
+			# [sg.Button('Guardar partida', key='GUARDAR'),sg.Button('Salir sin guardar',key='SALIR'), sg.Button('Cancelar',key='CANCELAR')] #si apreta sin guardar se debe verificar si corresponde guardar o no el puntaje
+			# ]
+	# wind= sg.Window('TERMINAR',layout1)
+	# event,values=wind.Read()
+	# if event== 'SALIR':
+		# records.actualizar(jugador.get_nombre(),jugador.get_puntos(),dif)
+		# wind.close()
+		# return True
+	# elif event=='CANCELAR':
+		# wind.close()
+		# return False
 		
 def terminar_por_otros(Inteligencia,jugador,dif):
 	layout1=[

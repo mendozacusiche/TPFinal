@@ -23,8 +23,8 @@ class IA():
 
 	def buscar_palabra(self):
 		palabra=""
-		marcas=[False for i in range(len(self.__fichas.get_letras()))]
-		n=7
+		n=len(self.__fichas.get_letras())
+		marcas=[False for i in range(n)]
 		while(palabra=="" and n>1):
 			combs=[]
 			self.combinaciones(combs,palabra,marcas,self.__fichas.get_letras(),n)

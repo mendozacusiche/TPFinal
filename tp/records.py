@@ -65,7 +65,7 @@ def actualizar(nombre,puntaje,nivel):
 	except FileNotFoundError:
 		sg.popup('No se encontro el archivo topten.json')
 
-def guardarDatos(datos):
+def guardarDatos(datos): #no uso manejo de excepciones porque ya las uso cuando lo llamo 
 	with open('archivos/topten.json','w') as p:
 		json.dump(datos,p,indent=4)
 

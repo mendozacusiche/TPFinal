@@ -137,6 +137,7 @@ def retomar(window,jugador,tablero,Inteligencia,tiempo_turno,bolsa,t,dificultad)
 	return True
     
 def cambiar_colores(window, dificultad, tablero):   
+    window["b_"+str(tablero.get_tamanio()//2)+"_"+str(tablero.get_tamanio()//2)].update('★')#★
     if(dificultad == "Facil"):
         Layout.diseño_facil(window,tablero)
     elif(dificultad == "Medio"):
@@ -187,10 +188,13 @@ def devolver_letra(window,tablero,fichas,x,y):
     tablero.set_letra("",x,y)
 
 def devolver_fichas(window,tablero,fichas):
-    coordenadas=tablero.get_no_confirmadas()
-    for c in coordenadas:
-        devolver_letra(window,tablero,fichas,c[0],c[1])
-        window["b_"+str(c[0])+"_"+str(c[1])].update("")
+	coordenadas=tablero.get_no_confirmadas()
+	for c in coordenadas:
+		devolver_letra(window,tablero,fichas,c[0],c[1])
+		if c==(tablero.get_tamanio()//2,tablero.get_tamanio()//2):
+			window["b_"+str(c[0])+"_"+str(c[1])].update("★")
+		else:
+			window["b_"+str(c[0])+"_"+str(c[1])].update("")
 
 def colocar_letra(event,jugador,tablero,window,pos):
     if True in (jugador.get_fichas().get_checked()):

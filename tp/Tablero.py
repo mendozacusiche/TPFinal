@@ -108,6 +108,7 @@ class Tablero():
 
         if(jugador.get_primer_turno()) and (self.__letras[self.__tamanio//2][self.__tamanio//2] == ""):
             es_palabra = False
+            palabra='No está en el medio'
 
         # Armo la palabra
         if es_palabra:

@@ -218,11 +218,11 @@ class Tablero():
                 elif ("b_"+str(i[1])+"_"+str(i[2])) in amarillo:
                     # Duplica el valor de la palabra
                     puntaje = puntaje+puntaje_letras[i[0]]
-                    duplicar=True
+                    triplicar=True
                 elif("b_"+str(i[1])+"_"+str(i[2])) in verde:
                     # Triplica el valor de la palabra
                     puntaje = puntaje+puntaje_letras[i[0]]
-                    triplicar=True
+                    duplicar=True
                 elif("b_"+str(i[1])+"_"+str(i[2])) in celeste:
                     # Resta 2 al valor de la palabra"
                     puntaje = puntaje+puntaje_letras[i[0]]-2

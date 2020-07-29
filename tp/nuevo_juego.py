@@ -29,7 +29,7 @@ Tamaño del tablero: 15x15."""
 	except FileNotFoundError as ex:
 		print("No se encontro el archivo config.json")
 		columna1=[[sg.Text('No hay tablero actual')]]
-		descr='No hay descripción el nivel actual'
+		descr='No hay descripción del nivel actual'
 				
 	columna2=[[sg.Text(descr,key='-descr-',font=("Current",10), size = (30, 0),justification='ljust')],
 			[sg.Button('Configuracion',font=("Current",10), size =(29, 0))],

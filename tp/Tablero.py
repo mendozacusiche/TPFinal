@@ -120,19 +120,20 @@ class Tablero():
 
         return palabra
 
-    def confirmar_letras(self, win):
+    def confirmar_letras(self, win, turno):
         puntaje = 0
         puntaje_letras = {}
         claves = []
-        
         for x in range(self.__tamanio):
             for y in range(self.__tamanio):
                 if ((not self.__confirmadas[x][y]) and (self.__letras[x][y] != "")):
                     self.__confirmadas[x][y] = True
                     letra = self.__letras[x][y]
-                    print(letra)
                     claves.append((letra, x, y))
-                    win["b_"+str(x)+"_"+str(y)].update(button_color=('white', '#ff00c3'))                
+                    if turno:
+                        win["b_"+str(x)+"_"+str(y)].update(button_color=('white', '#ff00c3'))
+                    else:
+                        win["b_"+str(x)+"_"+str(y)].update(button_color=('white', '#000000'))
         if self.__nivel == "Facil":
             puntaje = self.__calcular_puntaje_Facil(claves)
         elif self.__nivel == "Medio":
@@ -187,15 +188,7 @@ class Tablero():
                 i += 1
             jugar.confirmar(window, self, jugador, IA)
 
-        return ok
-    
-    def __sumar_pts_palabra(self, claves, puntaje_letras):
-        pts = 0
-        
-        for i in claves:
-            pts += puntaje_letras[i[0]] 
-            
-        return pts    
+        return ok 
 
     def __calcular_puntaje_Facil(self, claves):
 
@@ -208,6 +201,8 @@ class Tablero():
 
         puntaje = 0
         puntaje_letras = {}
+        duplicar=False
+        triplicar=False
 
         for i in claves:
             try:
@@ -222,25 +217,28 @@ class Tablero():
                     puntaje = puntaje+(puntaje_letras[i[0]]*3)
                 elif ("b_"+str(i[1])+"_"+str(i[2])) in amarillo:
                     # Duplica el valor de la palabra
-                    pal = 0
-                    pal = self.__sumar_pts_palabra(claves, puntaje_letras)  #puntaje+puntaje_letras[i[0]]
-                    puntaje += pal*3                
+                    puntaje = puntaje+puntaje_letras[i[0]]
+                    duplicar=True
                 elif("b_"+str(i[1])+"_"+str(i[2])) in verde:
                     # Triplica el valor de la palabra
-                    pal = 0
-                    pal = self.__sumar_pts_palabra(claves, puntaje_letras) #puntaje+puntaje_letras[i[0]]
-                    puntaje += pal*2
+                    puntaje = puntaje+puntaje_letras[i[0]]
+                    triplicar=True
                 elif("b_"+str(i[1])+"_"+str(i[2])) in celeste:
                     # Resta 2 al valor de la palabra"
-                    puntaje = puntaje + puntaje_letras[i[0]] - 2
+                    puntaje = puntaje+puntaje_letras[i[0]]-2
                 elif("b_"+str(i[1])+"_"+str(i[2])) in anaranjado:
                     # Resta 3 al valor de la palabra
-                    puntaje = puntaje + puntaje_letras[i[0]] - 3 
+                    puntaje = puntaje+puntaje_letras[i[0]]-3
                 else:
                     # incrementa los pts en caso que no haya caido en una casilla especial
                     puntaje = puntaje+puntaje_letras[i[0]]
             except FileNotFoundError as ex:
                 print("No se encontro el archivo config.txt")
+
+        if triplicar:
+            puntaje*=3
+        elif duplicar:
+            puntaje*=2
 
         return puntaje
 
@@ -263,10 +261,10 @@ class Tablero():
                     puntaje = puntaje + (puntaje_letras[i[0]]*2)
                 elif ("b_"+str(i[1])+"_"+str(i[2])) in dorado:
                     # Resta 2 al valor de la palabra
-                    puntaje = puntaje + (puntaje_letras[i[0]]-2)
+                    puntaje = puntaje+puntaje_letras[i[0]]-2
                 elif ("b_"+str(i[1])+"_"+str(i[2])) in verde:
                     # Resta 3 al valor de la palabra
-                    puntaje = puntaje +(puntaje_letras[i[0]]-3)
+                    puntaje = puntaje+puntaje_letras[i[0]]-3
                 else:
                     # incrementa los pts en caso que no haya caido en una casilla especial
                     puntaje = puntaje + puntaje_letras[i[0]]
@@ -296,10 +294,10 @@ class Tablero():
                     puntaje = puntaje+(puntaje_letras[i[0]]*3)
                 elif ("b_"+str(i[1])+"_"+str(i[2])) in Verde:
                     # Resta 2 al valor de la palabra
-                    puntaje = puntaje + (puntaje_letras[i[0]]-2)
+                    puntaje = puntaje+puntaje_letras[i[0]]-2
                 elif ("b_"+str(i[1])+"_"+str(i[2])) in Amarillo:
                     # Resta 3 al valor de la palabra
-                    puntaje = puntaje+(puntaje_letras[i[0]]-3)
+                    puntaje = puntaje+puntaje_letras[i[0]]-3
                 else:
                     # incrementa los pts en caso que no haya caido en una casilla especial
                     puntaje = puntaje+puntaje_letras[i[0]]

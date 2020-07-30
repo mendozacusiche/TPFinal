@@ -35,8 +35,8 @@ Palabras permitidas: son elegidas al azar entre adjetivos y verbos.
 Tamaño del tablero: 15x15.""")
 		archivo.close()
 	except FileNotFoundError as ex:
-		print('No se encontro el archivo "config.json" en el directorio actual...')
-		print(ex)
+		sg.popup('No se encontro el archivo "config.json" en el directorio actual...')
+		#print(ex)
   		
 def restaurar(win):
 	
@@ -87,8 +87,8 @@ def actualizar_descripcion(win,val):
 def ventana(wind):
 
 	try:
-		archivo= open("archivos/config.json","r")
-		config= json.load(archivo)
+		with open("archivos/config.json","r") as archivo:
+			config= json.load(archivo)
 	except FileNotFoundError as ex:
 		print("NO se encontro el archivo config.txt")
 

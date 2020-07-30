@@ -264,7 +264,7 @@ def posponer(config,tablero,bolsa,Inteligencia,jugador,tiempos,dificultad,opcion
 	config["jugador_primer_turno"]=jugador.get_primer_turno()
 	archivo=open("archivos/guardado.json","w") 
 	json.dump(config,archivo)
-	sg.popup('Partida guardada con éxito')
+	sg.popup('Partida guardada con éxito',title='')
 
 def juego(cargar=False):
 	try:
@@ -368,9 +368,9 @@ def juego(cargar=False):
 						devolver_fichas(window,tablero,jugador.get_fichas())
 						
 						if not medio:
-							sg.popup('En la primer jugada la palabra debe pasar por el medio')
+							sg.popup('En la primer jugada la palabra debe pasar por el medio',title='')
 						else:
-							sg.popup("La palabra ingresada no es valida")
+							sg.popup("La palabra ingresada no es valida",title='')
 					pasar(tablero,jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
 					jugar_IA.start()
 			elif event == "Pasar":
@@ -394,9 +394,9 @@ def juego(cargar=False):
 
 	except FileNotFoundError as ex:
 		if cargar:
-			sg.popup('No se encontro el archivo guardado.json')
+			sg.popup('No se encontro el archivo guardado.json',title='')
 		else:
-			sg.popup('No se encontro el archivo config.json')
+			sg.popup('No se encontro el archivo config.json',title='')
 		
 
 color_button = ('white','OrangeRed3')

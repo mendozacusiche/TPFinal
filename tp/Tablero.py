@@ -108,7 +108,7 @@ class Tablero():
     	
         medio=True
     	
-        if(jugador.get_primer_turno()) and (self.__letras[self.__tamanio//2][self.__tamanio//2] == ""):
+        if(jugador.get_primer_turno()) and (self.__letras[self.__tamanio//2][self.__tamanio//2] == "★"):
             es_palabra = False
             medio=False
 
@@ -236,7 +236,7 @@ class Tablero():
                     # incrementa los pts en caso que no haya caido en una casilla especial
                     puntaje = puntaje+puntaje_letras[i[0]]
             except FileNotFoundError as ex:
-                print("No se encontro el archivo config.txt")
+                sg.popup("No se encontro el archivo config.json",title='')
 
         if triplicar:
             puntaje*=3
@@ -272,7 +272,7 @@ class Tablero():
                     # incrementa los pts en caso que no haya caido en una casilla especial
                     puntaje = puntaje + puntaje_letras[i[0]]
             except FileNotFoundError as ex:
-                print("No se encontro el archivo config.txt")
+                sg.popup("No se encontro el archivo config.json",title='')
         return puntaje
 
     def __calcular_puntaje_dificil(self, claves):
@@ -305,6 +305,6 @@ class Tablero():
                     # incrementa los pts en caso que no haya caido en una casilla especial
                     puntaje = puntaje+puntaje_letras[i[0]]
             except FileNotFoundError as ex:
-                print("No se encontro el archivo config.txt")
+                sg.popup("No se encontro el archivo config.json",title='')
 
         return puntaje

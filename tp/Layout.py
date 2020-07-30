@@ -82,7 +82,7 @@ def crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion=None,carga
 
 	columna_2 = [
 				[sg.Text(descr)],
-				[sg.T(' '*4),sg.Button('INICIAR',key=("INICIAR"),font=("Current",10), size=(10, 0),pad=(0, 0)), sg.Button('TERMINAR',key='TERMINAR',font=("Current",10),size=(10, 0), pad=(0, 0),disabled=True),sg.Button('EXIT',font=("Current", 10), size=(10, 0), pad=(0, 0))],
+				[sg.T(' '*4),sg.Button('INICIAR',key=("INICIAR"),font=("Current",10), size=(10, 0),pad=(0, 0)),sg.Button('POSPONER',key='Posponer',font=("Current",10),pad=(0, 0),size=(15, 0),disabled=True), sg.Button('TERMINAR',key='TERMINAR',font=("Current",10),size=(10, 0), pad=(0, 0),disabled=True)],
 				[sg.Frame('DURACION DEL JUEGO',Tiempo_juego, pad=(10,10), relief= 'solid'), sg.Frame('DURACION DEL TURNO',T_turno, pad= (10, 10), relief= 'solid')],
 				[sg.Image(filename='imagenes/playerlogo.png', pad=(5, 0)), sg.Text(jugador), sg.Image(filename='imagenes/greendot.png',visible=False, key="-dot-")],
 				[sg.Text('PUNTAJE'), sg.Text('0000000',key=("-puntos-")) ],
@@ -91,7 +91,6 @@ def crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion=None,carga
 				[sg.Text('FICHAS EN BOLSA:'), sg.Text("000", key=("-CantFichas-"))],
 				[sg.Button('Pasar',key='Pasar',font=("Current",10),size=(15, 0),disabled=True)],
 				[sg.Button("Evaluar Palabra",key="Evaluar Palabra",font=("Current",10),size=(15, 0),disabled=True)], 
-				[sg.Button('Posponer',key='Posponer',font=("Current",10), size=(15, 0),disabled=True)],
 				[sg.Button('Cambiar letras',key='Cambiar letras',font=("Current",10),size=(15, 0),disabled=True),sg.Text('Cambios disponibles: '),sg.Text(cambios,key='-cambios-',visible=False)]
 				]
 
@@ -103,55 +102,54 @@ def crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion=None,carga
 				]
 	return layout   
 
-def terminar(Inteligencia,tiempos,jugador,dif): #CONCURRENCIA
-	tiempos[2] = False
-	
-	layout0=[
-			[sg.Text('¿Está seguro que desea salir?')],
-			[sg.Button('SI'),sg.Button('NO')]
-			]
-    
-	win=sg.Window('',layout0)
-	ev,val=win.Read()
-    
-	if ev=='SI':
-		layout1=[
-				[sg.Text('FIN DEL JUEGO')],
-				[sg.Text('Puntos jugador: '),sg.Text(jugador.get_puntos())],
-				[sg.Text('Puntos computadora: '),sg.Text(Inteligencia.get_puntos())],
-				[sg.Button('Guardar partida', key='GUARDAR'),sg.Button('Salir sin guardar',key='SALIR')] #si apreta sin guardar se debe verificar si corresponde guardar o no el puntaje
-				]
-		wind= sg.Window('TERMINAR',layout1)
-		event,values=wind.Read()
-		if event== 'SALIR':
-			#dic={jugador:puntos[0]}
-			records.actualizar(jugador.get_nombre(),jugador.get_puntos(),dif)
-			wind.close()
-			win.close()
-		return True
-	else:
-		win.close()
-		return False
-		
 # def terminar(Inteligencia,tiempos,jugador,dif): #CONCURRENCIA
-	# tiempos[2] = False
 	
-	
-	# layout1=[
-			# [sg.Text('FIN DEL JUEGO')],
-			# [sg.Text('Puntos jugador: '),sg.Text(jugador.get_puntos())],
-			# [sg.Text('Puntos computadora: '),sg.Text(Inteligencia.get_puntos())],
-			# [sg.Button('Guardar partida', key='GUARDAR'),sg.Button('Salir sin guardar',key='SALIR'), sg.Button('Cancelar',key='CANCELAR')] #si apreta sin guardar se debe verificar si corresponde guardar o no el puntaje
+	# layout0=[
+			# [sg.Text('¿Está seguro que desea salir?')],
+			# [sg.Button('SI'),sg.Button('NO')]
 			# ]
-	# wind= sg.Window('TERMINAR',layout1)
-	# event,values=wind.Read()
-	# if event== 'SALIR':
-		# records.actualizar(jugador.get_nombre(),jugador.get_puntos(),dif)
-		# wind.close()
+    
+	# win=sg.Window('',layout0)
+	# ev,val=win.Read()
+    
+	# if ev=='SI':
+		# tiempos[2] = False
+		# layout1=[
+				# [sg.Text('FIN DEL JUEGO')],
+				# [sg.Text('Puntos jugador: '),sg.Text(jugador.get_puntos())],
+				# [sg.Text('Puntos computadora: '),sg.Text(Inteligencia.get_puntos())],
+				# [sg.Button('Guardar partida', key='GUARDAR'),sg.Button('Salir sin guardar',key='SALIR')] #si apreta sin guardar se debe verificar si corresponde guardar o no el puntaje
+				# ]
+		# wind= sg.Window('TERMINAR',layout1)
+		# event,values=wind.Read()
+		# if event== 'SALIR':
+			# #dic={jugador:puntos[0]}
+			# records.actualizar(jugador.get_nombre(),jugador.get_puntos(),dif)
+			# wind.close()
+			# win.close()
 		# return True
-	# elif event=='CANCELAR':
-		# wind.close()
+	# else:
+		# win.close()
 		# return False
+		
+def terminar(Inteligencia,tiempos,jugador,dif): #CONCURRENCIA
+	
+	layout1=[
+			[sg.Text('FIN DEL JUEGO')],
+			[sg.Text('Puntos jugador: '),sg.Text(jugador.get_puntos())],
+			[sg.Text('Puntos computadora: '),sg.Text(Inteligencia.get_puntos())],
+			[sg.Button('Salir sin guardar',key='SALIR'), sg.Button('Cancelar',key='CANCELAR')] #si apreta sin guardar se debe verificar si corresponde guardar o no el puntaje
+			]
+	wind= sg.Window('',layout1)
+	event,values=wind.Read()
+	if event== 'SALIR':
+		tiempos[2] = False
+		records.actualizar(jugador.get_nombre(),jugador.get_puntos(),dif)
+		wind.close()
+		return True
+	elif event=='CANCELAR':
+		wind.close()
+		return False
 		
 def terminar_por_otros(Inteligencia,jugador,dif):
 	layout1=[
@@ -181,6 +179,7 @@ def diseño_facil(window,tablero):
         window[tablero.get_especiales()["cinco"][w]].update(button_color=(None, '#00b7ff'))
     for x in range(len(tablero.get_especiales()["seis"])):
         window[tablero.get_especiales()["seis"][x]].update(button_color=(None, '#ff8c00'))
+    #window["b_"+str(tablero.get_tamanio()//2)+"_"+str(tablero.get_tamanio()//2)].update('★')
     
 def diseño_medio(window,tablero):
     for i in range(len(tablero.get_especiales()["uno"])):

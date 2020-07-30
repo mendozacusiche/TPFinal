@@ -41,7 +41,7 @@ Tamaño del tablero: 15x15.""")
 def restaurar(win):
 	
 	try:
-		archivo=open("archivos/config.json","w")
+		archivo=open("archivos/config.json","w")#acá creo que no es necesario, porque siempre va a poder abrirlo por ser en modo w
 
 		puntaje_fichas= { 'A' : 1 ,   'B' : 3 ,   'C' : 2 , 'D' : 2 ,
 					      'E' : 1 ,   'F' : 4 ,   'G' : 2 , 'H' : 4 ,
@@ -64,17 +64,17 @@ def restaurar(win):
 		json.dump(j,archivo)
 
 		archivo.close()
+
+		win["-tot-"].update(j["tiempo_total"])
+		win["-turn-"].update(j["tiempo_turno"])
+		win["-dif-"].update(j["dificultad"])
+		win["-desc-"].update("")
+		win["-l1-"].update("")
+		win["-l2-"].update("")
+		win["-t1-"].update("")
+		win["-t2-"].update("")
 	except FileNotFoundError as ex:
 		sg.popup("No se encontro el archivo config.json",title='')
-
-	win["-tot-"].update(j["tiempo_total"])
-	win["-turn-"].update(j["tiempo_turno"])
-	win["-dif-"].update(j["dificultad"])
-	win["-desc-"].update("")
-	win["-l1-"].update("")
-	win["-l2-"].update("")
-	win["-t1-"].update("")
-	win["-t2-"].update("")
 
 def actualizar_descripcion(win,val):
 	if(val["-dif-"]=="Facil"):
@@ -89,66 +89,63 @@ def ventana(wind):
 	try:
 		with open("archivos/config.json","r") as archivo:
 			config= json.load(archivo)
+		letras=["A","B","C","D","E","F","G","H","I","J","K","L","LL","M","N","Ñ","O","P","Q","R","RR","S","T","U","V","W","X","Y","Z"]
+
+		layout=[
+			[sg.Text("Tiempo: ")],
+			[sg.Text("Total "), sg.InputText(config["tiempo_total"],size=(3,1),key="-tot-"), sg.Text("Turno "), sg.InputText(config["tiempo_turno"],size=(3,1),key="-turn-")],
+			[sg.Text("Dificultad: ")], 
+			[sg.Combo(["Facil","Medio","Dificil"],config["dificultad"], enable_events=True, key="-dif-")],
+			[sg.Text("", size=(50,1) , key=("-desc-"))],
+			[sg.Text("Puntaje: ")], 
+			[sg.Text("Letra "),sg.Combo(letras,size=(3,1), enable_events=True, key="-l1-"),sg.Text("Puntos "),sg.InputText("",size=(3,1), enable_events=True, key="-t1-")],
+			[sg.Text("Cantidad: ")],
+			[sg.Text("Letra "),sg.Combo(letras,size=(3,1), enable_events=True, key="-l2-"),sg.Text("Cantidad "),sg.InputText("",size=(3,1), enable_events=True, key="-t2-")],
+			[sg.Button("Aplicar",font=("Current ",9),size=(15, 0),pad=(0, 0)),sg.Button("Restaurar",font=("Current",9), size=(15, 0),pad=(0, 0)),sg.Button("Atras",font=("Current",9), size=(15, 0),pad=(0, 0))]
+			]
+
+		window= sg.Window("Configuracion",layout)
+
+		nuevos_puntajes={}
+		nuevas_cantidades={}
+
+		while True:
+			evento,valores = window.read()
+	
+			if evento == "Aplicar":
+				aplicar(valores, nuevos_puntajes, nuevas_cantidades,wind)
+				break
+	
+			elif evento == "Restaurar":
+				restaurar(window)
+				nuevos_puntajes={}
+				nuevas_cantidades={}
+	
+			elif evento == "Atras" or evento == sg.WIN_CLOSED:
+				break
+	
+			elif evento == "-dif-":
+				actualizar_descripcion(window, valores)
+	
+			elif evento == "-l1-":
+				if (valores["-l1-"] in nuevos_puntajes):
+					window["-t1-"].update(nuevos_puntajes[valores["-l1-"]])
+				else:
+					window["-t1-"].update(config["puntaje_fichas"][valores["-l1-"]])
+	
+			elif evento == "-l2-":
+				if (valores["-l2-"] in nuevos_puntajes):
+					window["-t2-"].update(nuevos_puntajes[valores["-l2-"]])
+				else:
+					window["-t2-"].update(config["cant_fichas"][valores["-l2-"]])
+	
+			elif evento == "-t1-":
+				nuevos_puntajes[valores["-l1-"]]=int(valores["-t1-"])
+	
+			elif evento == "-t2-":
+				nuevas_cantidades[valores["-l2-"]]=int(valores["-t2-"])
+	
+	
+		window.Close()
 	except FileNotFoundError as ex:
 		sg.popup("No se encontro el archivo config.json",title='')
-
-	letras=["A","B","C","D","E","F","G","H","I","J","K","L","LL","M","N","Ñ","O","P","Q","R","RR","S","T","U","V","W","X","Y","Z"]
-
-	layout=[
-		[sg.Text("Tiempo: ")],
-		[sg.Text("Total "), sg.InputText(config["tiempo_total"],size=(3,1),key="-tot-"), sg.Text("Turno "), sg.InputText(config["tiempo_turno"],size=(3,1),key="-turn-")],
-		[sg.Text("Dificultad: ")], 
-		[sg.Combo(["Facil","Medio","Dificil"],config["dificultad"], enable_events=True, key="-dif-")],
-		[sg.Text("", size=(50,1) , key=("-desc-"))],
-		[sg.Text("Puntaje: ")], 
-		[sg.Text("Letra "),sg.Combo(letras,size=(3,1), enable_events=True, key="-l1-"),sg.Text("Puntos "),sg.InputText("",size=(3,1), enable_events=True, key="-t1-")],
-		[sg.Text("Cantidad: ")],
-		[sg.Text("Letra "),sg.Combo(letras,size=(3,1), enable_events=True, key="-l2-"),sg.Text("Cantidad "),sg.InputText("",size=(3,1), enable_events=True, key="-t2-")],
-		[sg.Button("Aplicar",font=("Current ",9),size=(15, 0),pad=(0, 0)),sg.Button("Restaurar",font=("Current",9), size=(15, 0),pad=(0, 0)),sg.Button("Atras",font=("Current",9), size=(15, 0),pad=(0, 0))]
-		]
-
-	window= sg.Window("Configuracion",layout)
-
-	archivo.close()
-
-	nuevos_puntajes={}
-	nuevas_cantidades={}
-
-	while True:
-		evento,valores = window.read()
-
-		if evento == "Aplicar":
-			aplicar(valores, nuevos_puntajes, nuevas_cantidades,wind)
-			break
-
-		elif evento == "Restaurar":
-			restaurar(window)
-			nuevos_puntajes={}
-			nuevas_cantidades={}
-
-		elif evento == "Atras" or evento == sg.WIN_CLOSED:
-			break
-
-		elif evento == "-dif-":
-			actualizar_descripcion(window, valores)
-
-		elif evento == "-l1-":
-			if (valores["-l1-"] in nuevos_puntajes):
-				window["-t1-"].update(nuevos_puntajes[valores["-l1-"]])
-			else:
-				window["-t1-"].update(config["puntaje_fichas"][valores["-l1-"]])
-
-		elif evento == "-l2-":
-			if (valores["-l2-"] in nuevos_puntajes):
-				window["-t2-"].update(nuevos_puntajes[valores["-l2-"]])
-			else:
-				window["-t2-"].update(config["cant_fichas"][valores["-l2-"]])
-
-		elif evento == "-t1-":
-			nuevos_puntajes[valores["-l1-"]]=int(valores["-t1-"])
-
-		elif evento == "-t2-":
-			nuevas_cantidades[valores["-l2-"]]=int(valores["-t2-"])
-
-
-	window.Close()

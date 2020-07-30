@@ -269,8 +269,8 @@ def posponer(config,tablero,bolsa,Inteligencia,jugador,tiempos,dificultad,opcion
 def juego(cargar=False):
 	try:
 		if cargar:
-			archivo= open("archivos/guardado.json","r")#falta crear archivo #poner manejo excepciones #fijarse si está vacio el archivo también 
-			config = json.load(archivo) #se podria cambiar el nombre a guardado de la var
+			with open("archivos/guardado.json","r") as archivo:
+				config = json.load(archivo) #se podria cambiar el nombre a guardado de la var
 			nombre = config["jugador_nombre"]
 			fichas=Fichas.Fichas(config["jugador_fichas_letras"],config["jugador_fichas_usadas"],config["jugador_fichas_checked"])
 			jugador= Jugador.Jugador(nombre,fichas,config["jugador_mi_turno"],config["jugador_mi_turno"],config["jugador_cambios"],config["jugador_puntos"])
@@ -288,8 +288,8 @@ def juego(cargar=False):
 			window = sg.Window('ScrabbleAR',resizable= True,element_justification='center',).Layout(layout).Finalize()
 			iniciado = False
 		else:
-			archivo= open("archivos/config.json","r") #manejo excepciones
-			config = json.load(archivo)
+			with open("archivos/config.json","r") as archivo:
+				config = json.load(archivo)
 			nombre = ventana_bienvenida.ventana()  
 			tiempo_total= int(config["tiempo_total"]) * 60
 			tiempo_turno= int(config["tiempo_turno"]) * 60
@@ -306,13 +306,13 @@ def juego(cargar=False):
 			window = sg.Window('ScrabbleAR',resizable= True,element_justification='center',).Layout(layout).Finalize()
 			iniciado=False
 
-		pos_letra= -1 #que es esto?
+		pos_letra= -1 #se actualiza al clickear ficha y se utiliza en colocar letra
 
 		while True:                    
 			event, values = window.Read(timeout=200)
 			print(event, values)
-			if event in (None,'EXIT'):
-				tiempos[2]=False #se deberían guardar los puntajes acá?
+			if event == None:
+				tiempos[2]=False 
 				break
 			elif event == "INICIAR":
 				if not iniciado:
@@ -357,7 +357,7 @@ def juego(cargar=False):
 				if Layout.terminar(Inteligencia,tiempos,jugador,dificultad):
 					break
 			elif event in ("-letraIA0-","-letraIA1-","-letraIA2-","-letraIA3-","-letraIA4-","-letraIA5-","-letraIA6-"):
-				pass #es necesario poner este evento si no hace nada?
+				pass #Usamos esto porque si no al clickear una ficha de la IA se traba el programa y si las deshabilitamos cambia el color, por lo tanto no nos sirve
 			elif event == "Evaluar Palabra" and not Inteligencia.get_mi_turno():
 				if iniciado:
 					palabra,medio = tablero.buscar_palabra(jugador)
@@ -392,7 +392,11 @@ def juego(cargar=False):
 				break
 		window.close()
 
-	except FileNotFoundError as ex: #raro manejo de excepciones
-		print('No se encontro el  archivo.......')
+	except FileNotFoundError as ex:
+		if cargar:
+			sg.popup('No se encontro el archivo guardado.json')
+		else:
+			sg.popup('No se encontro el archivo config.json')
+		
 
 color_button = ('white','OrangeRed3')

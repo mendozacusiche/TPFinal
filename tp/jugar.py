@@ -28,7 +28,7 @@ def recargar_fichas(jugador, bolsa, window, turnoIA=False):
             if not turnoIA:
                 window["-letra"+str(i)+"-"].update(l)
             jugador.get_fichas().set_letra(l,i)
-            usadas[i]=False
+            jugador.get_fichas().desusar(i)
 
 def pasar(tablero,jugador,tiempos,tiempo_turno,Intel,bolsa,window):#CONCURRENCIA
 	devolver_fichas(window,tablero,jugador.get_fichas())
@@ -214,7 +214,10 @@ def colocar_letra(event,jugador,tablero,window,pos):
             if (not tablero.get_confirmadas()[x][y]):
                 if (tablero.get_letra(x,y)!=""):
                     devolver_letra(window,tablero,jugador.get_fichas(),x,y)
-                    window[event].update("")
+                    if (x==tablero.get_tamanio()//2 and y==tablero.get_tamanio()//2):
+                    	window[event].update("★")
+                    else:
+                    	window[event].update("")
 
 def confirmar(window,tablero,jugador,IA):
 	nuevos_puntos=tablero.confirmar_letras(window, IA.get_mi_turno())
@@ -241,6 +244,7 @@ def posponer(config,tablero,bolsa,Inteligencia,jugador,tiempos,dificultad,opcion
 	#config["tablero_especiales"]=tablero.get_especiales()
 	config["tablero_letras"]=tablero.get_letras()
 	config["tablero_confirmadas"]=tablero.get_confirmadas()
+	config["tablero_coloreadas"]=tablero.get_coloreadas()
 	config["bolsa"]=bolsa
 	config["tiempos"]=tiempos
 	config["dificultad"]=dificultad
@@ -281,7 +285,7 @@ def juego(cargar=False):
 			dificultad=config["dificultad"]
 			opcion=config["opcion"]
 			bolsa=config["bolsa"]
-			tablero=Tablero.Tablero(dificultad,config["tablero_letras"],config["tablero_confirmadas"])
+			tablero=Tablero.Tablero(dificultad,config["tablero_letras"],config["tablero_confirmadas"],config["tablero_coloreadas"])
 			fichasIA=Fichas.Fichas(config["Inteligencia_fichas_letras"],config["Inteligencia_fichas_usadas"],config["Inteligencia_fichas_checked"])
 			Inteligencia=IA.IA(fichasIA,config["Inteligencia_primer_turno"],config["Inteligencia_dificultad"],config["Inteligencia_puntos"],config["Inteligencia_mi_turno"],config["Inteligencia_procesando"],config["Inteligencia_cambios_letras"])
 			layout = Layout.crear_layout(tablero, tiempos, nombre, dificultad, jugador.get_cambios(), opcion, True)
@@ -310,7 +314,7 @@ def juego(cargar=False):
 
 		while True:                    
 			event, values = window.Read(timeout=200)
-			print(event, values)
+			#print(event, values)
 			if event == None:
 				tiempos[2]=False 
 				break
@@ -322,10 +326,10 @@ def juego(cargar=False):
 					if Inteligencia.get_mi_turno():
 						jugar_IA.start()
 			elif event == "RETOMAR":
-				if not iniciado:
-					iniciado = retomar(window,jugador,tablero,Inteligencia,tiempo_turno,bolsa,tiempos,dificultad)
-					jugar_IA= threading.Thread(target= Inteligencia.turno, args=(bolsa,window,tablero,jugador,tiempos,tiempo_turno))			
+				if not iniciado:			
 					cambiar_colores(window,dificultad,tablero) #actualiza el tablero con las casillas de premio  por nivel
+					iniciado = retomar(window,jugador,tablero,Inteligencia,tiempo_turno,bolsa,tiempos,dificultad)
+					jugar_IA = threading.Thread(target= Inteligencia.turno, args=(bolsa,window,tablero,jugador,tiempos,tiempo_turno))
 					if Inteligencia.get_mi_turno():
 						jugar_IA.start()
 			elif event == sg.TIMEOUT_KEY:
@@ -340,11 +344,11 @@ def juego(cargar=False):
 				if iniciado:
 					cambiar_fichas(window,jugador.get_fichas(),bolsa,tablero)
 					jugador.set_cambios(jugador.get_cambios()-1)
-					pasar(tablero,jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
-					jugar_IA.start()
 					window['-cambios-'].update(jugador.get_cambios())
 					if jugador.get_cambios()==0:
 						window["Cambiar letras"].update(disabled=True)
+					pasar(tablero,jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
+					jugar_IA.start()
 			elif event == "Posponer":
 				if (iniciado):
 					if (dificultad in ("Facil","Medio")):
@@ -366,13 +370,16 @@ def juego(cargar=False):
 						confirmar(window,tablero,jugador,Inteligencia)
 					else:
 						devolver_fichas(window,tablero,jugador.get_fichas())
-						
 						if not medio:
 							sg.popup('En la primer jugada la palabra debe pasar por el medio',title='')
 						else:
 							sg.popup("La palabra ingresada no es valida",title='')
-					pasar(tablero,jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
-					jugar_IA.start()
+					if (len(jugador.get_fichas().get_usadas())>contar_letras_bolsa(bolsa)):
+						Layout.terminar_por_otros(Inteligencia,jugador,dificultad,tiempos)
+						break
+					else:
+						pasar(tablero,jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
+						jugar_IA.start()
 			elif event == "Pasar":
 				if iniciado and not Inteligencia.get_mi_turno():
 					pasar(tablero,jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
@@ -381,18 +388,22 @@ def juego(cargar=False):
 				if iniciado:
 					colocar_letra(event,jugador,tablero,window,pos_letra)
 			if(iniciado and not Inteligencia.get_procesando() and Inteligencia.get_mi_turno()):
-				Inteligencia.set_mi_turno(False)
-				jugar_IA= threading.Thread(target= Inteligencia.turno, args=(bolsa,window,tablero,jugador,tiempos,tiempo_turno))
-				window['-turno-'].update('Tu turno')
-				window["-dotIA-"].update(filename='imagenes/greendot.png',visible=False)
-				window["-dot-"].update(filename='imagenes/greendot.png',visible=True)
-				deshabilitar_habilitar_botones(window,False,jugador)
-			if tiempos[0]==0:#acá no deberiamos preguntar si se quedo sin fichas la bolsa también?
+				if Inteligencia.get_terminar(): 
+					Layout.terminar_por_otros(Inteligencia,jugador,dificultad,tiempos)
+					break
+				else:
+					Inteligencia.set_mi_turno(False)
+					jugar_IA= threading.Thread(target= Inteligencia.turno, args=(bolsa,window,tablero,jugador,tiempos,tiempo_turno))
+					window['-turno-'].update('Tu turno')
+					window["-dotIA-"].update(filename='imagenes/greendot.png',visible=False)
+					window["-dot-"].update(filename='imagenes/greendot.png',visible=True)
+					deshabilitar_habilitar_botones(window,False,jugador)
+			if tiempos[0]==0:
 				Layout.terminar_por_otros(Inteligencia,jugador,dificultad)
 				break
 		window.close()
 
-	except FileNotFoundError as ex:
+	except FileNotFoundError:
 		if cargar:
 			sg.popup('No se encontro el archivo guardado.json',title='')
 		else:

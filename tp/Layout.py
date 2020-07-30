@@ -142,16 +142,19 @@ def terminar(Inteligencia,tiempos,jugador,dif): #CONCURRENCIA
 			]
 	wind= sg.Window('',layout1)
 	event,values=wind.Read()
+	wind.close()
 	if event== 'SALIR':
 		tiempos[2] = False
-		records.actualizar(jugador.get_nombre(),jugador.get_puntos(),dif)
-		wind.close()
+		if dif in ("Facil","Medio"):
+			records.actualizar(jugador.get_nombre(),jugador.get_puntos(),dif)
+		else:
+			records.actualizar(jugador.get_nombre(),jugador.get_puntos(),"Dificil")
 		return True
 	elif event=='CANCELAR':
-		wind.close()
 		return False
 		
-def terminar_por_otros(Inteligencia,jugador,dif):
+def terminar_por_otros(Inteligencia,jugador,dif,tiempos):
+	tiempos[2] = False
 	layout1=[
 				[sg.Text('FIN DEL JUEGO')],
 				[sg.Text('Puntos jugador: '),sg.Text(jugador.get_puntos())],
@@ -160,11 +163,10 @@ def terminar_por_otros(Inteligencia,jugador,dif):
 				]
 	wind= sg.Window('',layout1)
 	event,values=wind.Read()
+	wind.close()
 	print('FIN DEL JUEGO')
 	dic={jugador.get_nombre():jugador.get_puntos()}
 	records.actualizar(jugador.get_nombre(),jugador.get_puntos(),dif)
-	if event=='OK':
-		wind.close()
 
 def diseño_facil(window,tablero):
     for i in range(len(tablero.get_especiales()["uno"])):
@@ -204,6 +206,10 @@ def cargar_tablero(window,tablero):
 		for j in range(tablero.get_tamanio()):
 			if (tablero.get_confirmadas()[i][j]):
 				window["b_"+str(i)+"_"+str(j)].update(tablero.get_letras()[i][j])
+				if(tablero.get_coloreadas()[i][j]=="IA"):
+					window["b_"+str(i)+"_"+str(j)].update(button_color=('white', '#6a354c'))
+				else:
+					window["b_"+str(i)+"_"+str(j)].update(button_color=('white', '#498269'))
 
 		
 color_button = ('white','OrangeRed3')

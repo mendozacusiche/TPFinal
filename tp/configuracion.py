@@ -35,7 +35,7 @@ Palabras permitidas: son elegidas al azar entre adjetivos y verbos.
 Tamaño del tablero: 15x15.""")
 		archivo.close()
 	except FileNotFoundError as ex:
-		sg.popup('No se encontro el archivo "config.json" en el directorio actual...')
+		sg.popup('No se encontro el archivo "config.json" en el directorio actual',title='')
 		#print(ex)
   		
 def restaurar(win):
@@ -65,7 +65,7 @@ def restaurar(win):
 
 		archivo.close()
 	except FileNotFoundError as ex:
-		print("NO se encontro el archivo confi.json")
+		sg.popup("No se encontro el archivo config.json",title='')
 
 	win["-tot-"].update(j["tiempo_total"])
 	win["-turn-"].update(j["tiempo_turno"])
@@ -90,7 +90,7 @@ def ventana(wind):
 		with open("archivos/config.json","r") as archivo:
 			config= json.load(archivo)
 	except FileNotFoundError as ex:
-		print("NO se encontro el archivo config.txt")
+		sg.popup("No se encontro el archivo config.json",title='')
 
 	letras=["A","B","C","D","E","F","G","H","I","J","K","L","LL","M","N","Ñ","O","P","Q","R","RR","S","T","U","V","W","X","Y","Z"]
 

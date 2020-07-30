@@ -5,7 +5,7 @@ import json
 def ventana():	
 	try:
 		with open("archivos/config.json","r") as archivo:
-		config= json.load(archivo)
+			config= json.load(archivo)
 	
 		dificultad=config["dificultad"]
 		if dificultad=='Facil':
@@ -38,7 +38,7 @@ Tamaño del tablero: 15x15."""
 	
 	layout=[[sg.Column(columna1),sg.Column(columna2)]]
 	
-	window=sg.Window('Scrabble',layout)
+	window=sg.Window('ScrabbleAR',layout)
 	
 	while True:
 		event,values=window.Read()

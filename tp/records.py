@@ -3,34 +3,18 @@ import PySimpleGUI as sg
 	
 def  ventana ():
 	opciones=('Facil','Medio','Dificil')
-	# frase=''' 1.
- # 2.
- # 3.
- # 4.
- # 5.
- # 6.
- # 7.
- # 8.
- # 9.
-# 10.'''
 	layout=[
 		[sg.Text('Elija el nivel para ver el TOP TEN: ')],
-		#[sg.Combo(opciones,key='-dif-')],
-		[sg.Listbox(opciones,size=(15,len(opciones))),sg.Button('OK')],
-		[sg.Column([sg.Text(str(i+1)+".",font=("Current",8),pad=(0,0))]for i in range(10)),sg.Listbox( values={}, key='RECORDS', size= (60,10), pad=(0,0))],
-		#[sg.Text(frase,pad=(0,0),font=('Current',11)),sg.Listbox( values={}, key='RECORDS', size= (60,10),pad=(0,0) )],
+		[sg.Combo(["Facil","Medio","Dificil"], enable_events=True, key='-dif-')],
+		[sg.Listbox( values={}, key='RECORDS', size= (60,10), pad=(0,0))],
 		[sg.Button('Salir')]
 		]
 	window=sg.Window('record',layout)
 	while True:
 		event,values=window.Read()
-		# if event=='-dif-':
-			# print(event,values)
-			# imprimir(values,window)
-		if event=='OK':
-			#print(values[0][0])
-			imprimir(values[0][0],window)
-		if event=='Salir':
+		if event == "-dif-":
+			imprimir(values["-dif-"],window)
+		if event in (None,'Salir'):
 			break
 	window.close()
 
@@ -75,8 +59,7 @@ def imprimir(nivel,win):
 			datos=json.load(p)
 		try:
 			lista = sorted(datos[nivel].items(), key=lambda x: x[1],reverse=True)
-		
-			win['RECORDS'].update(map(lambda x: " {}: {}".format(x[0], x[1]),lista))
+			win['RECORDS'].update(map(lambda x: "{}. {}: {}".format(lista.index(x)+1,x[0], x[1]),lista))
 		except KeyError:
 			sg.popup('No hay registros del nivel seleccionado')
 	except FileNotFoundError:

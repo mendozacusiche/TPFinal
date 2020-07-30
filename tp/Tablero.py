@@ -2,7 +2,7 @@ import jugar
 import json
 
 class Tablero():
-    def __init__(self, nivel, letras=None, confirmadas=None):
+    def __init__(self, nivel, letras=None, confirmadas=None, coloreadas=None):
         '''Seteamos el tamaño por nivel e inicializamos el tablero como vacio'''
         self.__nivel = nivel
         if self.__nivel == "Facil":
@@ -28,15 +28,17 @@ class Tablero():
                                  "cuatro": (('b_0_3'), ('b_0_11'), ('b_2_6'), ('b_2_8'), ('b_3_0'), ('b_3_7'), ('b_3_14'), ('b_6_2'), ('b_6_6'), ('b_6_8'), ('b_6_12'), ('b_7_3'), ('b_7_11'), ('b_8_2'), ('b_8_6'), ('b_8_8'), ('b_8_12'), ('b_11_0'), ('b_11_7'), ('b_11_14'), ('b_12_6'), ('b_12_8'), ('b_14_3'), ('b_14_11'))
                                  }
         if letras == None:
-            self.__letras = [
-                ["" for i in range(self.__tamanio)] for j in range(self.__tamanio)]
+            self.__letras = [["" for i in range(self.__tamanio)] for j in range(self.__tamanio)]
         else:
             self.__letras = letras
         if confirmadas == None:
-            self.__confirmadas = [[False for i in range(
-                self.__tamanio)] for j in range(self.__tamanio)]
+            self.__confirmadas = [[False for i in range(self.__tamanio)] for j in range(self.__tamanio)]
         else:
             self.__confirmadas = confirmadas
+        if coloreadas == None:
+            self.__coloreadas = [["None" for i in range(self.__tamanio)] for j in range(self.__tamanio)]
+        else:
+            self.__coloreadas = coloreadas
 
     def get_especiales(self):
         return self.__especiales
@@ -55,6 +57,9 @@ class Tablero():
 
     def get_confirmadas(self):
         return self.__confirmadas
+
+    def get_coloreadas(self):
+        return self.__coloreadas
 
     def get_no_confirmadas(self):
         '''con esto se obtienen las casillas no ocupadas por letras a traves de una lista de tuplas'''
@@ -134,9 +139,11 @@ class Tablero():
                     letra = self.__letras[x][y]
                     claves.append((letra, x, y))
                     if turno:
-                        win["b_"+str(x)+"_"+str(y)].update(button_color=('white', '#ff00c3'))
+                        win["b_"+str(x)+"_"+str(y)].update(button_color=('white', '#6a354c'))
+                        self.__coloreadas[x][y]="IA"
                     else:
-                        win["b_"+str(x)+"_"+str(y)].update(button_color=('white', '#000000'))
+                        win["b_"+str(x)+"_"+str(y)].update(button_color=('white', '#498269'))
+                        self.__coloreadas[x][y]="Jugador"
         if self.__nivel == "Facil":
             puntaje = self.__calcular_puntaje_Facil(claves)
         elif self.__nivel == "Medio":

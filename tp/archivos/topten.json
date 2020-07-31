@@ -1,11 +1,14 @@
 {
     "Facil": {
-        "ppepe": 0,
-        "pplepe": 0,
-        "pepe": 0,
-        "sdf": 16
+        "prueba1": [
+            88,
+            "31.7.2020"
+        ]
     },
-    "Dificil": {
-        "pepe": 0
+    "Medio": {
+        "prueba1": [
+            0,
+            "31.7.2020"
+        ]
     }
 }

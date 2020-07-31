@@ -381,7 +381,8 @@ def juego(cargar=False):
 						else:
 							sg.popup("La palabra ingresada no es valida",title='')
 					if (len(jugador.get_fichas().get_usadas())>contar_letras_bolsa(bolsa)):
-						Layout.terminar_por_otros(Inteligencia,jugador,dificultad,tiempos)
+						fecha=date.today()
+						Layout.terminar_por_otros(Inteligencia,jugador,dificultad,tiempos,fecha)
 						break
 					else:
 						pasar(tablero,jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
@@ -395,7 +396,8 @@ def juego(cargar=False):
 					colocar_letra(event,jugador,tablero,window,pos_letra)
 			if(iniciado and not Inteligencia.get_procesando() and Inteligencia.get_mi_turno()):
 				if Inteligencia.get_terminar(): 
-					Layout.terminar_por_otros(Inteligencia,jugador,dificultad,tiempos)
+					fecha=date.today()
+					Layout.terminar_por_otros(Inteligencia,jugador,dificultad,tiempos,fecha)
 					break
 				else:
 					Inteligencia.set_mi_turno(False)
@@ -405,7 +407,8 @@ def juego(cargar=False):
 					window["-dot-"].update(filename='imagenes/greendot.png',visible=True)
 					deshabilitar_habilitar_botones(window,False,jugador)
 			if tiempos[0]==0:
-				Layout.terminar_por_otros(Inteligencia,jugador,dificultad)
+				fecha=date.today()
+				Layout.terminar_por_otros(Inteligencia,jugador,dificultad,fecha)
 				break
 		window.close()
 

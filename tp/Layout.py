@@ -153,7 +153,7 @@ def terminar(Inteligencia,tiempos,jugador,dif,fecha): #CONCURRENCIA
 	elif event=='CANCELAR':
 		return False
 		
-def terminar_por_otros(Inteligencia,jugador,dif,tiempos):
+def terminar_por_otros(Inteligencia,jugador,dif,tiempos,fecha):
 	tiempos[2] = False
 	layout1=[
 				[sg.Text('FIN DEL JUEGO')],
@@ -166,7 +166,7 @@ def terminar_por_otros(Inteligencia,jugador,dif,tiempos):
 	wind.close()
 	print('FIN DEL JUEGO')
 	dic={jugador.get_nombre():jugador.get_puntos()}
-	records.actualizar(jugador.get_nombre(),jugador.get_puntos(),dif)
+	records.actualizar(jugador.get_nombre(),jugador.get_puntos(),dif,fecha)
 
 def diseño_facil(window,tablero):
     for i in range(len(tablero.get_especiales()["uno"])):

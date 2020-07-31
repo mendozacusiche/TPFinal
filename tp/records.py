@@ -2,6 +2,7 @@ import json
 import PySimpleGUI as sg
 	
 def  ventana ():
+	'''Creación de la ventana de los records'''
 	opciones=('Facil','Medio','Dificil')
 	layout=[
 		[sg.Text('Elija el nivel para ver el TOP TEN: ')],
@@ -19,48 +20,79 @@ def  ventana ():
 	window.close()
 
 
-def crear():
-	datos={'Facil':{},'Medio':{},'Dificil':{}}
-	with open('archivos/topten.json','w') as p:
-		json.dump(datos,p,indent=4)
-	return datos
+# def crear():
+	# datos={'Facil':{},'Medio':{},'Dificil':{}}
+	# with open('archivos/topten.json','w') as p:
+		# json.dump(datos,p,indent=4)
+	# return datos
 	
-def actualizar(nombre,puntaje,nivel):
+# def actualizar(nombre,puntaje,nivel):
+	# '''actualizo los records en el nivel que corresponda'''
+	# try:
+		# with open('archivos/topten.json','r') as p:
+			# datos=json.load(p)
+		# if nivel in datos.keys():
+			# if (nombre in datos[nivel].keys()):
+				# if puntaje> datos[nivel][nombre]:
+					# datos[nivel][nombre]=puntaje
+			# else:
+				# if (len(datos[nivel])<10):
+					# datos[nivel][nombre]=puntaje
+				# else:
+					# print(len(datos[nivel]))
+					# minimo=min(datos[nivel], key=datos[nivel].get)
+					# datos[nivel].pop(minimo)
+					# datos[nivel][nombre]=puntaje
+					
+		# else :
+			# datos_nivel={nombre:puntaje}
+			# datos[nivel]=datos_nivel
+		# guardarDatos(datos)
+	# except FileNotFoundError:
+		# sg.popup('No se encontro el archivo topten.json')
+
+def actualizar(nombre,puntaje,nivel,fecha):
 	'''actualizo los records en el nivel que corresponda'''
 	try:
 		with open('archivos/topten.json','r') as p:
 			datos=json.load(p)
+		f='{}.{}.{}'.format(fecha.day,fecha.month,fecha.year)
 		if nivel in datos.keys():
 			if (nombre in datos[nivel].keys()):
 				if puntaje> datos[nivel][nombre]:
-					datos[nivel][nombre]=puntaje
+					datos[nivel][nombre]=(puntaje,f)
 			else:
 				if (len(datos[nivel])<10):
-					datos[nivel][nombre]=puntaje
+					datos[nivel][nombre]=(puntaje,f)
 				else:
 					print(len(datos[nivel]))
 					minimo=min(datos[nivel], key=datos[nivel].get)
 					datos[nivel].pop(minimo)
-					datos[nivel][nombre]=puntaje
+					datos[nivel][nombre]=(puntaje,f)
 					
 		else :
-			datos_nivel={nombre:puntaje}
+			datos_nivel={nombre:(puntaje,f)}
 			datos[nivel]=datos_nivel
 		guardarDatos(datos)
 	except FileNotFoundError:
 		sg.popup('No se encontro el archivo topten.json')
 
+
 def guardarDatos(datos): #no uso manejo de excepciones porque ya las uso cuando lo llamo 
+	'''Guardo los datos en topten.son que fueron generados en actualizar, ya que es el método que llama a guardarDatos'''
 	with open('archivos/topten.json','w') as p:
 		json.dump(datos,p,indent=4)
 
 def imprimir(nivel,win):
+	'''Imprimo el registro de records del nivel seleccionado en la ventana '''
 	try:
 		with open('archivos/topten.json','r') as p:
 			datos=json.load(p)
+
 		try:
-			lista = sorted(datos[nivel].items(), key=lambda x: x[1],reverse=True)
-			win['RECORDS'].update(map(lambda x: "{}. {}: {}".format(lista.index(x)+1,x[0], x[1]),lista))
+			lista = sorted(datos[nivel].items(), key=lambda x: x[1][0],reverse=True)
+
+			win['RECORDS'].update(map(lambda x: "{}. {}. {}: {}".format(lista.index(x)+1,x[1][1],x[0], x[1][0]),lista))
 		except KeyError:
 			sg.popup('No hay registros del nivel seleccionado')
 	except FileNotFoundError:

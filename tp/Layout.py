@@ -132,7 +132,7 @@ def crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion=None,carga
 		# win.close()
 		# return False
 		
-def terminar(Inteligencia,tiempos,jugador,dif): #CONCURRENCIA
+def terminar(Inteligencia,tiempos,jugador,dif,fecha): #CONCURRENCIA
 	
 	layout1=[
 			[sg.Text('FIN DEL JUEGO')],
@@ -146,9 +146,9 @@ def terminar(Inteligencia,tiempos,jugador,dif): #CONCURRENCIA
 	if event== 'SALIR':
 		tiempos[2] = False
 		if dif in ("Facil","Medio"):
-			records.actualizar(jugador.get_nombre(),jugador.get_puntos(),dif)
+			records.actualizar(jugador.get_nombre(),jugador.get_puntos(),dif,fecha)
 		else:
-			records.actualizar(jugador.get_nombre(),jugador.get_puntos(),"Dificil")
+			records.actualizar(jugador.get_nombre(),jugador.get_puntos(),"Dificil",fecha)
 		return True
 	elif event=='CANCELAR':
 		return False
@@ -181,7 +181,6 @@ def diseño_facil(window,tablero):
         window[tablero.get_especiales()["cinco"][w]].update(button_color=(None, '#00b7ff'))
     for x in range(len(tablero.get_especiales()["seis"])):
         window[tablero.get_especiales()["seis"][x]].update(button_color=(None, '#ff8c00'))
-    #window["b_"+str(tablero.get_tamanio()//2)+"_"+str(tablero.get_tamanio()//2)].update('★')
     
 def diseño_medio(window,tablero):
     for i in range(len(tablero.get_especiales()["uno"])):

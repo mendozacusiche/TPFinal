@@ -2,8 +2,10 @@ import PySimpleGUI as sg
 from string import ascii_uppercase as up
 import random, sys, time, json, threading, ventana_bienvenida, Fichas, Tablero, IA, Layout, Jugador
 from pattern.es import *   #parse, conjugate, INFINITIVE
+from datetime import date
 
 def evaluar(palabra, dificultad):
+    '''Se evalúa si el tipo de palabra ingresada corresponde a alguno de los tipos aceptados en el nivel que se está jugando'''
     ok=False
     analisis = parse(palabra).split('/')
     if palabra != "No es palabra":
@@ -20,7 +22,7 @@ def evaluar(palabra, dificultad):
     return ok
 
 
-def recargar_fichas(jugador, bolsa, window, turnoIA=False):
+def recargar_fichas(jugador, bolsa, window, turnoIA=False): #no entiendo bien
     usadas=jugador.get_fichas().get_usadas()
     for i in range(7):
         if usadas[i]:
@@ -232,6 +234,7 @@ def confirmar(window,tablero,jugador,IA):
 		window["-puntos-"].update(jugador.get_puntos())
 
 def deshabilitar_habilitar_botones(window,b,jugador):
+	'''Se habilitan y deshailitan los distintos botones del juego'''
 	for i in range(7):
 		window["-letra"+str(i)+"-"].update(disabled=b)
 	window["Evaluar Palabra"].update(disabled=b)
@@ -240,6 +243,7 @@ def deshabilitar_habilitar_botones(window,b,jugador):
 		window['Cambiar letras'].update(disabled=b)
 
 def posponer(config,tablero,bolsa,Inteligencia,jugador,tiempos,dificultad,opcion=None):
+	'''Se guardan los datos para posponer el juego'''
 	#config["tablero_tamanio"]=tablero.get_tamanio()
 	#config["tablero_especiales"]=tablero.get_especiales()
 	config["tablero_letras"]=tablero.get_letras()
@@ -271,6 +275,7 @@ def posponer(config,tablero,bolsa,Inteligencia,jugador,tiempos,dificultad,opcion
 	sg.popup('Partida guardada con éxito',title='')
 
 def juego(cargar=False):
+	'''Creación de la ventana de juego'''
 	try:
 		if cargar:
 			with open("archivos/guardado.json","r") as archivo:
@@ -358,7 +363,8 @@ def juego(cargar=False):
 						posponer(config,tablero,bolsa,Inteligencia,jugador,tiempos,dificultad,opcion)
 						break
 			elif event == "TERMINAR":
-				if Layout.terminar(Inteligencia,tiempos,jugador,dificultad):
+				fecha=date.today()
+				if Layout.terminar(Inteligencia,tiempos,jugador,dificultad,fecha):
 					break
 			elif event in ("-letraIA0-","-letraIA1-","-letraIA2-","-letraIA3-","-letraIA4-","-letraIA5-","-letraIA6-"):
 				pass #Usamos esto porque si no al clickear una ficha de la IA se traba el programa y si las deshabilitamos cambia el color, por lo tanto no nos sirve

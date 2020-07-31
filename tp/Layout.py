@@ -138,7 +138,7 @@ def terminar(Inteligencia,tiempos,jugador,dif): #CONCURRENCIA
 			[sg.Text('FIN DEL JUEGO')],
 			[sg.Text('Puntos jugador: '),sg.Text(jugador.get_puntos())],
 			[sg.Text('Puntos computadora: '),sg.Text(Inteligencia.get_puntos())],
-			[sg.Button('Salir sin guardar',key='SALIR'), sg.Button('Cancelar',key='CANCELAR')] #si apreta sin guardar se debe verificar si corresponde guardar o no el puntaje
+			[sg.Button('Salir',key='SALIR'), sg.Button('Cancelar',key='CANCELAR')] #si apreta sin guardar se debe verificar si corresponde guardar o no el puntaje
 			]
 	wind= sg.Window('',layout1)
 	event,values=wind.Read()

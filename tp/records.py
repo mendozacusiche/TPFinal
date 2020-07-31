@@ -44,7 +44,8 @@ def actualizar(nombre,puntaje,nivel):
 					datos[nivel][nombre]=puntaje
 					
 		else :
-			datos[nivel]=dic
+			datos_nivel={nombre:puntaje}
+			datos[nivel]=datos_nivel
 		guardarDatos(datos)
 	except FileNotFoundError:
 		sg.popup('No se encontro el archivo topten.json')

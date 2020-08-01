@@ -52,7 +52,7 @@ def segundo(tablero,jugador,Intel,tiempo_turno,bolsa,window,t,dif,lista): #CONCU
 		t[1]-=1
 		if(t[1]== 0):
 			pasar(tablero,jugador,t,tiempo_turno,Intel,bolsa,window)
-			if not Intel.get_mi_turno():
+			if not jugador.get_mi_turno():
 				threading.Thread(target= Intel.turno, args=(bolsa,window,tablero,jugador,t,tiempo_turno,lista)).start()
 
 def contar_letras_bolsa(bolsa):

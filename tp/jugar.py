@@ -374,7 +374,7 @@ def juego(cargar=False):
 						break
 			elif event == "TERMINAR":
 				fecha=date.today()
-				if Layout.terminar(Inteligencia,tiempos,jugador,dificultad,fecha):
+				if Layout.terminar(window,Inteligencia,tiempos,jugador,dificultad,fecha,config):
 					break
 			elif event in ("-letraIA0-","-letraIA1-","-letraIA2-","-letraIA3-","-letraIA4-","-letraIA5-","-letraIA6-"):
 				pass #Usamos esto porque si no al clickear una ficha de la IA se traba el programa y si las deshabilitamos cambia el color, por lo tanto no nos sirve
@@ -393,7 +393,7 @@ def juego(cargar=False):
 							sg.popup("La palabra ingresada no es valida",title='')
 					if (len(jugador.get_fichas().get_usadas())>contar_letras_bolsa(bolsa)):
 						fecha=date.today()
-						Layout.terminar_por_otros(Inteligencia,jugador,dificultad,tiempos,fecha)
+						Layout.terminar_por_otros(window,Inteligencia,jugador,dificultad,tiempos,fecha,config)
 						break
 					else:
 						pasar(tablero,jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
@@ -408,7 +408,7 @@ def juego(cargar=False):
 			if(iniciado and not Inteligencia.get_procesando() and Inteligencia.get_mi_turno()):
 				if Inteligencia.get_terminar(): 
 					fecha=date.today()
-					Layout.terminar_por_otros(Inteligencia,jugador,dificultad,tiempos,fecha)
+					Layout.terminar_por_otros(window,Inteligencia,jugador,dificultad,tiempos,fecha,config)
 					break
 				else:
 					Inteligencia.set_mi_turno(False)
@@ -419,7 +419,7 @@ def juego(cargar=False):
 					deshabilitar_habilitar_botones(window,False,jugador)
 			if tiempos[0]==0:
 				fecha=date.today()
-				Layout.terminar_por_otros(Inteligencia,jugador,dificultad,fecha)
+				Layout.terminar_por_otros(window,Inteligencia,jugador,dificultad,fecha,config)
 				break
 		window.close()
 

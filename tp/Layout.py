@@ -140,6 +140,8 @@ def mostrar_fichas(window,Inteligencia,jugador,config):
 		if (not Inteligencia.get_fichas().get_usadas()[i]):
 			window["-letraIA"+str(i)+"-"].update(Inteligencia.get_fichas().get_letra(i))
 			ptsIA=ptsIA+config["puntaje_fichas"][Inteligencia.get_fichas().get_letra(i)]
+		else:
+			window["-letraIA"+str(i)+"-"].update("")
 	Inteligencia.set_puntos(Inteligencia.get_puntos()-ptsIA)
 	window["-puntosIA-"].update(Inteligencia.get_puntos())
 	pts=0

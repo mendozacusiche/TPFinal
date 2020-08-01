@@ -5,12 +5,12 @@ import configuracion, nuevo_juego, records, jugar, os
 def main(args):
 	#sg.theme('DarkTeal8') #'BlueMono' 'BluePurple' 'DarkAmber'
 	sg.theme('BlueMono')
-	layout=[[sg.Button('Nuevo Juego',font=("Current",10), size=(20, 0))],
-			[sg.Button('Cargar Juego',font=("Current",10), size=(20, 0), disabled=True)],
-			[sg.Button("Records",font=("Current",10), size=(20, 0))],
-			[sg.Button('Salir',font=("Current",10),size=(20, 0))]]
+	layout=[[sg.Button('Nuevo Juego',font=("Arial Black",12), size=(20, 0))],
+			[sg.Button('Cargar Juego',font=("Arial Black",12), size=(20, 0), disabled=True)],
+			[sg.Button("Records",font=("Arial Black",12), size=(20, 0))],
+			[sg.Button('Salir',font=("Arial Black",12),size=(20, 0))]]
 	if os.path.isfile("archivos/guardado.json"):
-		layout[1]=[sg.Button('Cargar Juego',font=("Current",10), size=(20, 0), disabled=False)]
+		layout[1]=[sg.Button('Cargar Juego',font=("Arial Black",12), size=(20, 0), disabled=False)]
 
 	window=sg.Window('Scrabble',layout)
 

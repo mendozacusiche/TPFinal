@@ -81,10 +81,13 @@ def actualizar_descripcion(win,val):
 	'''Se actualiza la descripción en la ventana dependiendo del nivel elegido'''
 	if(val["-dif-"]=="Facil"):
 		win["-desc-"].update("Facil: sustantivos, adjetivos y verbos. Tablero 23x23.")
+		win["-max-"].update("(max: 25)")
 	elif (val["-dif-"]=="Medio"):
 		win["-desc-"].update("Medio: adjetivos y verbos. Tablero 19x19.")
+		win["-max-"].update("(max: 20)")
 	elif (val["-dif-"]=="Dificil"):
 		win["-desc-"].update("Dificil: al azar adjetivos o verbos. Tablero 15x15.")
+		win["-max-"].update("(max: 15)")
 
 def ventana(wind):
 	'''Creación ventana de confguración'''
@@ -92,10 +95,11 @@ def ventana(wind):
 		with open("archivos/config.json","r") as archivo:
 			config= json.load(archivo)
 		letras=["A","B","C","D","E","F","G","H","I","J","K","L","LL","M","N","Ñ","O","P","Q","R","RR","S","T","U","V","W","X","Y","Z"]
-
+		
 		layout=[
 			[sg.Text("Tiempo: ")],
-			[sg.Text("Total "), sg.InputText(config["tiempo_total"],size=(3,1),key="-tot-"), sg.Text("Turno "), sg.InputText(config["tiempo_turno"],size=(3,1),key="-turn-")],
+			[sg.Text("Total:"), sg.InputText(config["tiempo_total"],size=(3,1),key="-tot-"), sg.Text("Turno "), sg.InputText(config["tiempo_turno"],size=(3,1),key="-turn-")],
+			[sg.Text("(max: 15)",key="-max-")],
 			[sg.Text("Dificultad: ")], 
 			[sg.Combo(["Facil","Medio","Dificil"],config["dificultad"], enable_events=True, key="-dif-")],
 			[sg.Text("", size=(50,1) , key=("-desc-"))],
@@ -105,6 +109,10 @@ def ventana(wind):
 			[sg.Text("Letra "),sg.Combo(letras,size=(3,1), enable_events=True, key="-l2-"),sg.Text("Cantidad "),sg.InputText("",size=(3,1), enable_events=True, key="-t2-")],
 			[sg.Button("Aplicar",font=("Current ",9),size=(15, 0),pad=(0, 0)),sg.Button("Restaurar",font=("Current",9), size=(15, 0),pad=(0, 0)),sg.Button("Atras",font=("Current",9), size=(15, 0),pad=(0, 0))]
 			]
+		if config["dificultad"]=="Facil":
+			layout[2][0]=sg.Text("(max: 25)",key="-max-")
+		elif config["dificultad"]=="Medio":
+			layout[2][0]=sg.Text("(max: 20)",key="-max-")
 
 		window= sg.Window("Configuracion",layout)
 
@@ -115,8 +123,11 @@ def ventana(wind):
 			evento,valores = window.read()
 	
 			if evento == "Aplicar":
-				aplicar(valores, nuevos_puntajes, nuevas_cantidades,wind)
-				break
+				if (int(valores["-tot-"])<=25 and valores["-dif-"]=="Facil") or (int(valores["-tot-"])<=20 and valores["-dif-"]=="Medio") or (int(valores["-tot-"])<=15 and valores["-dif-"]=="Dificil"):
+					aplicar(valores, nuevos_puntajes, nuevas_cantidades,wind)
+					break
+				else:
+					sg.popup("El tiempo de partida supera el maximo!",title="")
 	
 			elif evento == "Restaurar":
 				restaurar(window)

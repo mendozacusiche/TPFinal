@@ -133,13 +133,25 @@ def crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion=None,carga
 	# else:
 		# win.close()
 		# return False
+
+def mostrar_fichas(window,Inteligencia,jugador,config):
+	ptsIA=0
+	for i in range(len(Inteligencia.get_fichas().get_letras())):
+		if (not Inteligencia.get_fichas().get_usadas()[i]):
+			window["-letraIA"+str(i)+"-"].update(Inteligencia.get_fichas().get_letra(i))
+			ptsIA=ptsIA+config["puntaje_fichas"][Inteligencia.get_fichas().get_letra(i)]
+	Inteligencia.set_puntos(Inteligencia.get_puntos()-ptsIA)
+	window["-puntosIA-"].update(Inteligencia.get_puntos())
+	pts=0
+	for i in range(len(jugador.get_fichas().get_letras())):
+		if (not jugador.get_fichas().get_usadas()[i]):
+			pts=pts+config["puntaje_fichas"][jugador.get_fichas().get_letra(i)]
+	jugador.set_puntos(jugador.get_puntos()-pts)
+	window["-puntos-"].update(jugador.get_puntos())
 		
-def terminar(Inteligencia,tiempos,jugador,dif,fecha): #CONCURRENCIA
-	
+def terminar(window,Inteligencia,tiempos,jugador,dif,fecha,config): #CONCURRENCIA
 	layout1=[
-			[sg.Text('FIN DEL JUEGO')],
-			[sg.Text('Puntos jugador: '),sg.Text(jugador.get_puntos())],
-			[sg.Text('Puntos computadora: '),sg.Text(Inteligencia.get_puntos())],
+			[sg.Text("¿Seguro que quiere terminar el juego?")],
 			[sg.Button('Salir',key='SALIR'), sg.Button('Cancelar',key='CANCELAR')] #si apreta sin guardar se debe verificar si corresponde guardar o no el puntaje
 			]
 	wind= sg.Window('',layout1)
@@ -147,6 +159,16 @@ def terminar(Inteligencia,tiempos,jugador,dif,fecha): #CONCURRENCIA
 	wind.close()
 	if event== 'SALIR':
 		tiempos[2] = False
+		mostrar_fichas(window,Inteligencia,jugador,config)
+		layout2=[
+			[sg.Text('FIN DEL JUEGO')],
+			[sg.Text('Puntos jugador: '),sg.Text(jugador.get_puntos())],
+			[sg.Text('Puntos computadora: '),sg.Text(Inteligencia.get_puntos())],
+			[sg.Ok()]
+			]
+		wind2=sg.Window("",layout2)
+		event,values=wind2.Read()
+		wind2.close()
 		if dif in ("Facil","Medio"):
 			records.actualizar(jugador.get_nombre(),jugador.get_puntos(),dif,fecha)
 		else:
@@ -155,8 +177,9 @@ def terminar(Inteligencia,tiempos,jugador,dif,fecha): #CONCURRENCIA
 	elif event=='CANCELAR':
 		return False
 		
-def terminar_por_otros(Inteligencia,jugador,dif,tiempos,fecha):
+def terminar_por_otros(window,Inteligencia,jugador,dif,tiempos,fecha,config):
 	tiempos[2] = False
+	mostrar_fichas(window,Inteligencia,jugador,config)
 	layout1=[
 				[sg.Text('FIN DEL JUEGO')],
 				[sg.Text('Puntos jugador: '),sg.Text(jugador.get_puntos())],
@@ -166,10 +189,9 @@ def terminar_por_otros(Inteligencia,jugador,dif,tiempos,fecha):
 	wind= sg.Window('',layout1)
 	event,values=wind.Read()
 	wind.close()
-	print('FIN DEL JUEGO')
 	dic={jugador.get_nombre():jugador.get_puntos()}
 	records.actualizar(jugador.get_nombre(),jugador.get_puntos(),dif,fecha)
-
+	
 def diseño_facil(window,tablero):
     for i in range(len(tablero.get_especiales()["uno"])):
         window[tablero.get_especiales()["uno"][i]].update(button_color=(None, 'red'))

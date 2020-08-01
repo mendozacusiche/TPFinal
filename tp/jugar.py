@@ -119,6 +119,7 @@ def retomar(window,jugador,tablero,Inteligencia,tiempo_turno,bolsa,t,dificultad,
 	window['-cambios-'].update(visible=True)
 	window["-puntos-"].update(jugador.get_puntos())
 	window["-puntosIA-"].update(Inteligencia.get_puntos())
+	window['PALABRAS'].update(map(lambda x: "TURNO: {}  PALABRA: {} PTOS: {}".format(x[0], x[1], x[2]),lista))
 	for i in range(7):
 		window["-letra"+str(i)+"-"].update(jugador.get_fichas().get_letra(i))
 	if (Inteligencia.get_mi_turno()):
@@ -136,6 +137,7 @@ def retomar(window,jugador,tablero,Inteligencia,tiempo_turno,bolsa,t,dificultad,
 	if __name__ == 'jugar':
 		timers.start()
 	window["-CantFichas-"].update(str(contar_letras_bolsa(bolsa)))
+	
 	return True
     
 def cambiar_colores(window, dificultad, tablero):   

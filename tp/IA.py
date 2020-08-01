@@ -46,15 +46,16 @@ class IA():
 			ok = tablero.insertar_palabra(palabra,window,jugador,self,lista)
 			#
 			if(ok):
+				for l in palabra.split():
+					i=0
+					while((l != self.__fichas.get_letras()[i]) or (self.__fichas.get_usadas()[i])):
+						i+=1
+					self.__fichas.usar(i)
 				if (len(palabra.split())<=jugar.contar_letras_bolsa(bolsa)):
-					for l in palabra.split():
-						i=0
-						while((l != self.__fichas.get_letras()[i]) or (self.__fichas.get_usadas()[i])):
-							i+=1
-						self.__fichas.usar(i)
-						self.__fichas.set_letra(jugar.sacar_letra_bolsa(bolsa),i)
 					for i in range(7):
-						self.__fichas.desusar(i)
+						if (self.__fichas.get_usadas()[i]):
+							self.__fichas.set_letra(jugar.sacar_letra_bolsa(bolsa),i)
+							self.__fichas.desusar(i)
 				else:
 					self.__terminar=True
 		# else:

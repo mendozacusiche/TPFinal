@@ -9,7 +9,7 @@ def main(args):
 			[sg.Button('Cargar Juego',font=("Arial Black",12), size=(20, 0), disabled=True)],
 			[sg.Button("Records",font=("Arial Black",12), size=(20, 0))],
 			[sg.Button('Salir',font=("Arial Black",12),size=(20, 0))]]
-	if os.path.isfile("archivos/guardado.json"):
+	if os.path.isfile("archivos/guardado.json"): #si existe un juego guardado se habilita el botón cargar juego
 		layout[1]=[sg.Button('Cargar Juego',font=("Arial Black",12), size=(20, 0), disabled=False)]
 
 	window=sg.Window('Scrabble',layout)
@@ -21,7 +21,7 @@ def main(args):
 			window.Hide()
 			nuevo_juego.ventana()
 			if os.path.isfile("archivos/guardado.json"):
-				window["Cargar Juego"].update(disabled=False)
+				window["Cargar Juego"].update(disabled=False,font=("Arial Black",12)) #si luego de jugar se guarda la partida se habilita el botón Cargar Juego
 			window.UnHide()
 		elif (event=='Cargar Juego'):
 			window.Hide()

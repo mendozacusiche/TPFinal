@@ -2,6 +2,7 @@ import PySimpleGUI as sg
 import json
 
 def aplicar(vals, punts, cants,wind):
+	'''Se define qué sucede cuando se da click en aplicar en la ventana de configuración'''
 	try:
 		archivo=open("archivos/config.json","r+")
 
@@ -39,7 +40,7 @@ Tamaño del tablero: 15x15.""")
 		#print(ex)
   		
 def restaurar(win):
-	
+	'''Se define qué sucede cuando se da click en restaurar en la ventana de configuración'''
 	try:
 		archivo=open("archivos/config.json","w")#acá creo que no es necesario, porque siempre va a poder abrirlo por ser en modo w
 
@@ -77,6 +78,7 @@ def restaurar(win):
 		sg.popup("No se encontro el archivo config.json",title='')
 
 def actualizar_descripcion(win,val):
+	'''Se actualiza la descripción en la ventana dependiendo del nivel elegido'''
 	if(val["-dif-"]=="Facil"):
 		win["-desc-"].update("Facil: sustantivos, adjetivos y verbos. Tablero 23x23.")
 	elif (val["-dif-"]=="Medio"):
@@ -85,7 +87,7 @@ def actualizar_descripcion(win,val):
 		win["-desc-"].update("Dificil: al azar adjetivos o verbos. Tablero 15x15.")
 
 def ventana(wind):
-
+	'''Creación ventana de confguración'''
 	try:
 		with open("archivos/config.json","r") as archivo:
 			config= json.load(archivo)

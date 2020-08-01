@@ -62,8 +62,10 @@ def crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion=None,carga
    
 	columna_0 = [
 					[sg.Column(lay)],#no se si está bien esto
-					[sg.Text('Mensajes del sistema: ')], 
-					[sg.Text('',key='-turno-',font=("Current",10), size=(10, 0),pad=(0, 0))]
+					[sg.Text('Mensajes del sistema: '),sg.Text('',key='-turno-',font=("Current",10), size=(10, 0))], 
+					#[sg.Text('',key='-turno-',font=("Current",10), size=(10, 0),pad=(0, 0))],
+					[sg.Text('Palabras ingresadas:')],
+					[sg.Listbox( values={}, key='PALABRAS',size= (45,20), pad=(0,0), background_color="pink",font=("Current",9))],
 					]
     
 	columna_1 =	[

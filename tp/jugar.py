@@ -45,7 +45,7 @@ def pasar(tablero,jugador,tiempos,tiempo_turno,Intel,bolsa,window):#CONCURRENCIA
 	jugador.set_mi_turno(not jugador.get_mi_turno())
 
 
-def segundo(tablero,jugador,Intel,tiempo_turno,bolsa,window,t,dif): #CONCURRENCIA
+def segundo(tablero,jugador,Intel,tiempo_turno,bolsa,window,t,dif,lista): #CONCURRENCIA
 	while (t[0]>0 and t[2]):
 		time.sleep(1)
 		t[0]-=1
@@ -53,7 +53,7 @@ def segundo(tablero,jugador,Intel,tiempo_turno,bolsa,window,t,dif): #CONCURRENCI
 		if(t[1]== 0):
 			pasar(tablero,jugador,t,tiempo_turno,Intel,bolsa,window)
 			if not Intel.get_mi_turno():
-				threading.Thread(target= Intel.turno, args=(bolsa,window,tablero,jugador,t,tiempo_turno)).start()
+				threading.Thread(target= Intel.turno, args=(bolsa,window,tablero,jugador,t,tiempo_turno,lista)).start()
 
 def contar_letras_bolsa(bolsa):
     cant=0
@@ -77,7 +77,7 @@ def cambiar_fichas(window,fichas,bolsa,tablero,turnoIA=False):
         if(not turnoIA):
             window["-letra"+str(i)+"-"].update(fichas.get_letra(i))
 
-def iniciar(t, window, config, tiempo_turno, tablero, dificultad, nombre):
+def iniciar(t, window, config, tiempo_turno, tablero, dificultad, nombre,lista):
 	window["INICIAR"].update(disabled=True)
 	window['TERMINAR'].update(disabled=False)
 	window['Posponer'].update(disabled=False)
@@ -105,13 +105,13 @@ def iniciar(t, window, config, tiempo_turno, tablero, dificultad, nombre):
 			window["-letra"+str(i)+"-"].update(disabled=False)
 		window['-turno-'].update('Tu turno')
 		window["-dot-"].update(filename='imagenes/greendot.png',visible=True)
-	timers= threading.Thread(target= segundo, args=(tablero,jugador,Inteligencia,tiempo_turno,bolsa,window,t,dificultad))
+	timers= threading.Thread(target= segundo, args=(tablero,jugador,Inteligencia,tiempo_turno,bolsa,window,t,dificultad,lista))
 	if __name__ == 'jugar':
 		timers.start()
 	window["-CantFichas-"].update(str(contar_letras_bolsa(bolsa)))
 	return True, jugador, bolsa, Inteligencia
 
-def retomar(window,jugador,tablero,Inteligencia,tiempo_turno,bolsa,t,dificultad):
+def retomar(window,jugador,tablero,Inteligencia,tiempo_turno,bolsa,t,dificultad,lista):
 	Layout.cargar_tablero(window,tablero)
 	window["RETOMAR"].update(disabled=True)
 	window['TERMINAR'].update(disabled=False)
@@ -132,7 +132,7 @@ def retomar(window,jugador,tablero,Inteligencia,tiempo_turno,bolsa,t,dificultad)
 			window["-letra"+str(i)+"-"].update(disabled=False)
 		window['-turno-'].update('Tu turno')
 		window["-dot-"].update(filename='imagenes/greendot.png',visible=True)
-	timers= threading.Thread(target= segundo, args=(tablero,jugador,Inteligencia,tiempo_turno,bolsa,window,t,dificultad))
+	timers= threading.Thread(target= segundo, args=(tablero,jugador,Inteligencia,tiempo_turno,bolsa,window,t,dificultad,lista))
 	if __name__ == 'jugar':
 		timers.start()
 	window["-CantFichas-"].update(str(contar_letras_bolsa(bolsa)))
@@ -221,17 +221,22 @@ def colocar_letra(event,jugador,tablero,window,pos):
                     else:
                     	window[event].update("")
 
-def confirmar(window,tablero,jugador,IA):
+def confirmar(window,tablero,jugador,IA,palabra,lista):
 	nuevos_puntos=tablero.confirmar_letras(window, IA.get_mi_turno())
 	if (IA.get_primer_turno() or jugador.get_primer_turno()):
 		IA.set_primer_turno(False)
 		jugador.set_primer_turno(False)
 	if IA.get_mi_turno():
+		turno='PC'
 		IA.set_puntos(IA.get_puntos()+nuevos_puntos)
 		window["-puntosIA-"].update(IA.get_puntos())
 	else:
+		turno=jugador.get_nombre()
 		jugador.set_puntos(jugador.get_puntos()+nuevos_puntos)
 		window["-puntos-"].update(jugador.get_puntos())
+	lista.append((turno.upper(),palabra.upper(),nuevos_puntos))
+	window['PALABRAS'].update(map(lambda x: "TURNO: {}  PALABRA: {} PTOS: {}".format(x[0], x[1], x[2]),lista))
+	
 
 def deshabilitar_habilitar_botones(window,b,jugador):
 	'''Se habilitan y deshailitan los distintos botones del juego'''
@@ -242,7 +247,7 @@ def deshabilitar_habilitar_botones(window,b,jugador):
 	if (jugador.get_cambios()>0):
 		window['Cambiar letras'].update(disabled=b)
 
-def posponer(config,tablero,bolsa,Inteligencia,jugador,tiempos,dificultad,opcion=None):
+def posponer(config,tablero,bolsa,Inteligencia,jugador,tiempos,dificultad,lista,opcion=None):
 	'''Se guardan los datos para posponer el juego'''
 	#config["tablero_tamanio"]=tablero.get_tamanio()
 	#config["tablero_especiales"]=tablero.get_especiales()
@@ -259,7 +264,7 @@ def posponer(config,tablero,bolsa,Inteligencia,jugador,tiempos,dificultad,opcion
 	config["Inteligencia_mi_turno"]=Inteligencia.get_mi_turno()
 	config["Inteligencia_procesando"]=Inteligencia.get_procesando()
 	config["Inteligencia_dificultad"]=Inteligencia.get_dificultad()
-	config["Inteligencia_cambios_letras"]=Inteligencia.get_cambios_letras()
+	#config["Inteligencia_cambios_letras"]=Inteligencia.get_cambios_letras()
 	config["Inteligencia_puntos"]=Inteligencia.get_puntos()
 	config["Inteligencia_primer_turno"]=Inteligencia.get_primer_turno()
 	config["jugador_fichas_letras"]=jugador.get_fichas().get_letras()
@@ -270,6 +275,7 @@ def posponer(config,tablero,bolsa,Inteligencia,jugador,tiempos,dificultad,opcion
 	config["jugador_cambios"]=jugador.get_cambios()
 	config["jugador_mi_turno"]=jugador.get_mi_turno()
 	config["jugador_primer_turno"]=jugador.get_primer_turno()
+	config["lista"]=lista
 	archivo=open("archivos/guardado.json","w") 
 	json.dump(config,archivo)
 	sg.popup('Partida guardada con éxito',title='')
@@ -292,10 +298,11 @@ def juego(cargar=False):
 			bolsa=config["bolsa"]
 			tablero=Tablero.Tablero(dificultad,config["tablero_letras"],config["tablero_confirmadas"],config["tablero_coloreadas"])
 			fichasIA=Fichas.Fichas(config["Inteligencia_fichas_letras"],config["Inteligencia_fichas_usadas"],config["Inteligencia_fichas_checked"])
-			Inteligencia=IA.IA(fichasIA,config["Inteligencia_primer_turno"],config["Inteligencia_dificultad"],config["Inteligencia_puntos"],config["Inteligencia_mi_turno"],config["Inteligencia_procesando"],config["Inteligencia_cambios_letras"])
+			Inteligencia=IA.IA(fichasIA,config["Inteligencia_primer_turno"],config["Inteligencia_dificultad"],config["Inteligencia_puntos"],config["Inteligencia_mi_turno"],config["Inteligencia_procesando"])#,config["Inteligencia_cambios_letras"])
 			layout = Layout.crear_layout(tablero, tiempos, nombre, dificultad, jugador.get_cambios(), opcion, True)
 			window = sg.Window('ScrabbleAR',resizable= True,element_justification='center',).Layout(layout).Finalize()
 			iniciado = False
+			lista=config["lista"]
 		else:
 			with open("archivos/config.json","r") as archivo:
 				config = json.load(archivo)
@@ -314,6 +321,7 @@ def juego(cargar=False):
 				layout = Layout.crear_layout(tablero, tiempos, nombre, dificultad, 3)    
 			window = sg.Window('ScrabbleAR',resizable= True,element_justification='center',).Layout(layout).Finalize()
 			iniciado=False
+			lista=[]
 
 		pos_letra= -1 #se actualiza al clickear ficha y se utiliza en colocar letra
 
@@ -325,16 +333,16 @@ def juego(cargar=False):
 				break
 			elif event == "INICIAR":
 				if not iniciado:
-					iniciado, jugador, bolsa, Inteligencia = iniciar(tiempos, window, config, tiempo_turno, tablero, dificultad, nombre)
-					jugar_IA= threading.Thread(target= Inteligencia.turno, args=(bolsa,window,tablero,jugador,tiempos,tiempo_turno))			
+					iniciado, jugador, bolsa, Inteligencia = iniciar(tiempos, window, config, tiempo_turno, tablero, dificultad, nombre,lista)
+					jugar_IA= threading.Thread(target= Inteligencia.turno, args=(bolsa,window,tablero,jugador,tiempos,tiempo_turno,lista))			
 					cambiar_colores(window,dificultad,tablero) #actualiza el tablero con las casillas de premio  por nivel
 					if Inteligencia.get_mi_turno():
 						jugar_IA.start()
 			elif event == "RETOMAR":
 				if not iniciado:			
 					cambiar_colores(window,dificultad,tablero) #actualiza el tablero con las casillas de premio  por nivel
-					iniciado = retomar(window,jugador,tablero,Inteligencia,tiempo_turno,bolsa,tiempos,dificultad)
-					jugar_IA = threading.Thread(target= Inteligencia.turno, args=(bolsa,window,tablero,jugador,tiempos,tiempo_turno))
+					iniciado = retomar(window,jugador,tablero,Inteligencia,tiempo_turno,bolsa,tiempos,dificultad,lista)
+					jugar_IA = threading.Thread(target= Inteligencia.turno, args=(bolsa,window,tablero,jugador,tiempos,tiempo_turno,lista))
 					if Inteligencia.get_mi_turno():
 						jugar_IA.start()
 			elif event == sg.TIMEOUT_KEY:
@@ -357,10 +365,10 @@ def juego(cargar=False):
 			elif event == "Posponer":
 				if (iniciado):
 					if (dificultad in ("Facil","Medio")):
-						posponer(config,tablero,bolsa,Inteligencia,jugador,tiempos,dificultad)
+						posponer(config,tablero,bolsa,Inteligencia,jugador,tiempos,dificultad,lista)
 						break
 					else:
-						posponer(config,tablero,bolsa,Inteligencia,jugador,tiempos,dificultad,opcion)
+						posponer(config,tablero,bolsa,Inteligencia,jugador,tiempos,dificultad,lista,opcion)
 						break
 			elif event == "TERMINAR":
 				fecha=date.today()
@@ -373,7 +381,8 @@ def juego(cargar=False):
 					palabra,medio = tablero.buscar_palabra(jugador)
 					ok = evaluar(palabra, dificultad)
 					if ok:
-						confirmar(window,tablero,jugador,Inteligencia)
+						confirmar(window,tablero,jugador,Inteligencia,palabra,lista)
+						
 					else:
 						devolver_fichas(window,tablero,jugador.get_fichas())
 						if not medio:
@@ -401,7 +410,7 @@ def juego(cargar=False):
 					break
 				else:
 					Inteligencia.set_mi_turno(False)
-					jugar_IA= threading.Thread(target= Inteligencia.turno, args=(bolsa,window,tablero,jugador,tiempos,tiempo_turno))
+					jugar_IA= threading.Thread(target= Inteligencia.turno, args=(bolsa,window,tablero,jugador,tiempos,tiempo_turno,lista))
 					window['-turno-'].update('Tu turno')
 					window["-dotIA-"].update(filename='imagenes/greendot.png',visible=False)
 					window["-dot-"].update(filename='imagenes/greendot.png',visible=True)

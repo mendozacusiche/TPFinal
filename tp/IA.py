@@ -2,13 +2,13 @@ import jugar, Fichas, Tablero, Layout
 
 class IA():
 
-	def __init__(self,fichas,primer_turno,dificultad,puntos,mi_turno=False,procesando=False,cambios_letras=3):
+	def __init__(self,fichas,primer_turno,dificultad,puntos,mi_turno=False,procesando=False):#,cambios_letras=3):
 		self.__fichas=fichas
 		self.__mi_turno=mi_turno
 		self.__primer_turno=primer_turno
 		self.__procesando=procesando
 		self.__dificultad=dificultad
-		self.__cambios_letras=cambios_letras
+		# self.__cambios_letras=cambios_letras
 		self.__puntos=puntos
 		self.__terminar=False
 
@@ -39,11 +39,11 @@ class IA():
 			n-=1
 		return palabra
 
-	def turno(self,bolsa,window,tablero,jugador,tiempos,tiempo_turno):
+	def turno(self,bolsa,window,tablero,jugador,tiempos,tiempo_turno,lista):
 		self.__procesando=True
 		palabra=self.buscar_palabra()
 		if (palabra!=""):
-			ok = tablero.insertar_palabra(palabra,window,jugador,self)
+			ok = tablero.insertar_palabra(palabra,window,jugador,self,lista)
 			#
 			if(ok):
 				if (len(palabra.split())<=jugar.contar_letras_bolsa(bolsa)):
@@ -57,10 +57,10 @@ class IA():
 						self.__fichas.desusar(i)
 				else:
 					self.__terminar=True
-		else:
-			if self.__cambios_letras > 0:
-				jugar.cambiar_fichas(window,self.__fichas,bolsa,tablero,True)
-				self.__cambios_letras-=1
+		# else:
+			# if self.__cambios_letras > 0:
+				# jugar.cambiar_fichas(window,self.__fichas,bolsa,tablero,True)
+				# self.__cambios_letras-=1
 		self.__procesando=False
 		jugar.pasar(tablero,jugador,tiempos,tiempo_turno,self,bolsa,window)
 
@@ -91,8 +91,8 @@ class IA():
 	def set_puntos(self, p):
 		self.__puntos=p
 
-	def get_cambios_letras(self):
-		return self.__cambios_letras
+	# def get_cambios_letras(self):
+		# return self.__cambios_letras
 
 	def get_terminar(self):
 		return self.__terminar

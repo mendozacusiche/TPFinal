@@ -3,7 +3,7 @@ import json
 
 class Tablero():
     def __init__(self, nivel, letras=None, confirmadas=None, coloreadas=None):
-        '''Seteamos el tamaño por nivel e inicializamos el tablero como vacio'''
+        '''Seteamos el tamaño por nivel, las casillas especiales e inicializamos el tablero como vacio'''
         self.__nivel = nivel
         if self.__nivel == "Facil":
             self.__tamanio = 23
@@ -62,7 +62,7 @@ class Tablero():
         return self.__coloreadas
 
     def get_no_confirmadas(self):
-        '''con esto se obtienen las casillas no ocupadas por letras a traves de una lista de tuplas'''
+        '''con esto se obtienen las casillas no ocupadas por letras a través de una lista de tuplas'''
         fichas = []
         for x in range(self.__tamanio):
             for y in range(self.__tamanio):
@@ -112,7 +112,7 @@ class Tablero():
             es_palabra = False
     	
         medio=True
-    	
+    	#Verifico si el primer turno es del jugador y si es así, si la palbra introducida pasa por el medio del tablero
         if(jugador.get_primer_turno()) and (self.__letras[self.__tamanio//2][self.__tamanio//2] == "★"):
             es_palabra = False
             medio=False
@@ -129,6 +129,7 @@ class Tablero():
         return palabra,medio
 
     def confirmar_letras(self, win, turno):
+        '''Confirmo las letras ingresadas y calculo el puntaje dependiendo el nivel'''
         puntaje = 0
         puntaje_letras = {}
         claves = []
@@ -153,9 +154,10 @@ class Tablero():
 
         return puntaje
 
-    def insertar_palabra(self, palabra, window, jugador, IA):
+    def insertar_palabra(self, palabra, window, jugador, IA,lista):# no lo entiendo bien
         casillas = []
         ok = False
+        pal=palabra.replace(' ','')
         if(not IA.get_primer_turno()):
             for i in range(self.__tamanio):
                 for j in range(self.__tamanio):
@@ -196,12 +198,12 @@ class Tablero():
                 self.__letras[c[0]][c[1]] = palabra.split()[i]
                 window["b_"+str(c[0])+"_"+str(c[1])].update(palabra.split()[i])
                 i += 1
-            jugar.confirmar(window, self, jugador, IA)
+            jugar.confirmar(window, self, jugador, IA,pal,lista)
 
         return ok 
 
     def __calcular_puntaje_Facil(self, claves):
-
+        '''Calculo el puntaje del nivel fácil teniendo en cuenta si pasa por las casillas especiales del nivel'''
         rojo = self.__especiales["uno"]
         azul = self.__especiales["dos"]
         amarillo = self.__especiales["tres"]
@@ -253,7 +255,7 @@ class Tablero():
         return puntaje
 
     def __calcular_puntaje_Medio(self, claves):
-
+        '''Calculo el puntaje del nivel medio teniendo en cuenta si pasa por las casillas especiales del nivel'''
         verde = self.__especiales["uno"]
         rosa = self.__especiales["dos"]
         dorado = self.__especiales["tres"]
@@ -283,7 +285,7 @@ class Tablero():
         return puntaje
 
     def __calcular_puntaje_dificil(self, claves):
-
+        '''Calculo el puntaje del nivel difícil teniendo en cuenta si pasa por las casillas especiales del nivel'''
         Anaranjado = self.__especiales["uno"]
         Amarillo = self.__especiales["dos"]
         Verde = self.__especiales["tres"]

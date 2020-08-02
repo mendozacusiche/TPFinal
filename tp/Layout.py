@@ -65,7 +65,8 @@ def crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion=None,carga
 					[sg.Text('Mensajes del sistema: ',font=("Current",9,'bold')),sg.Text('',key='-turno-',font=("Current",10), size=(10, 0))], 
 					#[sg.Text('',key='-turno-',font=("Current",10), size=(10, 0),pad=(0, 0))],
 					[sg.Text('Palabras ingresadas:',font=("Current",9,'bold'))],
-					[sg.Listbox( values={}, key='PALABRAS',size= (45,20), pad=(0,0), background_color="#b7c9e7",font=("Current",9))],
+					[sg.Text('TURNO',font=("Current",9,'bold'),justification='lleft'),sg.Text('PALABRA',font=("Current",9,'bold'),justification='center'),sg.Text('PUNTOS',font=("Current",9,'bold'),justification='lright')],
+					[sg.Listbox( values={}, key='PALABRAS',size= (30,20), pad=(0,0), background_color="#b7c9e7",font=("Current",10))],
 					]
     
 	columna_1 =	[

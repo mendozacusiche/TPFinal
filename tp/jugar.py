@@ -237,11 +237,12 @@ def confirmar(window,tablero,jugador,IA,palabra,lista):
 		jugador.set_puntos(jugador.get_puntos()+nuevos_puntos)
 		window["-puntos-"].update(jugador.get_puntos())
 	lista.append((turno.upper(),palabra.upper(),nuevos_puntos))
-	window['PALABRAS'].update(map(lambda x: "TURNO: {}  PALABRA: {} PTOS: {}".format(x[0], x[1], x[2]),lista))
+	lista.append(('','',''))
+	window['PALABRAS'].update(map(lambda x: " {}  {}  {} ".format(x[0], x[1], x[2]),lista))
 	
 
 def deshabilitar_habilitar_botones(window,b,jugador):
-	'''Se habilitan y deshailitan los distintos botones del juego'''
+	'''Se habilitan y deshabilitan los distintos botones del juego'''
 	for i in range(7):
 		window["-letra"+str(i)+"-"].update(disabled=b)
 	window["Evaluar Palabra"].update(disabled=b)

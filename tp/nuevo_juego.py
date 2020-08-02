@@ -32,8 +32,8 @@ Tamaño del tablero: 15x15."""
 		descr='No hay descripción del nivel actual'
 				
 	columna2=[[sg.Text(descr,key='-descr-',font=("Arial Black",10), size = (35, 0),justification='ljust')],
-			[sg.Button('Configuración',font=("Arial Black",12), size =(29, 0))],
-			[sg.Button('Jugar',font=("Arial Black",12), size=(13, 0)), sg.Button('Atrás',font=("Arial Black",12), size=(13,0),pad=(20,0))]
+			[sg.Button('Configuracion',font=("Arial Black",12), size =(29, 0))],
+			[sg.Button('Jugar',font=("Arial Black",12), size=(13, 0)), sg.Button('Atras',font=("Arial Black",12), size=(13,0),pad=(20,0))]
 			]
 	
 	layout=[[sg.Column(columna1),sg.Column(columna2)]]

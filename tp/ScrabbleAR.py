@@ -21,7 +21,7 @@ def main(args):
 			window.Hide()
 			nuevo_juego.ventana()
 			if os.path.isfile("archivos/guardado.json"):
-				window["Cargar Juego"].update(disabled=False,font=("Arial Black",12)) #si luego de jugar se guarda la partida se habilita el botón Cargar Juego
+				window["Cargar Juego"].update(disabled=False) #si luego de jugar se guarda la partida se habilita el botón Cargar Juego
 			window.UnHide()
 		elif (event=='Cargar Juego'):
 			window.Hide()

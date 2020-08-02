@@ -67,8 +67,9 @@ def actualizar(nombre,puntaje,nivel,fecha):
 				else:
 					#print(len(datos[nivel]))
 					minimo=min(datos[nivel], key=datos[nivel].get)
-					datos[nivel].pop(minimo)
-					datos[nivel][nombre]=(puntaje,f)
+					if puntaje>datos[nivel][minimo][0]:
+						datos[nivel].pop(minimo)
+						datos[nivel][nombre]=(puntaje,f)
 					
 		else :
 			datos_nivel={nombre:(puntaje,f)}

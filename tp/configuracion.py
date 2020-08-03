@@ -107,14 +107,14 @@ def ventana(wind):
 			[sg.Text("Letra "),sg.Combo(letras,size=(3,1), enable_events=True, key="-l1-"),sg.Text("Puntos "),sg.InputText("",size=(3,1), enable_events=True, key="-t1-")],
 			[sg.Text("Cantidad: ",font=("Arial Black",10))],
 			[sg.Text("Letra "),sg.Combo(letras,size=(3,1), enable_events=True, key="-l2-"),sg.Text("Cantidad "),sg.InputText("",size=(3,1), enable_events=True, key="-t2-")],
-			[sg.Button("Aplicar",font=("Arial Black",11),size=(15, 0),pad=(0, 0)),sg.Button("Restaurar",font=("Arial Black",11), size=(15, 0),pad=(0, 0)),sg.Button("Atras",font=("Arial Black",11), size=(15, 0),pad=(0, 0))]
+			[sg.Button("Aplicar",font=("Arial Black",11),size=(15, 0),pad=(0, 0)),sg.Button("Restaurar",font=("Arial Black",11), size=(15, 0),pad=(0, 0)),sg.Button("Atrás",key="Atras",font=("Arial Black",11), size=(15, 0),pad=(0, 0))]
 			]
 		if config["dificultad"]=="Facil":
 			layout[2][0]=sg.Text("(max: 25)",key="-max-")
 		elif config["dificultad"]=="Medio":
 			layout[2][0]=sg.Text("(max: 20)",key="-max-")
 
-		window= sg.Window("Configuracion",layout)
+		window= sg.Window("Configuración",layout)
 
 		nuevos_puntajes={}
 		nuevas_cantidades={}

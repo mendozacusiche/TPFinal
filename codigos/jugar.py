@@ -107,7 +107,7 @@ def iniciar(t, window, config, tiempo_turno, tablero, dificultad, nombre,lista):
 		window['-turno-'].update('Tu turno')
 		window["-dot-"].update(filename='imagenes/greendot.png',visible=True)
 	timers= threading.Thread(target= segundo, args=(tablero,jugador,Inteligencia,tiempo_turno,bolsa,window,t,dificultad,lista))
-	if __name__ == 'jugar':
+	if __name__ == 'codigos.jugar':
 		timers.start()
 	window["-CantFichas-"].update(str(contar_letras_bolsa(bolsa)))
 	return True, jugador, bolsa, Inteligencia
@@ -135,7 +135,7 @@ def retomar(window,jugador,tablero,Inteligencia,tiempo_turno,bolsa,t,dificultad,
 		window['-turno-'].update('Tu turno')
 		window["-dot-"].update(filename='imagenes/greendot.png',visible=True)
 	timers= threading.Thread(target= segundo, args=(tablero,jugador,Inteligencia,tiempo_turno,bolsa,window,t,dificultad,lista))
-	if __name__ == 'jugar':
+	if __name__ == 'codigos.jugar':
 		timers.start()
 	window["-CantFichas-"].update(str(contar_letras_bolsa(bolsa)))
 	

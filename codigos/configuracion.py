@@ -124,8 +124,11 @@ def ventana(wind):
 	
 			if evento == "Aplicar":
 				if (int(valores["-tot-"])<=25 and valores["-dif-"]=="Facil") or (int(valores["-tot-"])<=20 and valores["-dif-"]=="Medio") or (int(valores["-tot-"])<=15 and valores["-dif-"]=="Dificil"):
-					aplicar(valores, nuevos_puntajes, nuevas_cantidades,wind)
-					break
+					if (int(valores["-turn-"])<int(valores["-tot-"])):
+						aplicar(valores, nuevos_puntajes, nuevas_cantidades,wind)
+						break
+					else:
+						sg.popup("El tiempo de turno supera al tiempo de partida!",title="")
 				else:
 					sg.popup("El tiempo de partida supera el maximo!",title="")
 	

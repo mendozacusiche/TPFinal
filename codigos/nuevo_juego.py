@@ -1,5 +1,6 @@
 import PySimpleGUI as sg
-from codigos import configuracion, jugar
+if __name__ == 'codigos.nuevo_juego':
+	from codigos import configuracion, jugar
 import json
 
 def ventana():	
@@ -30,6 +31,8 @@ Tamaño del tablero: 15x15."""
 		sg.popup("No se encontro el archivo config.json")
 		columna1=[[sg.Text('No hay tablero actual')]]
 		descr='No hay descripción del nivel actual'
+	# except :
+		# print('hola')
 				
 	columna2=[[sg.Text(descr,key='-descr-',font=("Arial Black",10), size = (35, 0),justification='ljust')],
 			[sg.Button('Configuración',key='Configuracion',font=("Arial Black",12), size =(29, 0))],
@@ -53,3 +56,7 @@ Tamaño del tablero: 15x15."""
 		elif (event == sg.WIN_CLOSED or event == "Atras"):
 			window.close()
 			break
+
+if __name__ == '__main__':
+	sg.theme('BlueMono')
+	sg.popup('Por favor ejecute ScrabbleAR.py',title='')

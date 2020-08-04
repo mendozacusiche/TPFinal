@@ -1,6 +1,7 @@
 import PySimpleGUI as sg
 import sys
-from codigos import records,Tablero
+if __name__ == 'codigos.Layout':
+	from codigos import records,Tablero
 
 
 def definir_descripcion(dif,opcion=None):
@@ -54,7 +55,7 @@ def crear_botones(tablero, dificultad):
 
 
 def crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion=None,cargar=False):
-
+#Hay que poner manejo de excepciones?? Por las imagenes
 	descr=definir_descripcion(dificultad,opcion)
 	lay=definir_especiales(dificultad)
 		
@@ -240,3 +241,6 @@ def cargar_tablero(window,tablero):
 
 		
 color_button = ('white','OrangeRed3')
+if __name__ == '__main__':
+	sg.theme('BlueMono')
+	sg.popup('Por favor ejecute ScrabbleAR.py',title='')

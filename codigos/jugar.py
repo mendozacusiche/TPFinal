@@ -1,7 +1,8 @@
 import PySimpleGUI as sg
 from string import ascii_uppercase as up
 import random, sys, time, json, threading
-from codigos import ventana_bienvenida, Fichas, Tablero, IA, Layout, Jugador
+if __name__ == 'codigos.jugar':
+	from codigos import ventana_bienvenida, Fichas, Tablero, IA, Layout, Jugador
 from pattern.es import *   #parse, conjugate, INFINITIVE
 from datetime import date
 
@@ -41,7 +42,7 @@ def pasar(tablero,jugador,tiempos,tiempo_turno,Intel,bolsa,window):#CONCURRENCIA
 		Intel.set_mi_turno(True)
 		window['-turno-'].update('Turno PC')
 		window["-dotIA-"].update(filename='imagenes/greendot.png',visible=True)
-		window["-dot-"].update(filename='imagenes/greendot.png',visible=False)
+		window["-dot-"].update(filename='imagenes/greendot.png',visible=False)#Hay que poner manejo de excepciones??
 		deshabilitar_habilitar_botones(window,True,jugador)
 	jugador.set_mi_turno(not jugador.get_mi_turno())
 
@@ -97,7 +98,7 @@ def iniciar(t, window, config, tiempo_turno, tablero, dificultad, nombre,lista):
 	jugador=Jugador.Jugador(nombre,Fichas.Fichas(nuevas),not Inteligencia.get_mi_turno())
 	if (Inteligencia.get_mi_turno()):
 		window['-turno-'].update('Turno PC')
-		window["-dotIA-"].update(filename='imagenes/greendot.png',visible=True)
+		window["-dotIA-"].update(filename='imagenes/greendot.png',visible=True)#Hay que poner manejo de excepciones??
 	else:
 		window['Pasar'].update(disabled=False)
 		window["Evaluar Palabra"].update(disabled=False)
@@ -105,7 +106,7 @@ def iniciar(t, window, config, tiempo_turno, tablero, dificultad, nombre,lista):
 		for i in range(7):
 			window["-letra"+str(i)+"-"].update(disabled=False)
 		window['-turno-'].update('Tu turno')
-		window["-dot-"].update(filename='imagenes/greendot.png',visible=True)
+		window["-dot-"].update(filename='imagenes/greendot.png',visible=True)#Hay que poner manejo de excepciones??
 	timers= threading.Thread(target= segundo, args=(tablero,jugador,Inteligencia,tiempo_turno,bolsa,window,t,dificultad,lista))
 	if __name__ == 'codigos.jugar':
 		timers.start()
@@ -125,7 +126,7 @@ def retomar(window,jugador,tablero,Inteligencia,tiempo_turno,bolsa,t,dificultad,
 		window["-letra"+str(i)+"-"].update(jugador.get_fichas().get_letra(i))
 	if (Inteligencia.get_mi_turno()):
 		window['-turno-'].update('Turno PC')
-		window["-dotIA-"].update(filename='imagenes/greendot.png',visible=True)
+		window["-dotIA-"].update(filename='imagenes/greendot.png',visible=True)#Hay que poner manejo de excepciones??
 	else:
 		window['Pasar'].update(disabled=False)
 		window["Evaluar Palabra"].update(disabled=False)
@@ -133,7 +134,7 @@ def retomar(window,jugador,tablero,Inteligencia,tiempo_turno,bolsa,t,dificultad,
 		for i in range(7):
 			window["-letra"+str(i)+"-"].update(disabled=False)
 		window['-turno-'].update('Tu turno')
-		window["-dot-"].update(filename='imagenes/greendot.png',visible=True)
+		window["-dot-"].update(filename='imagenes/greendot.png',visible=True)#Hay que poner manejo de excepciones??
 	timers= threading.Thread(target= segundo, args=(tablero,jugador,Inteligencia,tiempo_turno,bolsa,window,t,dificultad,lista))
 	if __name__ == 'codigos.jugar':
 		timers.start()
@@ -416,7 +417,7 @@ def juego(cargar=False):
 					Inteligencia.set_mi_turno(False)
 					jugar_IA= threading.Thread(target= Inteligencia.turno, args=(bolsa,window,tablero,jugador,tiempos,tiempo_turno,lista))
 					window['-turno-'].update('Tu turno')
-					window["-dotIA-"].update(filename='imagenes/greendot.png',visible=False)
+					window["-dotIA-"].update(filename='imagenes/greendot.png',visible=False)#Hay que poner manejo de excepciones??
 					window["-dot-"].update(filename='imagenes/greendot.png',visible=True)
 					deshabilitar_habilitar_botones(window,False,jugador)
 			if tiempos[0]==0:
@@ -433,3 +434,7 @@ def juego(cargar=False):
 		
 
 color_button = ('white','OrangeRed3')
+
+if __name__ == '__main__':
+	sg.theme('BlueMono')
+	sg.popup('Por favor ejecute ScrabbleAR.py',title='')

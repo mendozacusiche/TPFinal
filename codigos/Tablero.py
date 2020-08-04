@@ -1,4 +1,5 @@
-from codigos import jugar
+if __name__ == 'codigos.Tablero':
+	from codigos import jugar#NO SE QUE TAN BIEN ESTÁ ESTO
 import json
 
 class Tablero():
@@ -317,3 +318,5 @@ class Tablero():
                 sg.popup("No se encontro el archivo config.json",title='')
 
         return puntaje
+        
+

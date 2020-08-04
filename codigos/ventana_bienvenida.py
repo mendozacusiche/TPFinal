@@ -1,7 +1,7 @@
 import PySimpleGUI as sg 
 
 def ventana(jugador="None"):
-  ''' Creación ventana de bienvenida '''
+  ''' Creación ventana de bienvenida ''' #Hay que poner manejo de excepciones??
   if jugador != "None":
     layout = [
               [sg.Text('Bienvenido a ScrabbleAR! ',size=(40, 1), justification='center', font='Courier 15')],

@@ -52,3 +52,4 @@ class Fichas():
 		window["-letra4-"].update(button_color=('white','OrangeRed3'))
 		window["-letra5-"].update(button_color=('white','OrangeRed3'))
 		window["-letra6-"].update(button_color=('white','OrangeRed3'))
+

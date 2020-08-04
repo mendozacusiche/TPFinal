@@ -170,3 +170,7 @@ def ventana(wind):
 		window.Close()
 	except FileNotFoundError as ex:
 		sg.popup("No se encontro el archivo config.json",title='')
+
+if __name__ == '__main__':
+	sg.theme('BlueMono')
+	sg.popup('Por favor ejecute ScrabbleAR.py',title='')

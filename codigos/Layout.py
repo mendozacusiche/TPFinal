@@ -100,19 +100,19 @@ def crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion=None,carga
 				]
 
 	
-	
+	if cargar:
+		fila_1[1][1]=sg.Button('RETOMAR',key=("RETOMAR"),font=("Current",10), size=(10, 0),pad=(0, 0))
+
 	columna_2=[
 				[sg.Text(' '*80),sg.Button('Ayuda (?)',key='AYUDA',font=("Current",10,'bold'),size=(10, 0))],
 				[sg.Frame('CONFIGURACION', fila_1, pad=(20, 50), relief= 'solid')],
 				]
-	
-	if cargar:
-		columna_2[1][1]=sg.Button('RETOMAR',key=("RETOMAR"),font=("Current",10), size=(10, 0),pad=(0, 0))
 
 	layout = [  
 				[sg.Column(columna_0),sg.Column(columna_1, pad=(0,0)),sg.Column(columna_2, pad=(0,0))],
 				]
-	return layout   
+
+	return layout 
 
 
 

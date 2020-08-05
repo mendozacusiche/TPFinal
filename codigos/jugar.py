@@ -2,8 +2,7 @@ import PySimpleGUI as sg
 from string import ascii_uppercase as up
 import random, sys, time, json, threading
 if __name__ == 'codigos.jugar':
-	from codigos import ventana_bienvenida, Layout,Fichas, Tablero, IA, Jugador
-	
+	from codigos import ventana_bienvenida, Layout,Fichas, Tablero, IA, Jugador,cambiar_letras
 from pattern.es import *   #parse, conjugate, INFINITIVE
 from datetime import date
 
@@ -73,15 +72,16 @@ def sacar_letra_bolsa(bolsa):
     bolsa[letra]-=1
     return letra
 
-def cambiar_fichas(window,fichas,bolsa,tablero,turnoIA=False):
+def cambiar_fichas(window, jugador, claves,bolsa,tablero,turnoIA=False):
     ''''''
     if(not turnoIA):
-        devolver_fichas(window,tablero,fichas)
+        devolver_fichas(window,tablero, jugador.get_fichas())
     for i in range(7):
-        bolsa[fichas.get_letras()[i]]+=1
-        fichas.set_letra(sacar_letra_bolsa(bolsa),i)
-        if(not turnoIA):
-            window["-letra"+str(i)+"-"].update(fichas.get_letra(i))
+        if claves[i][1]:
+        	bolsa[jugador.get_fichas().get_letras()[i]]+=1
+        	jugador.get_fichas().set_letra(sacar_letra_bolsa(bolsa),i)
+        if(not turnoIA)and(claves[i][1]):
+            window["-letra"+str(i)+"-"].update(jugador.get_fichas().get_letra(i))
 
 def iniciar(t, window, config, tiempo_turno, tablero, dificultad, nombre,lista):
 	'''Define qué sucede cuando se oprime el botón iniciar'''
@@ -339,7 +339,7 @@ def juego(cargar=False):
 				layout = Layout.crear_layout(tablero, tiempos, nombre, dificultad, 3, opcion)    
 			else:
 				layout = Layout.crear_layout(tablero, tiempos, nombre, dificultad, 3)    
-			window = sg.Window('ScrabbleAR',resizable= True,element_justification='center',).Layout(layout).Finalize()
+			window = sg.Window('ScrabbleAR',resizable= True,element_justification='center').Layout(layout).Finalize()
 			iniciado=False
 			lista=[]
 
@@ -375,7 +375,8 @@ def juego(cargar=False):
 					pos_letra = clickear_ficha(event, jugador, window)
 			elif event == "Cambiar letras" and not Inteligencia.get_mi_turno():
 				if iniciado:
-					cambiar_fichas(window,jugador.get_fichas(),bolsa,tablero)
+					cambiar_letras.ventana(window, jugador, bolsa, tablero)
+					#cambiar_fichas(window,jugador.get_fichas(),bolsa,tablero)
 					jugador.set_cambios(jugador.get_cambios()-1)
 					window['-cambios-'].update(jugador.get_cambios())
 					if jugador.get_cambios()==0:

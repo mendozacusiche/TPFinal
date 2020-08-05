@@ -72,15 +72,12 @@ def sacar_letra_bolsa(bolsa):
     bolsa[letra]-=1
     return letra
 
-def cambiar_fichas(window, jugador, claves,bolsa,tablero,turnoIA=False):
+def cambiar_fichas(window, jugador, claves,bolsa,tablero):
     ''''''
-    if(not turnoIA):
-        devolver_fichas(window,tablero, jugador.get_fichas())
     for i in range(7):
         if claves[i][1]:
-        	bolsa[jugador.get_fichas().get_letras()[i]]+=1
-        	jugador.get_fichas().set_letra(sacar_letra_bolsa(bolsa),i)
-        if(not turnoIA)and(claves[i][1]):
+            bolsa[jugador.get_fichas().get_letras()[i]]+=1
+            jugador.get_fichas().set_letra(sacar_letra_bolsa(bolsa),i)
             window["-letra"+str(i)+"-"].update(jugador.get_fichas().get_letra(i))
 
 def iniciar(t, window, config, tiempo_turno, tablero, dificultad, nombre,lista):
@@ -383,13 +380,14 @@ def juego(cargar=False):
 					pos_letra = clickear_ficha(event, jugador, window)
 			elif event == "Cambiar letras" and not Inteligencia.get_mi_turno():
 				if iniciado:
-					cambiar_letras.ventana(window, jugador, bolsa, tablero)
-					#cambiar_fichas(window,jugador.get_fichas(),bolsa,tablero)
-					jugador.set_cambios(jugador.get_cambios()-1)
-					window['-cambios-'].update(jugador.get_cambios())
-					if jugador.get_cambios()==0:
-						window["Cambiar letras"].update(disabled=True)
-					pasar(jugador,tiempos,tiempo_turno,Inteligencia)
+					devolver_fichas(window,tablero,jugador.get_fichas())
+					ok=cambiar_letras.ventana(window, jugador, bolsa, tablero)
+					if ok:
+						jugador.set_cambios(jugador.get_cambios()-1)
+						window['-cambios-'].update(jugador.get_cambios())
+						if jugador.get_cambios()==0:
+							window["Cambiar letras"].update(disabled=True)
+						pasar(jugador,tiempos,tiempo_turno,Inteligencia)
 			elif event == "Posponer":
 				if (iniciado):
 					devolver_fichas(window,tablero,jugador.get_fichas())

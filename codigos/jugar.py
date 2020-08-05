@@ -368,6 +368,7 @@ def juego(cargar=False):
 					pasar(jugador,tiempos,tiempo_turno,Inteligencia)
 			elif event == "Posponer":
 				if (iniciado):
+					devolver_fichas(window,tablero,jugador.get_fichas())
 					if (dificultad in ("Facil","Medio")):
 						posponer(config,tablero,bolsa,Inteligencia,jugador,tiempos,dificultad,lista)
 						break
@@ -375,6 +376,7 @@ def juego(cargar=False):
 						posponer(config,tablero,bolsa,Inteligencia,jugador,tiempos,dificultad,lista,opcion)
 						break
 			elif event == "TERMINAR":
+				devolver_fichas(window,tablero,jugador.get_fichas())
 				fecha=date.today()
 				if Layout.terminar(window,Inteligencia,tiempos,jugador,dificultad,fecha,config):
 					break

@@ -114,7 +114,7 @@ class Tablero():
     	
         medio=True
     	#Verifico si el primer turno es del jugador y si es así, si la palbra introducida pasa por el medio del tablero
-        if(jugador.get_primer_turno()) and (self.__letras[self.__tamanio//2][self.__tamanio//2] == "★"):
+        if(jugador.get_primer_turno()) and (self.__letras[self.__tamanio//2][self.__tamanio//2] == ""):
             es_palabra = False
             medio=False
 

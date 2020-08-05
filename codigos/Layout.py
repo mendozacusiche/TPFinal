@@ -1,7 +1,8 @@
 import PySimpleGUI as sg
 import sys
 if __name__ == 'codigos.Layout':
-	from codigos import records,Tablero
+	from codigos import records
+from clases import Tablero
 
 
 def definir_descripcion(dif,opcion=None):

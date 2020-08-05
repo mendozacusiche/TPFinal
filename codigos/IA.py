@@ -3,6 +3,7 @@ from codigos import jugar, Fichas, Tablero, Layout
 class IA():
 
 	def __init__(self,fichas,primer_turno,dificultad,puntos,mi_turno=False,procesando=False):#,cambios_letras=3):
+		'''Constructor de la clase IA'''
 		self.__fichas=fichas
 		self.__mi_turno=mi_turno
 		self.__primer_turno=primer_turno
@@ -13,6 +14,7 @@ class IA():
 		self.__terminar=False
 
 	def combinaciones(self,combs,pal,marcas,letras,largo):
+		'''Busca las combinaciones posibles para armar una palabra con las fichas que tiene en el atril'''
 		if (largo>0):
 			for i in range(len(letras)):
 				if(not marcas[i]):
@@ -23,6 +25,7 @@ class IA():
 			combs.append(pal)
 
 	def buscar_palabra(self):
+		'''Busca una palabra válida'''
 		palabra=""
 		n=len(self.__fichas.get_letras())
 		marcas=[False for i in range(n)]
@@ -40,6 +43,7 @@ class IA():
 		return palabra
 
 	def turno(self,bolsa,window,tablero,jugador,tiempos,tiempo_turno,lista):
+		'''Acciones que realiza la IA cuando es su turno'''
 		palabra=self.buscar_palabra()
 		if (palabra!=""):
 			ok = tablero.insertar_palabra(palabra,window,jugador,self,lista)

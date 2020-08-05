@@ -19,12 +19,12 @@ def evaluar(palabra, dificultad):
             ok=True
         elif (dificultad == "DificilAdjetivos") and (analisis[1] in ("JJ")):
             ok=True
-    # else:
-        # sg.popup("La Palapra Ingresada No es Valida")
+   
     return ok
 
 
-def recargar_fichas(jugador, bolsa, window): #no entiendo bien
+def recargar_fichas(jugador, bolsa, window): 
+	'''Repone las fichas usadas'''
     usadas=jugador.get_fichas().get_usadas()
     for i in range(7):
         if usadas[i]:
@@ -34,6 +34,7 @@ def recargar_fichas(jugador, bolsa, window): #no entiendo bien
             jugador.get_fichas().desusar(i)
 
 def pasar(jugador,tiempos,tiempo_turno,Intel):#CONCURRENCIA
+	'''Pasa el turno'''
 	if(jugador.get_mi_turno()):
 		Intel.set_procesando(True)
 		Intel.set_mi_turno(True)
@@ -45,6 +46,8 @@ def pasar(jugador,tiempos,tiempo_turno,Intel):#CONCURRENCIA
 
 
 def segundo(tablero,jugador,Intel,tiempo_turno,window,t,lista): #CONCURRENCIA
+	'''Va restando de a 1 segundo los contadores de tiempo, y si llega a 0 el tiempo del turno, pasa el turno, hasta que se llega a 0 en el 
+	tiempo total de la partida o se termine por otros motivos'''
 	while (t[0]>0 and t[2]):
 		time.sleep(1)
 		t[0]-=1
@@ -55,12 +58,14 @@ def segundo(tablero,jugador,Intel,tiempo_turno,window,t,lista): #CONCURRENCIA
 				threading.Thread(target= Intel.turno, args=(bolsa,window,tablero,jugador,t,tiempo_turno,lista)).start()
 
 def contar_letras_bolsa(bolsa):
+	'''Cuenta la cantidad de letras que hay en la bolsa'''
     cant=0
     for letra in bolsa.keys():
         cant=cant+bolsa[letra]
     return cant
 
 def sacar_letra_bolsa(bolsa):
+	'''Saca una letra aleatoria de la bolsa'''
     letra=random.choice(list(bolsa.keys()))
     while (bolsa[letra] == 0):
         letra=random.choice(list(bolsa.keys()))
@@ -68,6 +73,7 @@ def sacar_letra_bolsa(bolsa):
     return letra
 
 def cambiar_fichas(window,fichas,bolsa,tablero,turnoIA=False):
+	''''''
     if(not turnoIA):
         devolver_fichas(window,tablero,fichas)
     for i in range(7):
@@ -77,6 +83,7 @@ def cambiar_fichas(window,fichas,bolsa,tablero,turnoIA=False):
             window["-letra"+str(i)+"-"].update(fichas.get_letra(i))
 
 def iniciar(t, window, config, tiempo_turno, tablero, dificultad, nombre,lista):
+	'''Define qué sucede cuando se oprime el botón iniciar'''
 	window["INICIAR"].update(disabled=True)
 	window['TERMINAR'].update(disabled=False)
 	window['Posponer'].update(disabled=False)
@@ -112,6 +119,7 @@ def iniciar(t, window, config, tiempo_turno, tablero, dificultad, nombre,lista):
 	return True, jugador, bolsa, Inteligencia
 
 def retomar(window,jugador,tablero,Inteligencia,tiempo_turno,bolsa,t,dificultad,lista):
+	'''Define qué sucede cuando se oprime el botón retomar'''
 	Layout.cargar_tablero(window,tablero)
 	window["RETOMAR"].update(disabled=True)
 	window['TERMINAR'].update(disabled=False)
@@ -141,7 +149,8 @@ def retomar(window,jugador,tablero,Inteligencia,tiempo_turno,bolsa,t,dificultad,
 	return True
     
 def cambiar_colores(window, dificultad, tablero):   
-    window["b_"+str(tablero.get_tamanio()//2)+"_"+str(tablero.get_tamanio()//2)].update('★')#★
+	'''Actualiza las casillas especiales de tablero dependiendo del nivel'''
+    window["b_"+str(tablero.get_tamanio()//2)+"_"+str(tablero.get_tamanio()//2)].update('★',button_color='pink')#★
     if(dificultad == "Facil"):
         Layout.diseño_facil(window,tablero)
     elif(dificultad == "Medio"):
@@ -150,6 +159,7 @@ def cambiar_colores(window, dificultad, tablero):
         Layout.diseño_dificil(window,tablero)
  
 def checkear_ficha(event, jugador, window, n):  
+	'''Cambia el estado de las fichas del atril del jugador'''
     if (jugador.get_fichas().get_checked()[n]==False):
         jugador.get_fichas().descheckear_todas(window)
         jugador.get_fichas().checkear(n)
@@ -159,7 +169,7 @@ def checkear_ficha(event, jugador, window, n):
         window["-letra"+str(n)+"-"].update(button_color=('white','OrangeRed3'))
 
 def clickear_ficha(event, jugador, window):
-
+	
     if event == ("-letra0-"):
         checkear_ficha(event,jugador,window,0)
         return 0
@@ -183,6 +193,7 @@ def clickear_ficha(event, jugador, window):
         return 6
 
 def devolver_letra(window,tablero,fichas,x,y):
+	'''Devuelve una letra desde el tablero hacia el atril'''
     pos=0
     while (fichas.get_letras()[pos]!= ""):
         pos+=1
@@ -192,6 +203,7 @@ def devolver_letra(window,tablero,fichas,x,y):
     tablero.set_letra("",x,y)
 
 def devolver_fichas(window,tablero,fichas):
+	'''Devuelve todas las letras desde el tablero, no confirmadas, hacía el atril '''
 	coordenadas=tablero.get_no_confirmadas()
 	for c in coordenadas:
 		devolver_letra(window,tablero,fichas,c[0],c[1])
@@ -201,6 +213,7 @@ def devolver_fichas(window,tablero,fichas):
 			window["b_"+str(c[0])+"_"+str(c[1])].update("")
 
 def colocar_letra(event,jugador,tablero,window,pos):
+	'''Coloca una letra en el tablero'''
     if True in (jugador.get_fichas().get_checked()):
         b,x,y = str(event).split("_")
         x= int (x)
@@ -224,6 +237,7 @@ def colocar_letra(event,jugador,tablero,window,pos):
                     	window[event].update("")
 
 def confirmar(window,tablero,jugador,IA,palabra,lista):
+	'''Confirma las letras en el tablero'''
 	nuevos_puntos=tablero.confirmar_letras(window, IA.get_mi_turno())
 	if (IA.get_primer_turno() or jugador.get_primer_turno()):
 		IA.set_primer_turno(False)
@@ -408,11 +422,11 @@ def juego(cargar=False):
 				if iniciado:
 					colocar_letra(event,jugador,tablero,window,pos_letra)
 			
-			#Por problemas de compatibilidad de PySimpleGUI con Threading, se busco la manera con booleanos de hacer las tareas que requerian
-			#de actualización gráfica por fuera de los procesos cuando estos hayan indicado su finalización.
-			#Las ultimas versiones de PySimpleGUI incorporaron una instruccion "write_event_value" que permite levantar eventos que son leidos
-			#con window.Read(), pero no nos pareció indicado usar versiones posteriores que pudieran generar problemas al correr en computadoras
-			#donde no este actualizado.
+			'''Por problemas de compatibilidad de PySimpleGUI con Threading, se busco la manera con booleanos de hacer las tareas que requerian
+			de actualización gráfica por fuera de los procesos cuando estos hayan indicado su finalización.
+			Las ultimas versiones de PySimpleGUI incorporaron una instruccion "write_event_value" que permite levantar eventos que son leidos
+			con window.Read(), pero no nos pareció indicado usar versiones posteriores que pudieran generar problemas al correr en computadoras
+			donde no este actualizado.'''
 			if(iniciado and not Inteligencia.get_procesando() and Inteligencia.get_mi_turno()): 
 				if Inteligencia.get_terminar(): 
 					fecha=date.today()
@@ -448,8 +462,6 @@ def juego(cargar=False):
 		else:
 			sg.popup('No se encontro el archivo config.json',title='')
 		
-
-color_button = ('white','OrangeRed3')
 
 if __name__ == '__main__':
 	sg.theme('BlueMono')

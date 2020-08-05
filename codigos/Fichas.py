@@ -1,6 +1,7 @@
 class Fichas():
 	
 	def __init__(self, letras, usadas=None, checked=None):
+		'''Constructor de la clase Fichas'''
 		self.__letras=letras
 		if (usadas==None):
 			self.__usadas=[]
@@ -43,6 +44,7 @@ class Fichas():
 		self.__checked[i]=False
 
 	def descheckear_todas(self, window):
+		'''Descheckea las fichas del jugador'''
 		for i in range(7):
 			self.__checked[i]=False
 		window["-letra0-"].update(button_color=('white','OrangeRed3'))

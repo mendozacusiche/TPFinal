@@ -55,17 +55,16 @@ def crear_botones(tablero, dificultad):
 
 
 def crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion=None,cargar=False):
-#Hay que poner manejo de excepciones?? Por las imagenes
+	'''Creación de la ventana de juego'''
 	descr=definir_descripcion(dificultad,opcion)
 	lay=definir_especiales(dificultad)
 		
-	layout_fichasIA=[[sg.Button("#",font=("Current",9,'bold'),size=(2,1), pad=(20, 0), button_color=color_button, key=("-letraIA"+str(i)+"-")) for i in range(7)]]#,sg.Text('',key='-PC-')]]
-	layout_fichas_jugador=[[sg.Button(" ",font=("Current",9,'bold'),size=(2,1), pad=(20, 0), button_color=color_button, key=("-letra"+str(i)+"-"), disabled=True) for i in range(7)]]#,sg.Text('',key='-Jug-')]]
+	layout_fichasIA=[[sg.Button("#",font=("Current",9,'bold'),size=(2,1), pad=(20, 0), button_color=color_button, key=("-letraIA"+str(i)+"-")) for i in range(7)]]
+	layout_fichas_jugador=[[sg.Button(" ",font=("Current",9,'bold'),size=(2,1), pad=(20, 0), button_color=color_button, key=("-letra"+str(i)+"-"), disabled=True) for i in range(7)]]
    
 	columna_0 = [
-					[sg.Column(lay)],#no se si está bien esto
+					[sg.Column(lay)],
 					[sg.Text('Mensajes del sistema: ',font=("Current",9,'bold')),sg.Text('',key='-turno-',font=("Current",10), size=(10, 0))], 
-					#[sg.Text('',key='-turno-',font=("Current",10), size=(10, 0),pad=(0, 0))],
 					[sg.Text('Palabras ingresadas:',font=("Current",9,'bold'))],
 					[sg.Text('TURNO',font=("Current",9,'bold'),justification='lleft'),sg.Text('PALABRA',font=("Current",9,'bold'),justification='center'),sg.Text('PUNTOS',font=("Current",9,'bold'),justification='lright')],
 					[sg.Listbox( values={}, key='PALABRAS',size= (30,20), pad=(0,0), background_color="#b7c9e7",font=("Current",10))],
@@ -81,7 +80,7 @@ def crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion=None,carga
 				[sg.Text(f"{tiempos[0] // 60}:{tiempos[0]%60:02d}",size=(10, 2), text_color='white',font=('Digital-7',20), justification='center', key='-TURNO-')],
 				]
 
-	T_turno = [                                                                  #'Helvetica'
+	T_turno = [                                                                  
 				[sg.Text(f"{tiempos[1] // 60}:{tiempos[1]%60:02d}",size=(10, 2), font=('Digital-7', 20), text_color='white',justification='center', key='-DURACION-')],
 				]
 
@@ -107,37 +106,10 @@ def crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion=None,carga
 				]
 	return layout   
 
-# def terminar(Inteligencia,tiempos,jugador,dif): #CONCURRENCIA
-	
-	# layout0=[
-			# [sg.Text('¿Está seguro que desea salir?')],
-			# [sg.Button('SI'),sg.Button('NO')]
-			# ]
-    
-	# win=sg.Window('',layout0)
-	# ev,val=win.Read()
-    
-	# if ev=='SI':
-		# tiempos[2] = False
-		# layout1=[
-				# [sg.Text('FIN DEL JUEGO')],
-				# [sg.Text('Puntos jugador: '),sg.Text(jugador.get_puntos())],
-				# [sg.Text('Puntos computadora: '),sg.Text(Inteligencia.get_puntos())],
-				# [sg.Button('Guardar partida', key='GUARDAR'),sg.Button('Salir sin guardar',key='SALIR')] #si apreta sin guardar se debe verificar si corresponde guardar o no el puntaje
-				# ]
-		# wind= sg.Window('TERMINAR',layout1)
-		# event,values=wind.Read()
-		# if event== 'SALIR':
-			# #dic={jugador:puntos[0]}
-			# records.actualizar(jugador.get_nombre(),jugador.get_puntos(),dif)
-			# wind.close()
-			# win.close()
-		# return True
-	# else:
-		# win.close()
-		# return False
+
 
 def mostrar_fichas(window,Inteligencia,jugador,config):
+	'''Al finalizar la partida se muestran las fichas de la IA y se descuentan los puntos correspondientes a las letras de los atriles'''
 	ptsIA=0
 	for i in range(len(Inteligencia.get_fichas().get_letras())):
 		if (not Inteligencia.get_fichas().get_usadas()[i]):
@@ -155,9 +127,10 @@ def mostrar_fichas(window,Inteligencia,jugador,config):
 	window["-puntos-"].update(jugador.get_puntos())
 		
 def terminar(window,Inteligencia,tiempos,jugador,dif,fecha,config): #CONCURRENCIA
+	'''Se utiliza cuando el jugador oprime el botón terminar'''
 	layout1=[
 			[sg.Text("¿Seguro que quiere terminar el juego?")],
-			[sg.Button('Salir',key='SALIR'), sg.Button('Cancelar',key='CANCELAR')] #si apreta sin guardar se debe verificar si corresponde guardar o no el puntaje
+			[sg.Button('Salir',key='SALIR'), sg.Button('Cancelar',key='CANCELAR')] 
 			]
 	wind= sg.Window('',layout1)
 	event,values=wind.Read()
@@ -183,6 +156,7 @@ def terminar(window,Inteligencia,tiempos,jugador,dif,fecha,config): #CONCURRENCI
 		return False
 		
 def terminar_por_otros(window,Inteligencia,jugador,dif,tiempos,fecha,config):
+	'''Se utiliza cuando la partida termina por el tiempo o porque no hay más fichas en la bolsa'''
 	tiempos[2] = False
 	mostrar_fichas(window,Inteligencia,jugador,config)
 	layout1=[
@@ -198,6 +172,7 @@ def terminar_por_otros(window,Inteligencia,jugador,dif,tiempos,fecha,config):
 	records.actualizar(jugador.get_nombre(),jugador.get_puntos(),dif,fecha)
 	
 def diseño_facil(window,tablero):
+	'''Se ubican las casillas especiales en el tablero del nivel fácil'''
     for i in range(len(tablero.get_especiales()["uno"])):
         window[tablero.get_especiales()["uno"][i]].update(button_color=(None, 'red'))
     for j in range(len(tablero.get_especiales()["dos"])):
@@ -212,6 +187,7 @@ def diseño_facil(window,tablero):
         window[tablero.get_especiales()["seis"][x]].update(button_color=(None, '#ff8c00'))
     
 def diseño_medio(window,tablero):
+	'''Se ubican las casillas especiales en el tablero del nivel medio'''
     for i in range(len(tablero.get_especiales()["uno"])):
          window[tablero.get_especiales()["uno"][i]].update(button_color=(None, 'green'))
     for j in range(len(tablero.get_especiales()["dos"])):
@@ -220,6 +196,7 @@ def diseño_medio(window,tablero):
          window[tablero.get_especiales()["tres"][x]].update(button_color=(None, 'orange3'))
 
 def diseño_dificil(window,tablero):
+    '''Se ubican las casillas especiales en el tablero del nivel dificil'''
     for i in range(len(tablero.get_especiales()["uno"])):
         window[tablero.get_especiales()["uno"][i]].update(button_color=(None, '#fc2a00'))
     for j in range(len(tablero.get_especiales()["dos"])):
@@ -230,6 +207,7 @@ def diseño_dificil(window,tablero):
         window[tablero.get_especiales()["cuatro"][y]].update(button_color=(None, '#007eb0'))
 
 def cargar_tablero(window,tablero):
+	'''Se utiliza para cargar la parte gráfica del tablero del juego guardado '''
 	for i in range(tablero.get_tamanio()):
 		for j in range(tablero.get_tamanio()):
 			if (tablero.get_confirmadas()[i][j]):

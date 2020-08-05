@@ -1,10 +1,11 @@
 if __name__ == 'codigos.Tablero':
-	from codigos import jugar#NO SE QUE TAN BIEN ESTÁ ESTO
+	from codigos import jugar
 import json
 
 class Tablero():
     def __init__(self, nivel, letras=None, confirmadas=None, coloreadas=None):
-        '''Seteamos el tamaño por nivel, las casillas especiales e inicializamos el tablero como vacio'''
+        '''Seteamos el tamaño por nivel, las casillas especiales e inicializamos el tablero como vacio en caso de que sea un nuevo juego, 
+        o si se enviaron parámetros en el caso de cargarlo se inicializa el tablero utilizandolos. '''
         self.__nivel = nivel
         if self.__nivel == "Facil":
             self.__tamanio = 23
@@ -113,7 +114,7 @@ class Tablero():
             es_palabra = False
     	
         medio=True
-    	#Verifico si el primer turno es del jugador y si es así, si la palbra introducida pasa por el medio del tablero
+    	#Verifico si el primer turno es del jugador y si es así, si la palabra introducida pasa por el medio del tablero
         if(jugador.get_primer_turno()) and (self.__letras[self.__tamanio//2][self.__tamanio//2] == ""):
             es_palabra = False
             medio=False
@@ -155,11 +156,15 @@ class Tablero():
 
         return puntaje
 
-    def insertar_palabra(self, palabra, window, jugador, IA,lista):# no lo entiendo bien
+    def insertar_palabra(self, palabra, window, jugador, IA,lista):
+		'''Busca e inserta palabras de la IA, si no logra hacerlo retorna False'''
         casillas = []
         ok = False
         pal=palabra.replace(' ','')
+        
         if(not IA.get_primer_turno()):
+			
+			#Busca un espacio de manera horizontal
             for i in range(self.__tamanio):
                 for j in range(self.__tamanio):
                     if(not self.__confirmadas[j][i]):
@@ -173,7 +178,8 @@ class Tablero():
                     break
                 else:
                     casillas = []
-
+                    
+			#Busca un espacio de manera vertical
             if(not ok):
                 for i in range(self.__tamanio):
                     for j in range(self.__tamanio):
@@ -188,11 +194,14 @@ class Tablero():
                         break
                     else:
                         casillas = []
+                        
+		#Inserta la palabra en el medio del tablero si es el primer turno
         else:
             for i in range(len(palabra.split())):
                 casillas.append((i+self.__tamanio//2, self.__tamanio//2))
             ok = True
 
+		#Si encontró un lugar actualizo el tablero con la palabra 
         if(ok):
             i = 0
             for c in casillas:

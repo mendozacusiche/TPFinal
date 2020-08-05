@@ -4,6 +4,7 @@ if __name__ == 'codigos.nuevo_juego':
 import json
 
 def ventana():	
+	'''Creación de la ventana de nuevo juego'''
 	try:
 		with open("archivos/config.json","r") as archivo:
 			config= json.load(archivo)
@@ -31,8 +32,7 @@ Tamaño del tablero: 15x15."""
 		sg.popup("No se encontro el archivo config.json")
 		columna1=[[sg.Text('No hay tablero actual')]]
 		descr='No hay descripción del nivel actual'
-	# except :
-		# print('hola')
+	
 				
 	columna2=[[sg.Text(descr,key='-descr-',font=("Arial Black",10), size = (35, 0),justification='ljust')],
 			[sg.Button('Configuración',key='Configuracion',font=("Arial Black",12), size =(29, 0))],

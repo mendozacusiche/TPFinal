@@ -37,7 +37,7 @@ Tamaño del tablero: 15x15.""")
 		archivo.close()
 	except FileNotFoundError as ex:
 		sg.popup('No se encontro el archivo "config.json" en el directorio actual',title='')
-		#print(ex)
+		
   		
 def restaurar(win):
 	'''Se define qué sucede cuando se da click en restaurar en la ventana de configuración'''
@@ -90,7 +90,7 @@ def actualizar_descripcion(win,val):
 		win["-max-"].update("(max: 15)")
 
 def ventana(wind):
-	'''Creación ventana de confguración'''
+	'''Creación ventana de configuración'''
 	try:
 		with open("archivos/config.json","r") as archivo:
 			config= json.load(archivo)
@@ -128,7 +128,7 @@ def ventana(wind):
 						if (int(valores["-turn-"])<=int(valores["-tot-"]))and((int(valores["-turn-"])!=0) and (int(valores["-tot-"])!=0)): #no se si está bien poner el igual acá o deberia ir en el elif
 							aplicar(valores, nuevos_puntajes, nuevas_cantidades,wind)
 							break
-						elif ((int(valores["-turn-"])==0) or (int(valores["-tot-"])==0)):#no me toma el tema del "-turn-"
+						elif ((int(valores["-turn-"])==0) or (int(valores["-tot-"])==0)):
 							sg.popup('Ingrese valores mayores a 0!',title='')
 						elif (int(valores["-turn-"])>int(valores["-tot-"])):
 							sg.popup("El tiempo de turno supera al tiempo de partida!",title="")
@@ -136,7 +136,7 @@ def ventana(wind):
 					else:
 						sg.popup("El tiempo de partida supera el maximo!",title="")
 				except ValueError:
-					sg.popup('Ingrese un valor válido!',title='')#REVISAR BIEN QUE PONER #si lo pongo abajo no creo que acá sea necesario
+					sg.popup('Ingrese un valor válido!',title='')
 			elif evento == "Restaurar":
 				restaurar(window)
 				nuevos_puntajes={}
@@ -155,7 +155,7 @@ def ventana(wind):
 					else:
 						window["-t1-"].update(config["puntaje_fichas"][valores["-l1-"]])
 				except ValueError:
-					sg.popup('Ingrese un valor válido!',title='')#REVISAR BIEN QUE PONER 
+					sg.popup('Ingrese un valor válido!',title='')
 
 			elif evento == "-l2-":
 				try:
@@ -164,23 +164,23 @@ def ventana(wind):
 					else:
 						window["-t2-"].update(config["cant_fichas"][valores["-l2-"]])
 				except ValueError:
-					sg.popup('Ingrese un valor válido!',title='')#REVISAR BIEN QUE PONER 
+					sg.popup('Ingrese un valor válido!',title='')
 			elif evento == "-t1-":
 				try:
 					nuevos_puntajes[valores["-l1-"]]=int(valores["-t1-"])
 				except ValueError:
-					sg.popup('Ingrese un valor válido!',title='')#REVISAR BIEN QUE PONER 
+					sg.popup('Ingrese un valor válido!',title='')
 			elif evento == "-t2-":
 				try:
 					nuevas_cantidades[valores["-l2-"]]=int(valores["-t2-"])
 				except ValueError:
-					sg.popup('Ingrese un valor válido!',title='')#REVISAR BIEN QUE PONER 
+					sg.popup('Ingrese un valor válido!',title='')
 	
 		window.Close()
 	except FileNotFoundError as ex:
 		sg.popup("No se encontro el archivo config.json",title='')
-	# except ValueError:
-		# sg.popup('Ingrese un valor válido!',title='')#REVISAR BIEN QUE PONER 
+	
+
 
 if __name__ == '__main__':
 	sg.theme('BlueMono')

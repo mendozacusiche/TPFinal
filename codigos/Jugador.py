@@ -3,6 +3,7 @@ from codigos import jugar, Fichas
 class Jugador():
 
 	def __init__ (self,nombre,fichas,mi_turno,primer_turno=True,cambios=3,puntos=0,jugado=False):
+		'''Constructor de la clase Jugador'''
 		self.__nombre=nombre
 		self.__fichas= fichas
 		self.__mi_turno=mi_turno

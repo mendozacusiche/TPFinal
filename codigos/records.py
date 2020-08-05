@@ -20,37 +20,6 @@ def  ventana ():
 	window.close()
 
 
-# def crear():
-	# datos={'Facil':{},'Medio':{},'Dificil':{}}
-	# with open('archivos/topten.json','w') as p:
-		# json.dump(datos,p,indent=4)
-	# return datos
-	
-# def actualizar(nombre,puntaje,nivel):
-	# '''actualizo los records en el nivel que corresponda'''
-	# try:
-		# with open('archivos/topten.json','r') as p:
-			# datos=json.load(p)
-		# if nivel in datos.keys():
-			# if (nombre in datos[nivel].keys()):
-				# if puntaje> datos[nivel][nombre]:
-					# datos[nivel][nombre]=puntaje
-			# else:
-				# if (len(datos[nivel])<10):
-					# datos[nivel][nombre]=puntaje
-				# else:
-					# print(len(datos[nivel]))
-					# minimo=min(datos[nivel], key=datos[nivel].get)
-					# datos[nivel].pop(minimo)
-					# datos[nivel][nombre]=puntaje
-					
-		# else :
-			# datos_nivel={nombre:puntaje}
-			# datos[nivel]=datos_nivel
-		# guardarDatos(datos)
-	# except FileNotFoundError:
-		# sg.popup('No se encontro el archivo topten.json')
-
 def actualizar(nombre,puntaje,nivel,fecha):
 	'''actualizo los records en el nivel que corresponda'''
 	try:
@@ -98,7 +67,7 @@ def imprimir(nivel,win):
 			sg.popup('No hay registros del nivel seleccionado')
 	except FileNotFoundError:
 		sg.popup('No se encontro el archivo topten.json')
-		#win.close()#se puede poner o no
+		
 
 if __name__ == '__main__':
 	sg.theme('BlueMono')

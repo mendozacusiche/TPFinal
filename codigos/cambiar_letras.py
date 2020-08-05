@@ -60,7 +60,7 @@ def ventana(win, jugador ,bolsa, tablero):
               [sg.Button(jugador.get_fichas().get_letras()[i], size=(2,1), pad=(1, 0), button_color=('white','#5e82bf'), key=("-c"+str(i)+"-")) for i in range(7)],
               #[sg.Column(lista = crear_botones(win, jugador))],
               #[sg.Button("?",font=("Current",9),size=(2,1), pad=(1, 0), button_color=('white','#5e82bf'), key=("-c"+str(i)+"-")) for i in range(7)],
-              [sg.Button('CONFIMAR CAMBIO')]
+              [sg.Button('CONFIRMAR CAMBIO')]
              ]
     #auto_close_duration = 1,
     window = sg.Window('CAMBIAR LETRAS',element_justification='center', no_titlebar=True, keep_on_top= True).Layout(layout)
@@ -74,7 +74,7 @@ def ventana(win, jugador ,bolsa, tablero):
         elif event in ("-c0-", "-c1-", "-c2-", "-c3-", "-c4-", "-c5-", "-c6-"):
             cambiar_F = clickear_ficha(event, jugador, window, win, fichas_b)
             cambio = True
-        elif (event =="CONFIMAR CAMBIO"):
+        elif (event =="CONFIRMAR CAMBIO"):
             if cambio:
                 #entra y cambia las fichas eligidas
                 claves = unirlis(cambiar_fichas, cambiar_F)

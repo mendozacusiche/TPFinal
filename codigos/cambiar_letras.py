@@ -1,6 +1,7 @@
 import PySimpleGUI as sg
-#import jugar
-from codigos import jugar
+if __name__ == 'codigos.cambiar_letras':
+	from codigos import jugar
+	
 def sacar_letras( win, jugador):
     ''' saca todas las letras del atril del jugador'''
     fichas = []
@@ -117,3 +118,8 @@ def ventana(win, jugador ,bolsa, tablero):
             break
     window.close()
     return ok
+
+
+if __name__ == '__main__':
+	sg.theme('BlueMono')
+	sg.popup('Por favor ejecute ScrabbleAR.py',title='')

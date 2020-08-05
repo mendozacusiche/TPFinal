@@ -149,29 +149,38 @@ def ventana(wind):
 				actualizar_descripcion(window, valores)
 	
 			elif evento == "-l1-":
-				if (valores["-l1-"] in nuevos_puntajes):
-					window["-t1-"].update(nuevos_puntajes[valores["-l1-"]])
-				else:
-					window["-t1-"].update(config["puntaje_fichas"][valores["-l1-"]])
-	
+				try:
+					if (valores["-l1-"] in nuevos_puntajes):
+						window["-t1-"].update(nuevos_puntajes[valores["-l1-"]])
+					else:
+						window["-t1-"].update(config["puntaje_fichas"][valores["-l1-"]])
+				except ValueError:
+					sg.popup('Ingrese un valor válido!',title='')#REVISAR BIEN QUE PONER 
+
 			elif evento == "-l2-":
-				if (valores["-l2-"] in nuevos_puntajes):
-					window["-t2-"].update(nuevos_puntajes[valores["-l2-"]])
-				else:
-					window["-t2-"].update(config["cant_fichas"][valores["-l2-"]])
-	
+				try:
+					if (valores["-l2-"] in nuevos_puntajes):
+						window["-t2-"].update(nuevos_puntajes[valores["-l2-"]])
+					else:
+						window["-t2-"].update(config["cant_fichas"][valores["-l2-"]])
+				except ValueError:
+					sg.popup('Ingrese un valor válido!',title='')#REVISAR BIEN QUE PONER 
 			elif evento == "-t1-":
-				nuevos_puntajes[valores["-l1-"]]=int(valores["-t1-"])
-	
+				try:
+					nuevos_puntajes[valores["-l1-"]]=int(valores["-t1-"])
+				except ValueError:
+					sg.popup('Ingrese un valor válido!',title='')#REVISAR BIEN QUE PONER 
 			elif evento == "-t2-":
-				nuevas_cantidades[valores["-l2-"]]=int(valores["-t2-"])
-	
+				try:
+					nuevas_cantidades[valores["-l2-"]]=int(valores["-t2-"])
+				except ValueError:
+					sg.popup('Ingrese un valor válido!',title='')#REVISAR BIEN QUE PONER 
 	
 		window.Close()
 	except FileNotFoundError as ex:
 		sg.popup("No se encontro el archivo config.json",title='')
-	except ValueError:
-		sg.popup('Ingrese un valor válido!',title='')#REVISAR BIEN QUE PONER 
+	# except ValueError:
+		# sg.popup('Ingrese un valor válido!',title='')#REVISAR BIEN QUE PONER 
 
 if __name__ == '__main__':
 	sg.theme('BlueMono')

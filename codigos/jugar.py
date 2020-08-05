@@ -3,7 +3,7 @@ from string import ascii_uppercase as up
 import random, sys, time, json, threading
 if __name__ == 'codigos.jugar':
 	from codigos import ventana_bienvenida, Layout
-from clases import Fichas, Tablero, IA, Jugador
+	from clases import Fichas, Tablero, IA, Jugador
 from pattern.es import *   #parse, conjugate, INFINITIVE
 from datetime import date
 

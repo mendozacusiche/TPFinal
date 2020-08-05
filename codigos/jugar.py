@@ -436,6 +436,7 @@ def juego(cargar=False):
 				jugar_IA.start()
 
 			if tiempos[0]==0:
+				devolver_fichas(window,tablero,jugador.get_fichas())
 				fecha=date.today()
 				Layout.terminar_por_otros(window,Inteligencia,jugador,dificultad,tiempos,fecha,config)
 				break

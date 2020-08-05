@@ -56,7 +56,7 @@ def actualizar(nombre,puntaje,nivel,fecha):
 	try:
 		with open('archivos/topten.json','r') as p:
 			datos=json.load(p)
-		f='{}.{}.{}'.format(fecha.day,fecha.month,fecha.year)
+		f='{}/{}/{}'.format(fecha.day,fecha.month,fecha.year)
 		if nivel in datos.keys():
 			if (nombre in datos[nivel].keys()):
 				if puntaje> datos[nivel][nombre][0]:
@@ -93,7 +93,7 @@ def imprimir(nivel,win):
 		try:
 			lista = sorted(datos[nivel].items(), key=lambda x: x[1][0],reverse=True)
 
-			win['RECORDS'].update(map(lambda x: "{}. {}. {}: {}".format(lista.index(x)+1,x[1][1],x[0], x[1][0]),lista))
+			win['RECORDS'].update(map(lambda x: "{}. {} {}: {}".format(lista.index(x)+1,x[1][1],x[0], x[1][0]),lista))
 		except KeyError:
 			sg.popup('No hay registros del nivel seleccionado')
 	except FileNotFoundError:

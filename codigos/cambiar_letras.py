@@ -53,7 +53,7 @@ def clickear_ficha(event, jugador, window, win, fichas):
     elif event == ("-c4-"):
         if(fichas[4]):
             window[event].update("?")
-            win["-letra4-"].update(jugador.get_fichas().get_letra(5))
+            win["-letra4-"].update(jugador.get_fichas().get_letra(4))
             fichas[4] = False
         else:
             window[event].update(jugador.get_fichas().get_letra(4))

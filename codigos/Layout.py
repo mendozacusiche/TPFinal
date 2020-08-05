@@ -57,6 +57,8 @@ def crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion=None,carga
 	'''Creación de la ventana de juego'''
 	descr=definir_descripcion(dificultad,opcion)
 	lay=definir_especiales(dificultad)
+	
+	
 		
 	layout_fichasIA=[[sg.Button("#",font=("Current",9,'bold'),size=(2,1), pad=(20, 0), button_color=color_button, key=("-letraIA"+str(i)+"-")) for i in range(7)]]
 	layout_fichas_jugador=[[sg.Button(" ",font=("Current",9,'bold'),size=(2,1), pad=(20, 0), button_color=color_button, key=("-letra"+str(i)+"-"), disabled=True) for i in range(7)]]
@@ -83,7 +85,7 @@ def crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion=None,carga
 				[sg.Text(f"{tiempos[1] // 60}:{tiempos[1]%60:02d}",size=(10, 2), font=('Digital-7', 20), text_color='white',justification='center', key='-DURACION-')],
 				]
 
-	columna_2 = [
+	fila_1 = [
 				[sg.Text(descr,font=("Current",9,'bold'))],
 				[sg.T(' '*4),sg.Button('INICIAR',key=("INICIAR"),font=("Current",10), size=(10, 0),pad=(0, 0)),sg.Button('POSPONER',key='Posponer',font=("Current",10),pad=(0, 0),size=(15, 0),disabled=True), sg.Button('TERMINAR',key='TERMINAR',font=("Current",10),size=(10, 0), pad=(0, 0),disabled=True)],
 				[sg.Frame('DURACION DEL JUEGO',Tiempo_juego, pad=(10,10), relief= 'solid'), sg.Frame('DURACION DEL TURNO',T_turno, pad= (10, 10), relief= 'solid')],
@@ -97,11 +99,18 @@ def crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion=None,carga
 				[sg.Button('Cambiar letras',key='Cambiar letras',font=("Current",10),size=(15, 0),disabled=True),sg.Text('Cambios disponibles: '),sg.Text(cambios,key='-cambios-',visible=False)]
 				]
 
+	
+	
+	columna_2=[
+				[sg.Text(' '*80),sg.Button('Ayuda (?)',key='AYUDA',font=("Current",10,'bold'),size=(10, 0))],
+				[sg.Frame('CONFIGURACION', fila_1, pad=(20, 50), relief= 'solid')],
+				]
+	
 	if cargar:
 		columna_2[1][1]=sg.Button('RETOMAR',key=("RETOMAR"),font=("Current",10), size=(10, 0),pad=(0, 0))
 
 	layout = [  
-				[sg.Column(columna_0),sg.Column(columna_1, pad=(0,0)), sg.Frame('CONFIGURACION', columna_2, pad=(20, 50), relief= 'solid')],
+				[sg.Column(columna_0),sg.Column(columna_1, pad=(0,0)),sg.Column(columna_2, pad=(0,0))],
 				]
 	return layout   
 

@@ -72,12 +72,15 @@ def sacar_letra_bolsa(bolsa):
     bolsa[letra]-=1
     return letra
 
-def cambiar_fichas(window, jugador, claves,bolsa,tablero):
+def cambiar_fichas(window, jugador, claves,bolsa,tablero,turnoIA=False):
     ''''''
+    if(not turnoIA):
+        devolver_fichas(window,tablero, jugador.get_fichas())
     for i in range(7):
         if claves[i][1]:
-            bolsa[jugador.get_fichas().get_letras()[i]]+=1
-            jugador.get_fichas().set_letra(sacar_letra_bolsa(bolsa),i)
+        	bolsa[jugador.get_fichas().get_letras()[i]]+=1
+        	jugador.get_fichas().set_letra(sacar_letra_bolsa(bolsa),i)
+        if(not turnoIA)and(claves[i][1]):
             window["-letra"+str(i)+"-"].update(jugador.get_fichas().get_letra(i))
 
 def iniciar(t, window, config, tiempo_turno, tablero, dificultad, nombre,lista):
@@ -342,6 +345,14 @@ def juego(cargar=False):
 
 		pos_letra= -1 #se actualiza al clickear ficha y se utiliza en colocar letra
 
+		reglas='''。 A quien le toque el primer turno debe poner la palabra pasando por el centro del tablero.
+。 Las palabras deben tener mínimo 2 letras y deben estar todas en la misma línea.
+。 Las palabras deben colocarse vertical u horizontalmente y entre ellas no pueden cruzarse.
+。 Se puede pasar el turno o cambiar fichas (max 3 veces) en caso de no encontrar una palabra para colocar.
+。 Hay casillas especiales dependiendo donde se posicione la palabra se suman o restan más puntos.
+。 Para finalizar el juego se puede presionar el botón terminar, o si se desea se puede posponer el juego, oprimir el botón posponer. 
+。 Si a un jugador se le acaban sus fichas y ya no hay fichas suficientes en la bolsa de fichas, se acaba el juego.'''
+
 		while True:                    
 			event, values = window.Read(timeout=200)
 			#print(event, values)
@@ -372,14 +383,13 @@ def juego(cargar=False):
 					pos_letra = clickear_ficha(event, jugador, window)
 			elif event == "Cambiar letras" and not Inteligencia.get_mi_turno():
 				if iniciado:
-					devolver_fichas(window,tablero,jugador.get_fichas())
-					ok=cambiar_letras.ventana(window, jugador, bolsa, tablero)
-					if ok:
-						jugador.set_cambios(jugador.get_cambios()-1)
-						window['-cambios-'].update(jugador.get_cambios())
-						if jugador.get_cambios()==0:
-							window["Cambiar letras"].update(disabled=True)
-						pasar(jugador,tiempos,tiempo_turno,Inteligencia)
+					cambiar_letras.ventana(window, jugador, bolsa, tablero)
+					#cambiar_fichas(window,jugador.get_fichas(),bolsa,tablero)
+					jugador.set_cambios(jugador.get_cambios()-1)
+					window['-cambios-'].update(jugador.get_cambios())
+					if jugador.get_cambios()==0:
+						window["Cambiar letras"].update(disabled=True)
+					pasar(jugador,tiempos,tiempo_turno,Inteligencia)
 			elif event == "Posponer":
 				if (iniciado):
 					devolver_fichas(window,tablero,jugador.get_fichas())
@@ -418,10 +428,14 @@ def juego(cargar=False):
 			elif event == "Pasar":
 				if iniciado and not Inteligencia.get_mi_turno():
 					pasar(jugador,tiempos,tiempo_turno,Inteligencia)
+			elif event=='AYUDA':
+			    sg.popup(reglas,title='',font=("Current",10,'bold'))
+			
 			else:
 				if iniciado:
-					colocar_letra(event,jugador,tablero,window,pos_letra)
+						colocar_letra(event,jugador,tablero,window,pos_letra)
 			
+
 			'''Por problemas de compatibilidad de PySimpleGUI con Threading, se busco la manera con booleanos de hacer las tareas que requerian
 			de actualización gráfica por fuera de los procesos cuando estos hayan indicado su finalización.
 			Las ultimas versiones de PySimpleGUI incorporaron una instruccion "write_event_value" que permite levantar eventos que son leidos

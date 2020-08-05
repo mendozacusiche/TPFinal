@@ -2,13 +2,14 @@ from codigos import jugar, Fichas
 
 class Jugador():
 
-	def __init__ (self,nombre,fichas,mi_turno,primer_turno=True,cambios=3,puntos=0):
+	def __init__ (self,nombre,fichas,mi_turno,primer_turno=True,cambios=3,puntos=0,jugado=False):
 		self.__nombre=nombre
 		self.__fichas= fichas
 		self.__mi_turno=mi_turno
 		self.__primer_turno=primer_turno
 		self.__cambios=cambios
 		self.__puntos=puntos
+		self.__jugado=jugado
 
 	def get_nombre(self):
 		return self.__nombre
@@ -39,3 +40,9 @@ class Jugador():
 
 	def set_puntos(self,puntos):
 		self.__puntos=puntos
+
+	def get_jugado(self):
+		return self.__jugado
+
+	def set_jugado(self,b):
+		self.__jugado=b

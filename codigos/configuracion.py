@@ -126,12 +126,12 @@ def ventana(wind):
 				try:
 					if (int(valores["-tot-"])<=25 and valores["-dif-"]=="Facil") or (int(valores["-tot-"])<=20 and valores["-dif-"]=="Medio") or (int(valores["-tot-"])<=15 and valores["-dif-"]=="Dificil"):
 						if (int(valores["-turn-"])<=int(valores["-tot-"]))and((int(valores["-turn-"])!=0) and (int(valores["-tot-"])!=0)): #no se si está bien poner el igual acá o deberia ir en el elif
-							if(int(valores["-t2-"])!=0):
+							if(int(valores["-t2-"])>0)and (int(valores["-t1-"])>0):
 								aplicar(valores, nuevos_puntajes, nuevas_cantidades,wind)
 								sg.popup('Configuración guardada con éxito!',title='')
 								break
 							else:
-								sg.popup('Ingrese valores en cantidad de letras que sean mayores a 0!',title='')
+								sg.popup('Ingrese valores mayores a 0!',title='')
 						elif ((int(valores["-turn-"])==0) or (int(valores["-tot-"])==0)):
 							sg.popup('Ingrese valores mayores a 0!',title='')
 						elif (int(valores["-turn-"])>int(valores["-tot-"])):
@@ -167,17 +167,18 @@ def ventana(wind):
 				
 			elif evento == "-t1-":
 				try:
-					nuevos_puntajes[valores["-l1-"]]=int(valores["-t1-"])
-					
+					if int(valores["-t1-"])>0:
+						nuevos_puntajes[valores["-l1-"]]=int(valores["-t1-"])
+					else:
+						sg.popup('Ingrese valores mayores a 0!',title='')
 				except ValueError:
 					sg.popup('Ingrese un valor válido!',title='')
 			elif evento == "-t2-":
 				try:
-					if int(valores["-t2-"])!=0:
+					if int(valores["-t2-"])>0:
 						nuevas_cantidades[valores["-l2-"]]=int(valores["-t2-"])
 					else:
-						#raise ValueError("Ingrese valores mayores a 0!")
-						sg.popup('Ingrese valores mayores a 0!',title='')#SALE ESTE CARTEL PERO IGUAL LO APLICA
+						sg.popup('Ingrese valores mayores a 0!',title='')
 				except ValueError:
 					sg.popup('Ingrese un valor válido!',title='')
 	
@@ -190,3 +191,4 @@ def ventana(wind):
 if __name__ == '__main__':
 	sg.theme('BlueMono')
 	sg.popup('Por favor ejecute ScrabbleAR.py',title='')
+

@@ -1,4 +1,6 @@
-from codigos import jugar, Fichas
+if __name__ == 'codigos.Jugador':
+	from codigos import jugar,Fichas
+	
 
 class Jugador():
 

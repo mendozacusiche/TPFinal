@@ -1,4 +1,6 @@
-from codigos import jugar, Fichas, Tablero, Layout
+if __name__ == 'codigos.IA':
+	from codigos import jugar, Layout, Fichas, Tablero
+	
 
 class IA():
 

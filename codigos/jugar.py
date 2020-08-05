@@ -342,6 +342,14 @@ def juego(cargar=False):
 
 		pos_letra= -1 #se actualiza al clickear ficha y se utiliza en colocar letra
 
+		reglas='''。 A quien le toque el primer turno debe poner la palabra pasando por el centro del tablero.
+。 Las palabras deben tener mínimo 2 letras y deben estar todas en la misma línea.
+。 Las palabras deben colocarse vertical u horizontalmente y entre ellas no pueden cruzarse.
+。 Se puede pasar el turno o cambiar fichas (max 3 veces) en caso de no encontrar una palabra para colocar.
+。 Hay casillas especiales dependiendo donde se posicione la palabra se suman o restan más puntos.
+。 Para finalizar el juego se puede presionar el botón terminar, o si se desea se puede posponer el juego, oprimir el botón posponer. 
+。 Si a un jugador se le acaban sus fichas y ya no hay fichas suficientes en la bolsa de fichas, se acaba el juego.'''
+
 		while True:                    
 			event, values = window.Read(timeout=200)
 			#print(event, values)
@@ -418,10 +426,14 @@ def juego(cargar=False):
 			elif event == "Pasar":
 				if iniciado and not Inteligencia.get_mi_turno():
 					pasar(jugador,tiempos,tiempo_turno,Inteligencia)
+			elif event=='AYUDA':
+			    sg.popup(reglas,title='',font=("Current",10,'bold'))
+			
 			else:
 				if iniciado:
-					colocar_letra(event,jugador,tablero,window,pos_letra)
+						colocar_letra(event,jugador,tablero,window,pos_letra)
 			
+
 			'''Por problemas de compatibilidad de PySimpleGUI con Threading, se busco la manera con booleanos de hacer las tareas que requerian
 			de actualización gráfica por fuera de los procesos cuando estos hayan indicado su finalización.
 			Las ultimas versiones de PySimpleGUI incorporaron una instruccion "write_event_value" que permite levantar eventos que son leidos

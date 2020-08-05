@@ -40,7 +40,6 @@ class IA():
 		return palabra
 
 	def turno(self,bolsa,window,tablero,jugador,tiempos,tiempo_turno,lista):
-		self.__procesando=True
 		palabra=self.buscar_palabra()
 		if (palabra!=""):
 			ok = tablero.insertar_palabra(palabra,window,jugador,self,lista)
@@ -63,10 +62,13 @@ class IA():
 				# jugar.cambiar_fichas(window,self.__fichas,bolsa,tablero,True)
 				# self.__cambios_letras-=1
 		self.__procesando=False
-		jugar.pasar(tablero,jugador,tiempos,tiempo_turno,self,bolsa,window)
+		jugar.pasar(jugador,tiempos,tiempo_turno,self)
 
 	def get_procesando(self):
 		return self.__procesando
+
+	def set_procesando(self, b):
+		self.__procesando=b
 
 	def get_primer_turno(self):
 		return self.__primer_turno

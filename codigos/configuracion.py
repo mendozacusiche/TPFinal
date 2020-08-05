@@ -150,30 +150,31 @@ def ventana(wind):
 				actualizar_descripcion(window, valores)
 	
 			elif evento == "-l1-":
-				try:
-					if (valores["-l1-"] in nuevos_puntajes):
-						window["-t1-"].update(nuevos_puntajes[valores["-l1-"]])
-					else:
-						window["-t1-"].update(config["puntaje_fichas"][valores["-l1-"]])
-				except ValueError:
-					sg.popup('Ingrese un valor válido!',title='')
-
+				if (valores["-l1-"] in nuevos_puntajes):
+					window["-t1-"].update(nuevos_puntajes[valores["-l1-"]])
+				else:
+					window["-t1-"].update(config["puntaje_fichas"][valores["-l1-"]])
+				
 			elif evento == "-l2-":
-				try:
-					if (valores["-l2-"] in nuevos_puntajes):
-						window["-t2-"].update(nuevos_puntajes[valores["-l2-"]])
-					else:
-						window["-t2-"].update(config["cant_fichas"][valores["-l2-"]])
-				except ValueError:
-					sg.popup('Ingrese un valor válido!',title='')
+				
+				if (valores["-l2-"] in nuevos_puntajes):
+					window["-t2-"].update(nuevos_puntajes[valores["-l2-"]])
+				else:
+					window["-t2-"].update(config["cant_fichas"][valores["-l2-"]])
+				
 			elif evento == "-t1-":
 				try:
 					nuevos_puntajes[valores["-l1-"]]=int(valores["-t1-"])
+					
 				except ValueError:
 					sg.popup('Ingrese un valor válido!',title='')
 			elif evento == "-t2-":
 				try:
-					nuevas_cantidades[valores["-l2-"]]=int(valores["-t2-"])
+					if int(valores["-t2-"])!=0:
+						nuevas_cantidades[valores["-l2-"]]=int(valores["-t2-"])
+					else:
+						#raise ValueError("Ingrese valores mayores a 0!")
+						sg.popup('Ingrese valores mayores a 0!',title='')#SALE ESTE CARTEL PERO IGUAL LO APLICA
 				except ValueError:
 					sg.popup('Ingrese un valor válido!',title='')
 	

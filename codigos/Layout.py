@@ -3,16 +3,14 @@ import sys
 if __name__ == 'codigos.Layout':
 	from codigos import records,Tablero
 	
-
-
 def definir_descripcion(dif,opcion=None):
 	if dif=="Facil":
-		descr= "Palabras permitidas: sustantivos, adjetivos y verbos." 
+		descr= "Nivel Fácil. Palabras permitidas: sustantivos, adjetivos y verbos." 
 		
 	elif dif=="Medio":
-		descr="Palabras permitidas: adjetivos y verbos. "
+		descr="Nivel Medio. Palabras permitidas: adjetivos y verbos. "
 	else:
-		descr="Palabras permitidas: "+opcion
+		descr="Nivel difícil. Palabras permitidas: "+opcion
 	return descr
 
 def definir_especiales(dif):
@@ -86,7 +84,7 @@ def crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion=None,carga
 				]
 
 	columna_2 = [
-				[sg.Text(descr)],
+				[sg.Text(descr,font=("Current",9,'bold'))],
 				[sg.T(' '*4),sg.Button('INICIAR',key=("INICIAR"),font=("Current",10), size=(10, 0),pad=(0, 0)),sg.Button('POSPONER',key='Posponer',font=("Current",10),pad=(0, 0),size=(15, 0),disabled=True), sg.Button('TERMINAR',key='TERMINAR',font=("Current",10),size=(10, 0), pad=(0, 0),disabled=True)],
 				[sg.Frame('DURACION DEL JUEGO',Tiempo_juego, pad=(10,10), relief= 'solid'), sg.Frame('DURACION DEL TURNO',T_turno, pad= (10, 10), relief= 'solid')],
 				[sg.Image(filename='imagenes/playerlogo.png', pad=(5, 0)), sg.Text(jugador), sg.Image(filename='imagenes/greendot.png',visible=False, key="-dot-")],

@@ -24,7 +24,7 @@ def evaluar(palabra, dificultad):
 
 
 def recargar_fichas(jugador, bolsa, window): 
-	'''Repone las fichas usadas'''
+    '''Repone las fichas usadas'''
     usadas=jugador.get_fichas().get_usadas()
     for i in range(7):
         if usadas[i]:
@@ -58,14 +58,14 @@ def segundo(tablero,jugador,Intel,tiempo_turno,window,t,lista): #CONCURRENCIA
 				threading.Thread(target= Intel.turno, args=(bolsa,window,tablero,jugador,t,tiempo_turno,lista)).start()
 
 def contar_letras_bolsa(bolsa):
-	'''Cuenta la cantidad de letras que hay en la bolsa'''
+    '''Cuenta la cantidad de letras que hay en la bolsa'''
     cant=0
     for letra in bolsa.keys():
         cant=cant+bolsa[letra]
     return cant
 
 def sacar_letra_bolsa(bolsa):
-	'''Saca una letra aleatoria de la bolsa'''
+    '''Saca una letra aleatoria de la bolsa'''
     letra=random.choice(list(bolsa.keys()))
     while (bolsa[letra] == 0):
         letra=random.choice(list(bolsa.keys()))
@@ -73,7 +73,7 @@ def sacar_letra_bolsa(bolsa):
     return letra
 
 def cambiar_fichas(window,fichas,bolsa,tablero,turnoIA=False):
-	''''''
+    ''''''
     if(not turnoIA):
         devolver_fichas(window,tablero,fichas)
     for i in range(7):
@@ -149,7 +149,7 @@ def retomar(window,jugador,tablero,Inteligencia,tiempo_turno,bolsa,t,dificultad,
 	return True
     
 def cambiar_colores(window, dificultad, tablero):   
-	'''Actualiza las casillas especiales de tablero dependiendo del nivel'''
+    '''Actualiza las casillas especiales de tablero dependiendo del nivel'''
     window["b_"+str(tablero.get_tamanio()//2)+"_"+str(tablero.get_tamanio()//2)].update('★',button_color='pink')#★
     if(dificultad == "Facil"):
         Layout.diseño_facil(window,tablero)
@@ -159,7 +159,7 @@ def cambiar_colores(window, dificultad, tablero):
         Layout.diseño_dificil(window,tablero)
  
 def checkear_ficha(event, jugador, window, n):  
-	'''Cambia el estado de las fichas del atril del jugador'''
+    '''Cambia el estado de las fichas del atril del jugador'''
     if (jugador.get_fichas().get_checked()[n]==False):
         jugador.get_fichas().descheckear_todas(window)
         jugador.get_fichas().checkear(n)
@@ -169,7 +169,7 @@ def checkear_ficha(event, jugador, window, n):
         window["-letra"+str(n)+"-"].update(button_color=('white','OrangeRed3'))
 
 def clickear_ficha(event, jugador, window):
-	
+
     if event == ("-letra0-"):
         checkear_ficha(event,jugador,window,0)
         return 0
@@ -193,7 +193,7 @@ def clickear_ficha(event, jugador, window):
         return 6
 
 def devolver_letra(window,tablero,fichas,x,y):
-	'''Devuelve una letra desde el tablero hacia el atril'''
+    '''Devuelve una letra desde el tablero hacia el atril'''
     pos=0
     while (fichas.get_letras()[pos]!= ""):
         pos+=1
@@ -213,7 +213,7 @@ def devolver_fichas(window,tablero,fichas):
 			window["b_"+str(c[0])+"_"+str(c[1])].update("")
 
 def colocar_letra(event,jugador,tablero,window,pos):
-	'''Coloca una letra en el tablero'''
+    '''Coloca una letra en el tablero'''
     if True in (jugador.get_fichas().get_checked()):
         b,x,y = str(event).split("_")
         x= int (x)

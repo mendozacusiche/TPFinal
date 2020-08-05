@@ -24,36 +24,33 @@ def evaluar(palabra, dificultad):
     return ok
 
 
-def recargar_fichas(jugador, bolsa, window, turnoIA=False): #no entiendo bien
+def recargar_fichas(jugador, bolsa, window): #no entiendo bien
     usadas=jugador.get_fichas().get_usadas()
     for i in range(7):
         if usadas[i]:
             l=sacar_letra_bolsa(bolsa)
-            if not turnoIA:
-                window["-letra"+str(i)+"-"].update(l)
+            window["-letra"+str(i)+"-"].update(l)
             jugador.get_fichas().set_letra(l,i)
             jugador.get_fichas().desusar(i)
 
-def pasar(tablero,jugador,tiempos,tiempo_turno,Intel,bolsa,window):#CONCURRENCIA
-	devolver_fichas(window,tablero,jugador.get_fichas())
-	recargar_fichas(jugador,bolsa,window,Intel.get_mi_turno())
-	tiempos[1]=tiempo_turno
-	if Intel.get_mi_turno()==False:
+def pasar(jugador,tiempos,tiempo_turno,Intel):#CONCURRENCIA
+	if(jugador.get_mi_turno()):
+		Intel.set_procesando(True)
 		Intel.set_mi_turno(True)
-		window['-turno-'].update('Turno PC')
-		window["-dotIA-"].update(filename='imagenes/greendot.png',visible=True)
-		window["-dot-"].update(filename='imagenes/greendot.png',visible=False)#Hay que poner manejo de excepciones??
-		deshabilitar_habilitar_botones(window,True,jugador)
-	jugador.set_mi_turno(not jugador.get_mi_turno())
+		jugador.set_jugado(True)
+	else:
+		jugador.set_jugado(False)
+		jugador.set_mi_turno(True)
+	tiempos[1]=tiempo_turno
 
 
-def segundo(tablero,jugador,Intel,tiempo_turno,bolsa,window,t,dif,lista): #CONCURRENCIA
+def segundo(tablero,jugador,Intel,tiempo_turno,window,t,lista): #CONCURRENCIA
 	while (t[0]>0 and t[2]):
 		time.sleep(1)
 		t[0]-=1
 		t[1]-=1
 		if(t[1]== 0):
-			pasar(tablero,jugador,t,tiempo_turno,Intel,bolsa,window)
+			pasar(jugador,t,tiempo_turno,Intel)
 			if not jugador.get_mi_turno():
 				threading.Thread(target= Intel.turno, args=(bolsa,window,tablero,jugador,t,tiempo_turno,lista)).start()
 
@@ -89,7 +86,8 @@ def iniciar(t, window, config, tiempo_turno, tablero, dificultad, nombre,lista):
 	for i in range(7):
 		l=sacar_letra_bolsa(bolsa)
 		nuevas.append(l)
-	Inteligencia = IA.IA (Fichas.Fichas(nuevas),True,dificultad,0,mi_turno=random.choice([True,False]))
+	turno=random.choice([True,False])
+	Inteligencia = IA.IA (Fichas.Fichas(nuevas),True,dificultad,0,mi_turno=turno,procesando=turno)
 	nuevas=[]
 	for i in range(7):
 		l=sacar_letra_bolsa(bolsa)
@@ -107,7 +105,7 @@ def iniciar(t, window, config, tiempo_turno, tablero, dificultad, nombre,lista):
 			window["-letra"+str(i)+"-"].update(disabled=False)
 		window['-turno-'].update('Tu turno')
 		window["-dot-"].update(filename='imagenes/greendot.png',visible=True)#Hay que poner manejo de excepciones??
-	timers= threading.Thread(target= segundo, args=(tablero,jugador,Inteligencia,tiempo_turno,bolsa,window,t,dificultad,lista))
+	timers= threading.Thread(target= segundo, args=(tablero,jugador,Inteligencia,tiempo_turno,window,t,lista))
 	if __name__ == 'codigos.jugar':
 		timers.start()
 	window["-CantFichas-"].update(str(contar_letras_bolsa(bolsa)))
@@ -135,7 +133,7 @@ def retomar(window,jugador,tablero,Inteligencia,tiempo_turno,bolsa,t,dificultad,
 			window["-letra"+str(i)+"-"].update(disabled=False)
 		window['-turno-'].update('Tu turno')
 		window["-dot-"].update(filename='imagenes/greendot.png',visible=True)#Hay que poner manejo de excepciones??
-	timers= threading.Thread(target= segundo, args=(tablero,jugador,Inteligencia,tiempo_turno,bolsa,window,t,dificultad,lista))
+	timers= threading.Thread(target= segundo, args=(tablero,jugador,Inteligencia,tiempo_turno,window,t,lista))
 	if __name__ == 'codigos.jugar':
 		timers.start()
 	window["-CantFichas-"].update(str(contar_letras_bolsa(bolsa)))
@@ -280,9 +278,11 @@ def posponer(config,tablero,bolsa,Inteligencia,jugador,tiempos,dificultad,lista,
 	config["jugador_cambios"]=jugador.get_cambios()
 	config["jugador_mi_turno"]=jugador.get_mi_turno()
 	config["jugador_primer_turno"]=jugador.get_primer_turno()
+	config["jugador_jugado"]=jugador.get_jugado()
 	config["lista"]=lista
 	archivo=open("archivos/guardado.json","w") 
 	json.dump(config,archivo)
+	tiempos[2]=False
 	sg.popup('Partida guardada con éxito',title='')
 
 def juego(cargar=False):
@@ -293,7 +293,7 @@ def juego(cargar=False):
 				config = json.load(archivo) #se podria cambiar el nombre a guardado de la var
 			nombre = config["jugador_nombre"]
 			fichas=Fichas.Fichas(config["jugador_fichas_letras"],config["jugador_fichas_usadas"],config["jugador_fichas_checked"])
-			jugador= Jugador.Jugador(nombre,fichas,config["jugador_mi_turno"],config["jugador_mi_turno"],config["jugador_cambios"],config["jugador_puntos"])
+			jugador= Jugador.Jugador(nombre,fichas,config["jugador_mi_turno"],config["jugador_mi_turno"],config["jugador_cambios"],config["jugador_puntos"],config["jugador_jugado"])
 			ventana_bienvenida.ventana(nombre)
 			tiempos= config["tiempos"]
 			tiempo_total=int(config["tiempo_total"]) * 60
@@ -365,8 +365,7 @@ def juego(cargar=False):
 					window['-cambios-'].update(jugador.get_cambios())
 					if jugador.get_cambios()==0:
 						window["Cambiar letras"].update(disabled=True)
-					pasar(tablero,jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
-					jugar_IA.start()
+					pasar(jugador,tiempos,tiempo_turno,Inteligencia)
 			elif event == "Posponer":
 				if (iniciado):
 					if (dificultad in ("Facil","Medio")):
@@ -399,16 +398,20 @@ def juego(cargar=False):
 						Layout.terminar_por_otros(window,Inteligencia,jugador,dificultad,tiempos,fecha,config)
 						break
 					else:
-						pasar(tablero,jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
-						jugar_IA.start()
+						pasar(jugador,tiempos,tiempo_turno,Inteligencia)
 			elif event == "Pasar":
 				if iniciado and not Inteligencia.get_mi_turno():
-					pasar(tablero,jugador,tiempos,tiempo_turno,Inteligencia,bolsa,window)
-					jugar_IA.start()
+					pasar(jugador,tiempos,tiempo_turno,Inteligencia)
 			else:
 				if iniciado:
 					colocar_letra(event,jugador,tablero,window,pos_letra)
-			if(iniciado and not Inteligencia.get_procesando() and Inteligencia.get_mi_turno()):
+			
+			#Por problemas de compatibilidad de PySimpleGUI con Threading, se busco la manera con booleanos de hacer las tareas que requerian
+			#de actualización gráfica por fuera de los procesos cuando estos hayan indicado su finalización.
+			#Las ultimas versiones de PySimpleGUI incorporaron una instruccion "write_event_value" que permite levantar eventos que son leidos
+			#con window.Read(), pero no nos pareció indicado usar versiones posteriores que pudieran generar problemas al correr en computadoras
+			#donde no este actualizado.
+			if(iniciado and not Inteligencia.get_procesando() and Inteligencia.get_mi_turno()): 
 				if Inteligencia.get_terminar(): 
 					fecha=date.today()
 					Layout.terminar_por_otros(window,Inteligencia,jugador,dificultad,tiempos,fecha,config)
@@ -417,9 +420,19 @@ def juego(cargar=False):
 					Inteligencia.set_mi_turno(False)
 					jugar_IA= threading.Thread(target= Inteligencia.turno, args=(bolsa,window,tablero,jugador,tiempos,tiempo_turno,lista))
 					window['-turno-'].update('Tu turno')
-					window["-dotIA-"].update(filename='imagenes/greendot.png',visible=False)#Hay que poner manejo de excepciones??
+					window["-dotIA-"].update(filename='imagenes/greendot.png',visible=False)
 					window["-dot-"].update(filename='imagenes/greendot.png',visible=True)
 					deshabilitar_habilitar_botones(window,False,jugador)
+			elif (iniciado and jugador.get_jugado() and jugador.get_mi_turno()):
+				jugador.set_mi_turno(False)
+				deshabilitar_habilitar_botones(window,True,jugador)
+				devolver_fichas(window,tablero,jugador.get_fichas())
+				recargar_fichas(jugador,bolsa,window)
+				window['-turno-'].update('Turno PC')
+				window["-dotIA-"].update(filename='imagenes/greendot.png',visible=True)
+				window["-dot-"].update(filename='imagenes/greendot.png',visible=False)
+				jugar_IA.start()
+
 			if tiempos[0]==0:
 				fecha=date.today()
 				Layout.terminar_por_otros(window,Inteligencia,jugador,dificultad,fecha,config)

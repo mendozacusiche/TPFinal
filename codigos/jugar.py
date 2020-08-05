@@ -435,7 +435,7 @@ def juego(cargar=False):
 
 			if tiempos[0]==0:
 				fecha=date.today()
-				Layout.terminar_por_otros(window,Inteligencia,jugador,dificultad,fecha,config)
+				Layout.terminar_por_otros(window,Inteligencia,jugador,dificultad,tiempos,fecha,config)
 				break
 		window.close()
 

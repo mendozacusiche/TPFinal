@@ -125,10 +125,10 @@ def ventana(wind):
 			if evento == "Aplicar":
 				try:
 					if (int(valores["-tot-"])<=25 and valores["-dif-"]=="Facil") or (int(valores["-tot-"])<=20 and valores["-dif-"]=="Medio") or (int(valores["-tot-"])<=15 and valores["-dif-"]=="Dificil"):
-						if (int(valores["-turn-"])<int(valores["-tot-"])):
+						if (int(valores["-turn-"])<=int(valores["-tot-"])):
 							aplicar(valores, nuevos_puntajes, nuevas_cantidades,wind)
 							break
-						elif (int(valores["-turn-"])==0)or (int(valores["-tot-"])==0):
+						elif ((int(valores["-turn-"])==0)or (int(valores["-tot-"])==0)):
 							sg.popup('Ingrese valores mayores a 0!',title='')
 						elif (int(valores["-turn-"])>int(valores["-tot-"])):
 							sg.popup("El tiempo de turno supera al tiempo de partida!",title="")
@@ -136,7 +136,7 @@ def ventana(wind):
 					else:
 						sg.popup("El tiempo de partida supera el maximo!",title="")
 				except ValueError:
-					sg.popup('Ingrese un valor válido!',title='')
+					sg.popup('Ingrese un valor válido!',title='')#REVISAR BIEN QUE PONER #si lo pongo abajo no creo que acá sea necesario
 			elif evento == "Restaurar":
 				restaurar(window)
 				nuevos_puntajes={}
@@ -170,6 +170,8 @@ def ventana(wind):
 		window.Close()
 	except FileNotFoundError as ex:
 		sg.popup("No se encontro el archivo config.json",title='')
+	except ValueError:
+		sg.popup('Ingrese un valor válido!',title='')#REVISAR BIEN QUE PONER 
 
 if __name__ == '__main__':
 	sg.theme('BlueMono')

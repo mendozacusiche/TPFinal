@@ -127,6 +127,7 @@ def ventana(wind):
 					if (int(valores["-tot-"])<=25 and valores["-dif-"]=="Facil") or (int(valores["-tot-"])<=20 and valores["-dif-"]=="Medio") or (int(valores["-tot-"])<=15 and valores["-dif-"]=="Dificil"):
 						if (int(valores["-turn-"])<=int(valores["-tot-"]))and((int(valores["-turn-"])!=0) and (int(valores["-tot-"])!=0)): #no se si está bien poner el igual acá o deberia ir en el elif
 							aplicar(valores, nuevos_puntajes, nuevas_cantidades,wind)
+							sg.popup('Configuración guardada con éxito!',title='')
 							break
 						elif ((int(valores["-turn-"])==0) or (int(valores["-tot-"])==0)):
 							sg.popup('Ingrese valores mayores a 0!',title='')

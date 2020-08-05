@@ -4,7 +4,10 @@ from codigos import configuracion,nuevo_juego,jugar,records
 
 
 def main(args):
-	#sg.theme('DarkTeal8') #'BlueMono' 'BluePurple' 'DarkAmber'
+	'''Bienvenidos al ScrabbleAR'''
+	
+	'''Programa principal'''
+	
 	sg.theme('BlueMono')
 	layout=[[sg.Button('Nuevo Juego',font=("Arial Black",12), size=(20, 0))],
 			[sg.Button('Cargar Juego',font=("Arial Black",12), size=(20, 0), disabled=True)],

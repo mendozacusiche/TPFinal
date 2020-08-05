@@ -150,7 +150,7 @@ def retomar(window,jugador,tablero,Inteligencia,tiempo_turno,bolsa,t,dificultad,
     
 def cambiar_colores(window, dificultad, tablero):   
     '''Actualiza las casillas especiales de tablero dependiendo del nivel'''
-    window["b_"+str(tablero.get_tamanio()//2)+"_"+str(tablero.get_tamanio()//2)].update('★',button_color='pink')#★
+    window["b_"+str(tablero.get_tamanio()//2)+"_"+str(tablero.get_tamanio()//2)].update('★',button_color=(None,'pink'))#★
     if(dificultad == "Facil"):
         Layout.diseño_facil(window,tablero)
     elif(dificultad == "Medio"):
@@ -169,7 +169,7 @@ def checkear_ficha(event, jugador, window, n):
         window["-letra"+str(n)+"-"].update(button_color=('white','OrangeRed3'))
 
 def clickear_ficha(event, jugador, window):
-
+	
     if event == ("-letra0-"):
         checkear_ficha(event,jugador,window,0)
         return 0

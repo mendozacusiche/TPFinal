@@ -172,7 +172,7 @@ def terminar_por_otros(window,Inteligencia,jugador,dif,tiempos,fecha,config):
 	records.actualizar(jugador.get_nombre(),jugador.get_puntos(),dif,fecha)
 	
 def diseño_facil(window,tablero):
-	'''Se ubican las casillas especiales en el tablero del nivel fácil'''
+    '''Se ubican las casillas especiales en el tablero del nivel fácil'''
     for i in range(len(tablero.get_especiales()["uno"])):
         window[tablero.get_especiales()["uno"][i]].update(button_color=(None, 'red'))
     for j in range(len(tablero.get_especiales()["dos"])):
@@ -187,7 +187,7 @@ def diseño_facil(window,tablero):
         window[tablero.get_especiales()["seis"][x]].update(button_color=(None, '#ff8c00'))
     
 def diseño_medio(window,tablero):
-	'''Se ubican las casillas especiales en el tablero del nivel medio'''
+    '''Se ubican las casillas especiales en el tablero del nivel medio'''
     for i in range(len(tablero.get_especiales()["uno"])):
          window[tablero.get_especiales()["uno"][i]].update(button_color=(None, 'green'))
     for j in range(len(tablero.get_especiales()["dos"])):

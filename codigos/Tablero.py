@@ -157,7 +157,7 @@ class Tablero():
         return puntaje
 
     def insertar_palabra(self, palabra, window, jugador, IA,lista):
-		'''Busca e inserta palabras de la IA, si no logra hacerlo retorna False'''
+        '''Busca e inserta palabras de la IA, si no logra hacerlo retorna False'''
         casillas = []
         ok = False
         pal=palabra.replace(' ','')

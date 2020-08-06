@@ -349,7 +349,8 @@ def juego(cargar=False):
 。 Hay casillas especiales dependiendo donde se posicione la palabra se suman o restan más puntos.
 。 Para finalizar el juego se puede presionar el botón terminar, o si se desea se puede posponer el juego, oprimir el botón posponer. 
 。 Si a un jugador se le acaban sus fichas y ya no hay fichas suficientes en la bolsa de fichas, se acaba el juego.'''
-
+		puntajes=str(config["puntaje_fichas"]).replace('{','').replace('}','').replace("'",'').replace(',',' / ')
+		
 		while True:                    
 			event, values = window.Read(timeout=200)
 			#print(event, values)
@@ -428,7 +429,8 @@ def juego(cargar=False):
 					pasar(jugador,tiempos,tiempo_turno,Inteligencia)
 			elif event=='AYUDA':
 			    sg.popup(reglas,title='',font=("Current",10,'bold'))
-			
+			elif event=='PUNTAJES':
+			    sg.popup(puntajes,title='PUNTAJES LETRAS',font=("Current",11))
 			else:
 				if iniciado:
 						colocar_letra(event,jugador,tablero,window,pos_letra)

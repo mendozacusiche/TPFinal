@@ -28,7 +28,6 @@ def evaluar(palabra, dificultad):
    
     return ok
 
-
 def recargar_fichas(jugador, bolsa, window): 
     '''Repone las fichas usadas'''
     usadas=jugador.get_fichas().get_usadas()
@@ -49,7 +48,6 @@ def pasar(jugador,tiempos,tiempo_turno,Intel):
 		jugador.set_jugado(False)
 		jugador.set_mi_turno(True)
 	tiempos[1]=tiempo_turno
-
 
 def segundo(tablero,jugador,Intel,tiempo_turno,window,t,lista): 
 	'''Va restando de a 1 segundo los contadores de tiempo, y si llega a 0 el 
@@ -414,7 +412,7 @@ def juego(cargar=False):
 				if Layout.terminar(window,Inteligencia,tiempos,jugador,dificultad,fecha,config):
 					break
 			elif event in ("-letraIA0-","-letraIA1-","-letraIA2-","-letraIA3-","-letraIA4-","-letraIA5-","-letraIA6-"):
-				pass #Usamos esto porque si no al clickear una ficha de la IA se traba el programa y si las deshabilitamos cambia el color, por lo tanto no nos sirve
+				pass 
 			elif event=="Evaluar Palabra" and not Inteligencia.get_mi_turno():
 				if iniciado:
 					palabra,medio,vacio=tablero.buscar_palabra(jugador)

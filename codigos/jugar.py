@@ -348,7 +348,8 @@ def juego(cargar=False):
 。 Se puede pasar el turno o cambiar fichas (max 3 veces) en caso de no encontrar una palabra para colocar.
 。 Hay casillas especiales dependiendo donde se posicione la palabra se suman o restan más puntos.
 。 Para finalizar el juego se puede presionar el botón terminar, o si se desea se puede posponer el juego, oprimir el botón posponer. 
-。 Si a un jugador se le acaban sus fichas y ya no hay fichas suficientes en la bolsa de fichas, se acaba el juego.'''
+。 Si a un jugador se le acaban sus fichas y ya no hay fichas suficientes en la bolsa de fichas, se acaba el juego.
+。 Si al colocar una palabra esta cae en una casilla de descuentos, el puntaje resultante puede ser negativo. '''
 		puntajes=str(config["puntaje_fichas"]).replace('{','').replace('}','').replace("'",'').replace(',',' / ')
 		
 		while True:                    

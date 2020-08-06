@@ -31,7 +31,7 @@ Tamaño del tablero: 15x15."""
             columna1=[[imag]]
                 
         except FileNotFoundError as ex:
-            sg.popup("No se encontro el archivo config.json",title='')
+            sg.popup("No se encontró el archivo config.json",title='')
             columna1=[[sg.Text('No hay tablero actual')]]
             descr='No hay descripción del nivel actual'
         
@@ -59,7 +59,7 @@ Tamaño del tablero: 15x15."""
                 window.close()
                 break
     except TclError:
-        sg.popup("Lo sentimos ha ocurrido un error inesperado",title='')
+        sg.popup("Lo sentimos, ha ocurrido un error inesperado",title='')
         
 if __name__=='__main__':
     sg.theme('BlueMono')

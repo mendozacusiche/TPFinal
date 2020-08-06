@@ -5,6 +5,7 @@ if __name__ == 'codigos.jugar':
 	from codigos import ventana_bienvenida, Layout,Fichas, Tablero, IA, Jugador,cambiar_letras
 from pattern.es import *   #parse, conjugate, INFINITIVE
 from datetime import date
+from tkinter import *
 
 def evaluar(palabra, dificultad):
     '''Se evalúa si el tipo de palabra ingresada corresponde a alguno de los tipos aceptados en el nivel que se está jugando'''

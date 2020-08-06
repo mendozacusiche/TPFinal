@@ -1,9 +1,13 @@
 import PySimpleGUI as sg
 from string import ascii_uppercase as up
-import random, sys, time, json, threading
+import random
+import sys
+import time
+import json
+import threading
 if __name__ == 'codigos.jugar':
 	from codigos import ventana_bienvenida, Layout,Fichas, Tablero, IA, Jugador,cambiar_letras
-from pattern.es import *   #parse, conjugate, INFINITIVE
+from pattern.es import *
 from datetime import date
 from tkinter import *
 

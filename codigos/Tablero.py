@@ -332,4 +332,7 @@ class Tablero():
 
         return puntaje
         
-
+if __name__ == '__main__':
+	import PySimpleGUI as sg
+	sg.theme('BlueMono')
+	sg.popup('Por favor ejecute ScrabbleAR.py',title='')

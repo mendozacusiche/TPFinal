@@ -37,7 +37,7 @@ Palabras permitidas: son elegidas al azar entre adjetivos y verbos.
 Tamaño del tablero: 15x15.""")
         archivo.close()
     except FileNotFoundError as ex:
-        sg.popup('No se encontro el archivo "config.json" en el directorio actual',title='')
+        sg.popup('No se encontró el archivo "config.json"',title='')
         
         
 def restaurar(win):
@@ -140,7 +140,7 @@ def ventana(wind):
                             sg.popup("El tiempo de turno supera al tiempo de partida!",title="")
 
                     else:
-                        sg.popup("El tiempo de partida supera el maximo!",title="")
+                        sg.popup("El tiempo de partida supera el máximo!",title="")
                 except ValueError:
                     sg.popup('Ingrese un valor válido!',title='')
             elif evento=="Restaurar":
@@ -186,7 +186,7 @@ def ventana(wind):
     
         window.Close()
     except FileNotFoundError as ex:
-        sg.popup("No se encontro el archivo config.json",title='')
+        sg.popup("No se encontró el archivo config.json",title='')
     
 
 

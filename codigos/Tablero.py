@@ -119,6 +119,10 @@ class Tablero():
             es_palabra = False
             medio=False
 
+        vacio=False
+        if fichas==[]:
+            vacio=True
+	
         # Armo la palabra
         if es_palabra:
             palabra = ""

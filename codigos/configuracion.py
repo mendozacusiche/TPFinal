@@ -52,12 +52,12 @@ def restaurar(win):
 					      'U' : 1 ,   'V' : 4 ,   'W' : 7 , 'X' : 7 ,
 					      'Y' : 4 ,   'Z' : 10 }
 
-		cant_fichas= { 'A' : 23 ,   'B' : 4 ,   'C' : 6 , 'D' : 6 ,
-					   'E' : 23 ,   'F' : 3 ,   'G' : 3 , 'H' : 3 ,
-					   'I' : 23 ,   'J' : 3 , 'K' : 1 , 'L' : 6 ,'LL': 1,
-					   'M' : 4 ,   'N' : 8 ,'Ñ': 1,   'O' : 23 , 'P' : 3 ,
+		cant_fichas= { 'A' : 11 ,   'B' : 4 ,   'C' : 6 , 'D' : 6 ,
+					   'E' : 11 ,   'F' : 3 ,   'G' : 3 , 'H' : 3 ,
+					   'I' : 8 ,   'J' : 3 , 'K' : 1 , 'L' : 6 ,'LL': 1,
+					   'M' : 4 ,   'N' : 8 ,'Ñ': 1,   'O' : 8 , 'P' : 3 ,
 					   'Q' : 1 , 'R' : 6 ,'RR': 1,   'S' : 10 , 'T' : 6 ,
-					   'U' : 23 ,   'V' : 3  ,   'W' : 1 , 'X' : 1 ,
+					   'U' : 6 ,   'V' : 3  ,   'W' : 1 , 'X' : 1 ,
 					   'Y' : 1 ,   'Z' : 1 }
 
 		j={"tiempo_total":"20","tiempo_turno":"1","dificultad":"Medio","puntaje_fichas":puntaje_fichas,"cant_fichas":cant_fichas}

@@ -69,6 +69,6 @@ def imprimir(nivel,win):
 		sg.popup('No se encontro el archivo topten.json')
 		
 
-if __name__ == '__main__':
+if __name__=='__main__':
 	sg.theme('BlueMono')
 	sg.popup('Por favor ejecute ScrabbleAR.py',title='')

@@ -55,7 +55,7 @@ class Fichas():
 		window["-letra5-"].update(button_color=('white','OrangeRed3'))
 		window["-letra6-"].update(button_color=('white','OrangeRed3'))
 
-if __name__ == '__main__':
+if __name__=='__main__':
 	import PySimpleGUI as sg
 	sg.theme('BlueMono')
 	sg.popup('Por favor ejecute ScrabbleAR.py',title='')

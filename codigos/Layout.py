@@ -12,7 +12,7 @@ def definir_descripcion(dif,opcion=None):
     elif dif=="Medio":
         descr="Nivel Medio. Palabras permitidas: adjetivos y verbos. "
     else:
-        descr="Nivel difícil. Palabras permitidas: "+opcion
+        descr="Nivel Difícil. Palabras permitidas: "+opcion
     return descr
 
 def definir_especiales(dif):

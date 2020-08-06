@@ -1,4 +1,4 @@
-if __name__ == 'codigos.IA':
+if __name__=='codigos.IA':
 	from codigos import jugar, Layout, Fichas, Tablero
 	
 
@@ -16,7 +16,8 @@ class IA():
 		self.__terminar=False
 
 	def combinaciones(self,combs,pal,marcas,letras,largo):
-		'''Busca las combinaciones posibles para armar una palabra con las fichas que tiene en el atril'''
+		'''Busca las combinaciones posibles para armar una palabra con las fichas que 
+		tiene en el atril.'''
 		if (largo>0):
 			for i in range(len(letras)):
 				if(not marcas[i]):
@@ -106,7 +107,7 @@ class IA():
 	def get_terminar(self):
 		return self.__terminar
 
-if __name__ == '__main__':
+if __name__=='__main__':
 	import PySimpleGUI as sg
 	sg.theme('BlueMono')
 	sg.popup('Por favor ejecute ScrabbleAR.py',title='')

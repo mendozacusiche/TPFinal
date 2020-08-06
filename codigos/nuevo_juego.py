@@ -1,5 +1,5 @@
 import PySimpleGUI as sg
-if __name__ == 'codigos.nuevo_juego':
+if __name__=='codigos.nuevo_juego':
 	from codigos import configuracion, jugar
 import json
 from tkinter import *
@@ -36,8 +36,8 @@ Tamaño del tablero: 15x15."""
 			descr='No hay descripción del nivel actual'
 		
 		columna2=[
-				[sg.Text(descr,key='-descr-',font=("Arial Black",10), size = (35, 0), justification='ljust')],
-				[sg.Button('Configuración',key='Configuracion',font=("Arial Black",12), size =(29, 0))],
+				[sg.Text(descr,key='-descr-',font=("Arial Black",10), size=(35, 0), justification='ljust')],
+				[sg.Button('Configuración',key='Configuracion',font=("Arial Black",12), size=(29, 0))],
 				[sg.Button('Jugar',font=("Arial Black",12), size=(13, 0)), sg.Button('Atrás',key='Atras',font=("Arial Black",12), size=(13,0),pad=(20,0))]
 				]
 	
@@ -48,18 +48,18 @@ Tamaño del tablero: 15x15."""
 		while True:
 			event,values=window.Read()
 		
-			if (event== 'Jugar'):
+			if (event=='Jugar'):
 				window.close()
 				jugar.juego()
 			elif (event=='Configuracion'):
 				window.Hide()
 				configuracion.ventana(window)
 				window.UnHide()
-			elif (event == sg.WIN_CLOSED or event == "Atras"):
+			elif (event==sg.WIN_CLOSED or event == "Atras"):
 				window.close()
 				break
 	except TclError:
 		sg.popup("Lo sentimos a ocurrido un error inesperado",title='')
-if __name__ == '__main__':
+if __name__=='__main__':
 	sg.theme('BlueMono')
 	sg.popup('Por favor ejecute ScrabbleAR.py',title='')

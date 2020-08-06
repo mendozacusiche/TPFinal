@@ -95,7 +95,7 @@ def ventana(win, jugador ,bolsa, tablero):
     ''' Ventana de cambiar_letras'''
     layout = [
               [sg.Text('CAMBIAR LETRAS',size=(40, 1), justification='center', font='Courier 15')],
-              [sg.T('Haz click en las letras que desea conservar', justification='center')],
+              [sg.T('Haga click en las letras que desea conservar', justification='center')],
               [sg.Button(jugador.get_fichas().get_letras()[i], size=(2,1), pad=(1, 0), button_color=('white','#5e82bf'), key=("-c"+str(i)+"-")) for i in range(7)],
               [sg.Button('CONFIRMAR CAMBIO')]
              ]

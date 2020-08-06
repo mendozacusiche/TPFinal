@@ -2,7 +2,8 @@ import PySimpleGUI as sg
 import json
 
 def aplicar(vals, punts, cants,wind):
-	'''Se define qué sucede cuando se da click en aplicar en la ventana de configuración'''
+	'''Se define qué sucede cuando se da click en aplicar en la ventana de 
+	configuración.'''
 	try:
 		archivo=open("archivos/config.json","r+")
 
@@ -40,9 +41,10 @@ Tamaño del tablero: 15x15.""")
 		
   		
 def restaurar(win):
-	'''Se define qué sucede cuando se da click en restaurar en la ventana de configuración'''
+	'''Se define qué sucede cuando se da click en restaurar en la ventana de 
+	configuración.'''
 	try:
-		archivo=open("archivos/config.json","w")#acá creo que no es necesario, porque siempre va a poder abrirlo por ser en modo w
+		archivo=open("archivos/config.json","w")
 
 		puntaje_fichas={ 'A' : 1 ,   'B' : 3 ,   'C' : 2 , 'D' : 2 ,
 					      'E' : 1 ,   'F' : 4 ,   'G' : 2 , 'H' : 4 ,
@@ -120,9 +122,9 @@ def ventana(wind):
 		nuevas_cantidades={}
 
 		while True:
-			evento,valores = window.read()
+			evento,valores=window.read()
 	
-			if evento == "Aplicar":
+			if evento=="Aplicar":
 				try:
 					if (int(valores["-tot-"])<=25 and valores["-dif-"]=="Facil") or (int(valores["-tot-"])<=20 and valores["-dif-"]=="Medio") or (int(valores["-tot-"])<=15 and valores["-dif-"]=="Dificil"):
 						if (int(valores["-turn-"])<=int(valores["-tot-"]))and((int(valores["-turn-"])!=0) and (int(valores["-tot-"])!=0)): #no se si está bien poner el igual acá o deberia ir en el elif
@@ -188,7 +190,6 @@ def ventana(wind):
 	
 
 
-if __name__ == '__main__':
+if __name__=='__main__':
 	sg.theme('BlueMono')
 	sg.popup('Por favor ejecute ScrabbleAR.py',title='')
-

@@ -1,6 +1,7 @@
 if __name__=='codigos.Tablero':
     from codigos import jugar
 import json
+from tkinter import *
 
 class Tablero():
     def __init__(self, nivel, letras=None, confirmadas=None, coloreadas=None):
@@ -209,12 +210,15 @@ class Tablero():
 
         #Si encontró un lugar actualizo el tablero con la palabra 
         if(ok):
-            i=0
-            for c in casillas:
-                self.__letras[c[0]][c[1]]=palabra.split()[i]
-                window["b_"+str(c[0])+"_"+str(c[1])].update(palabra.split()[i])
-                i+=1
-            jugar.confirmar(window, self, jugador, IA,pal,lista)
+            try:
+                i=0
+                for c in casillas:
+                    self.__letras[c[0]][c[1]]=palabra.split()[i]
+                    window["b_"+str(c[0])+"_"+str(c[1])].update(palabra.split()[i])
+                    i+=1
+                jugar.confirmar(window, self, jugador, IA,pal,lista)
+            except TclError:
+                ok=False
 
         return ok 
 

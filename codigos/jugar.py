@@ -333,10 +333,10 @@ def juego(cargar=False):
 				opciones=["Adjetivos", "Verbos"]
 				opcion=random.choice(opciones)
 				dificultad=dificultad+opcion
-				layout = Layout.crear_layout(tablero, tiempos, nombre, dificultad, 3, opcion)    
+				layout = Layout.crear_layout(tablero, tiempos, nombre, dificultad, 3, opcion)
 			else:
-				layout = Layout.crear_layout(tablero, tiempos, nombre, dificultad, 3)    
-			window = sg.Window('ScrabbleAR',resizable= True,element_justification='center',no_titlebar=True).Layout(layout).Finalize()
+				layout = Layout.crear_layout(tablero, tiempos, nombre, dificultad, 3)
+			window = sg.Window('ScrabbleAR',resizable= False,element_justification='center',auto_size_text= True, no_titlebar=False).Layout(layout).Finalize()
 			iniciado=False
 			lista=[]
 
@@ -354,7 +354,7 @@ def juego(cargar=False):
 			event, values = window.Read(timeout=200)
 			#print(event, values)
 			if event == None:
-				tiempos[2]=False 
+				tiempos[2]=False
 				break
 			elif event == "INICIAR":
 				if not iniciado:
@@ -364,7 +364,7 @@ def juego(cargar=False):
 					if Inteligencia.get_mi_turno():
 						jugar_IA.start()
 			elif event == "RETOMAR":
-				if not iniciado:			
+				if not iniciado:
 					cambiar_colores(window,dificultad,tablero) #actualiza el tablero con las casillas de premio  por nivel
 					iniciado = retomar(window,jugador,tablero,Inteligencia,tiempo_turno,bolsa,tiempos,dificultad,lista)
 					jugar_IA = threading.Thread(target= Inteligencia.turno, args=(bolsa,window,tablero,jugador,tiempos,tiempo_turno,lista))

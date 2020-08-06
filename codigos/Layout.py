@@ -46,12 +46,9 @@ def crear_botones(tablero, dificultad):
             return [[sg.Button(" ", button_color=(None, '#a6a3a2'), size=(4,2), pad=(0, 0),font=('Current',9,'bold'), key=("b_"+str(x)+"_"+str(y))) for x in range(tablero.get_tamanio())] for y in range(tablero.get_tamanio())]
     else:
         if (dificultad == "Medio" or dificultad == "Facil"):
-            return [[sg.Button(" ", button_color=(None, '#a6a3a2'), size=(1,1), pad=(0, 0),font=('Current',9,'bold'), key=("b_"+str(x)+"_"+str(y))) for x in range(tablero.get_tamanio())] for y in range(tablero.get_tamanio())]
+            return [[sg.Button(" ", button_color=(None, '#a6a3a2'), size=(1,1), pad=(0, 0), key=("b_"+str(x)+"_"+str(y))) for x in range(tablero.get_tamanio())] for y in range(tablero.get_tamanio())]
         else:
-            return [[sg.Button(" ", button_color=(None, '#a6a3a2'), size=(2,2), pad=(0, 0),font=('Current',9,'bold'), key=("b_"+str(x)+"_"+str(y))) for x in range(tablero.get_tamanio())] for y in range(tablero.get_tamanio())]
-
-
-
+            return [[sg.Button(" ", button_color=(None, '#a6a3a2'), size=(2,2), pad=(0, 0), key=("b_"+str(x)+"_"+str(y))) for x in range(tablero.get_tamanio())] for y in range(tablero.get_tamanio())]
 
 def crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion=None,cargar=False):
 	'''Creación de la ventana de juego'''
@@ -81,7 +78,7 @@ def crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion=None,carga
 				[sg.Text(f"{tiempos[0] // 60}:{tiempos[0]%60:02d}",size=(10, 2), text_color='white',font=('Digital-7',20), justification='center', key='-TURNO-')],
 				]
 
-	T_turno = [                                                                  
+	T_turno = [
 				[sg.Text(f"{tiempos[1] // 60}:{tiempos[1]%60:02d}",size=(10, 2), font=('Digital-7', 20), text_color='white',justification='center', key='-DURACION-')],
 				]
 

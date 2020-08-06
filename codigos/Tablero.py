@@ -132,7 +132,7 @@ class Tablero():
         else:
             palabra = "No es palabra"
 
-        return palabra,medio
+        return palabra,medio,vacio
 
     def confirmar_letras(self, win, turno):
         '''Confirmo las letras ingresadas y calculo el puntaje dependiendo el nivel'''

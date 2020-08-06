@@ -1,6 +1,8 @@
 import PySimpleGUI as sg
 import sys
-if __name__=='codigos.Layout':
+from tkinter import *
+
+if __name__ == 'codigos.Layout':
 	from codigos import records,Tablero
 	
 def definir_descripcion(dif,opcion=None):
@@ -39,8 +41,8 @@ def definir_especiales(dif):
 	return lay
 
 def crear_botones(tablero, dificultad):
-    if sys.platform=="win32":
-        if (dificultad=="Medio" or dificultad == "Facil"):
+    if sys.platform == "win32":
+        if (dificultad == "Medio" or dificultad == "Facil"):
             return [[sg.Button(" ", button_color=(None, '#a6a3a2'), size=(2,0), pad=(0, 0),font=('Current',9,'bold'), key=("b_"+str(x)+"_"+str(y))) for x in range(tablero.get_tamanio())] for y in range(tablero.get_tamanio())]
         else:
             return [[sg.Button(" ", button_color=(None, '#a6a3a2'), size=(4,2), pad=(0, 0),font=('Current',9,'bold'), key=("b_"+str(x)+"_"+str(y))) for x in range(tablero.get_tamanio())] for y in range(tablero.get_tamanio())]
@@ -59,8 +61,8 @@ def crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion=None,carga
 		
 	layout_fichasIA=[[sg.Button("#",font=("Current",9,'bold'),size=(2,1), pad=(20, 0), button_color=color_button, key=("-letraIA"+str(i)+"-")) for i in range(7)]]
 	layout_fichas_jugador=[[sg.Button(" ",font=("Current",9,'bold'),size=(2,1), pad=(20, 0), button_color=color_button, key=("-letra"+str(i)+"-"), disabled=True) for i in range(7)]]
-   
-	columna_0=[
+	
+	columna_0 = [
 					[sg.Column(lay)],
 					[sg.Text('Mensajes del sistema: ',font=("Current",9,'bold')),sg.Text('',key='-turno-',font=("Current",10), size=(10, 0))], 
 					[sg.Text('Palabras ingresadas:',font=("Current",9,'bold'))],
@@ -68,21 +70,21 @@ def crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion=None,carga
 					[sg.Listbox( values={}, key='PALABRAS',size= (30,20), pad=(0,0), background_color="#b7c9e7",font=("Current",10))],
 					]
     
-	columna_1=[
-		[sg.Frame('FICHAS COMPUTADORA',layout_fichasIA)],
-		[sg.Column(crear_botones(tablero, dificultad), background_color= 'grey40', justification='center')],
-		[sg.Frame('FICHAS JUGADOR',layout_fichas_jugador)]
-		]
+	columna_1 =	[
+				[sg.Frame('FICHAS COMPUTADORA',layout_fichasIA)],
+				[sg.Column(crear_botones(tablero, dificultad), background_color= 'grey40', justification='center')],
+				[sg.Frame('FICHAS JUGADOR',layout_fichas_jugador)]
+				]
 
 	Tiempo_juego=[       
 				[sg.Text(f"{tiempos[0] // 60}:{tiempos[0]%60:02d}",size=(10, 2), text_color='white',font=('Digital-7',20), justification='center', key='-TURNO-')],
 				]
 
-	T_turno=[
+	T_turno = [
 				[sg.Text(f"{tiempos[1] // 60}:{tiempos[1]%60:02d}",size=(10, 2), font=('Digital-7', 20), text_color='white',justification='center', key='-DURACION-')],
 				]
 
-	fila_1=[
+	fila_1 = [
 				[sg.Text(descr,font=("Current",9,'bold'))],
 				[sg.T(' '*4),sg.Button('INICIAR',key=("INICIAR"),font=("Current",10), size=(10, 0),pad=(0, 0)),sg.Button('POSPONER',key='Posponer',font=("Current",10),pad=(0, 0),size=(15, 0),disabled=True), sg.Button('TERMINAR',key='TERMINAR',font=("Current",10),size=(10, 0), pad=(0, 0),disabled=True)],
 				[sg.Frame('DURACION DEL JUEGO',Tiempo_juego, pad=(10,10), relief= 'solid'), sg.Frame('DURACION DEL TURNO',T_turno, pad= (10, 10), relief= 'solid')],
@@ -106,13 +108,12 @@ def crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion=None,carga
 				[sg.Frame('CONFIGURACION', fila_1, pad=(20, 50), relief= 'solid')],
 				]
 
-	layout=[  
+	layout = [  
 				[sg.Column(columna_0),sg.Column(columna_1, pad=(0,0)),sg.Column(columna_2, pad=(0,0))],
 				]
 
 	return layout 
-
-
+	
 
 def mostrar_fichas(window,Inteligencia,jugador,config):
 	'''Al finalizar la partida se muestran las fichas de la IA y se descuentan los puntos correspondientes a las letras de los atriles'''
@@ -132,16 +133,16 @@ def mostrar_fichas(window,Inteligencia,jugador,config):
 	jugador.set_puntos(jugador.get_puntos()-pts)
 	window["-puntos-"].update(jugador.get_puntos())
 		
-def terminar(window,Inteligencia,tiempos,jugador,dif,fecha,config): #CONCURRENCIA
+def terminar(window,Inteligencia,tiempos,jugador,dif,fecha,config):
 	'''Se utiliza cuando el jugador oprime el botón terminar'''
 	layout1=[
 			[sg.Text("¿Seguro que quiere terminar el juego?")],
 			[sg.Button('Salir',key='SALIR'), sg.Button('Cancelar',key='CANCELAR')] 
 			]
-	wind=sg.Window('',layout1)
+	wind= sg.Window('',layout1)
 	event,values=wind.Read()
 	wind.close()
-	if event=='SALIR':
+	if event== 'SALIR':
 		tiempos[2] = False
 		mostrar_fichas(window,Inteligencia,jugador,config)
 		layout2=[
@@ -162,8 +163,9 @@ def terminar(window,Inteligencia,tiempos,jugador,dif,fecha,config): #CONCURRENCI
 		return False
 		
 def terminar_por_otros(window,Inteligencia,jugador,dif,tiempos,fecha,config):
-	'''Se utiliza cuando la partida termina por el tiempo o porque no hay más fichas en la bolsa'''
-	tiempos[2]=False
+	'''Se utiliza cuando la partida termina por el tiempo o porque no hay más 
+	fichas en la bolsa.'''
+	tiempos[2] = False
 	mostrar_fichas(window,Inteligencia,jugador,config)
 	layout1=[
 				[sg.Text('FIN DEL JUEGO')],
@@ -224,7 +226,7 @@ def cargar_tablero(window,tablero):
 					window["b_"+str(i)+"_"+str(j)].update(button_color=('white', '#498269'))
 
 		
-color_button=('white','OrangeRed3')
-if __name__=='__main__':
+color_button = ('white','OrangeRed3')
+if __name__ == '__main__':
 	sg.theme('BlueMono')
 	sg.popup('Por favor ejecute ScrabbleAR.py',title='')

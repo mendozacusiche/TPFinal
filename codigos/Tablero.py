@@ -4,8 +4,9 @@ import json
 
 class Tablero():
     def __init__(self, nivel, letras=None, confirmadas=None, coloreadas=None):
-        '''Seteamos el tamaño por nivel, las casillas especiales e inicializamos el tablero como vacio en caso de que sea un nuevo juego, 
-        o si se enviaron parámetros en el caso de cargarlo se inicializa el tablero utilizandolos. '''
+        '''Seteamos el tamaño por nivel, las casillas especiales e inicializamos el 
+        tablero como vacio en caso de que sea un nuevo juego, o si se enviaron 
+        parámetros en el caso de cargarlo se inicializa el tablero utilizandolos. '''
         self.__nivel=nivel
         if self.__nivel=="Facil":
             self.__tamanio=23
@@ -64,7 +65,8 @@ class Tablero():
         return self.__coloreadas
 
     def get_no_confirmadas(self):
-        '''con esto se obtienen las casillas no ocupadas por letras a través de una lista de tuplas'''
+        '''Con esto se obtienen las casillas no ocupadas por letras a través de una 
+        lista de tuplas.'''
         fichas=[]
         for x in range(self.__tamanio):
             for y in range(self.__tamanio):
@@ -135,7 +137,7 @@ class Tablero():
         return palabra,medio,vacio
 
     def confirmar_letras(self, win, turno):
-        '''Confirmo las letras ingresadas y calculo el puntaje dependiendo el nivel'''
+        '''Confirmo las letras ingresadas y calculo el puntaje dependiendo el nivel.'''
         puntaje=0
         puntaje_letras={}
         claves=[]
@@ -161,7 +163,7 @@ class Tablero():
         return puntaje
 
     def insertar_palabra(self, palabra, window, jugador, IA,lista):
-        '''Busca e inserta palabras de la IA, si no logra hacerlo retorna False'''
+        '''Busca e inserta palabras de la IA, si no logra hacerlo retorna False.'''
         casillas=[]
         ok=False
         pal=palabra.replace(' ','')
@@ -217,7 +219,8 @@ class Tablero():
         return ok 
 
     def __calcular_puntaje_Facil(self, claves):
-        '''Calculo el puntaje del nivel fácil teniendo en cuenta si pasa por las casillas especiales del nivel'''
+        '''Calculo el puntaje del nivel fácil teniendo en cuenta si pasa por las 
+        casillas especiales del nivel.'''
         rojo=self.__especiales["uno"]
         azul=self.__especiales["dos"]
         amarillo=self.__especiales["tres"]
@@ -269,7 +272,8 @@ class Tablero():
         return puntaje
 
     def __calcular_puntaje_Medio(self, claves):
-        '''Calculo el puntaje del nivel medio teniendo en cuenta si pasa por las casillas especiales del nivel'''
+        '''Calculo el puntaje del nivel medio teniendo en cuenta si pasa por las 
+        casillas especiales del nivel.'''
         verde=self.__especiales["uno"]
         rosa=self.__especiales["dos"]
         dorado=self.__especiales["tres"]
@@ -299,7 +303,8 @@ class Tablero():
         return puntaje
 
     def __calcular_puntaje_dificil(self, claves):
-        '''Calculo el puntaje del nivel difícil teniendo en cuenta si pasa por las casillas especiales del nivel'''
+        '''Calculo el puntaje del nivel difícil teniendo en cuenta si pasa por las 
+        casillas especiales del nivel.'''
         Anaranjado=self.__especiales["uno"]
         Amarillo=self.__especiales["dos"]
         Verde=self.__especiales["tres"]

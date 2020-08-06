@@ -35,4 +35,4 @@ def ventana(jugador="None"):
                 else:
                     window["-Nombre-"].update("Olvido el nombre!")
     except TclError:
-        sg.popup("Lo sentimos ha ocurrido un error inesperado",title='')
+        sg.popup("Lo sentimos, ha ocurrido un error inesperado",title='')

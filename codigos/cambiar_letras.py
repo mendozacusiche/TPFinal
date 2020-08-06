@@ -3,7 +3,7 @@ if __name__ == 'codigos.cambiar_letras':
 	from codigos import jugar
 
 def sacar_letras( win, jugador):
-    ''' saca todas las letras del atril del jugador'''
+    ''' Saca todas las letras del atril del jugador'''
     fichas = []
     fichas_f = []
     for i in range(7):
@@ -14,7 +14,7 @@ def sacar_letras( win, jugador):
     return fichas, fichas_f
 
 def clickear_ficha(event, jugador, window, win, fichas):
-    '''confirma que letras el jugador desea cambiar y preservar en el atril'''
+    '''Confirma que letras el jugador desea cambiar y preservar en el atril'''
     if event == ("-c0-"):
         if(fichas[0]):
             window[event].update("?")
@@ -91,7 +91,7 @@ def devolver(win,jugador):
         win["-letra"+str(i)+"-"].update(jugador.get_fichas().get_letra(i))
 
 def ventana(win, jugador ,bolsa, tablero):
-    ''' ventana de  Cambiar Fichas'''
+    ''' Ventana de cambiar_letras'''
     layout = [
               [sg.Text('CAMBIAR LETRAS',size=(40, 1), justification='center', font='Courier 15')],
               [sg.T('Haz click en las letras que desea conservar', justification='center')],

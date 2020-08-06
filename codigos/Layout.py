@@ -114,7 +114,6 @@ def crear_layout(tablero, tiempos, jugador, dificultad,cambios,opcion=None,carga
 
 	return layout 
 	
-
 def mostrar_fichas(window,Inteligencia,jugador,config):
 	'''Al finalizar la partida se muestran las fichas de la IA y se descuentan los puntos correspondientes a las letras de los atriles'''
 	ptsIA=0

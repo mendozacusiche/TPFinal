@@ -321,9 +321,9 @@ def juego(cargar=False):
 			tablero=Tablero.Tablero(dificultad,config["tablero_letras"],config["tablero_confirmadas"],config["tablero_coloreadas"])
 			fichasIA=Fichas.Fichas(config["Inteligencia_fichas_letras"],config["Inteligencia_fichas_usadas"],config["Inteligencia_fichas_checked"])
 			Inteligencia=IA.IA(fichasIA,config["Inteligencia_primer_turno"],config["Inteligencia_dificultad"],config["Inteligencia_puntos"],config["Inteligencia_mi_turno"],config["Inteligencia_procesando"])#,config["Inteligencia_cambios_letras"])
+			iniciado=False
 			layout=Layout.crear_layout(tablero, tiempos, nombre, dificultad, jugador.get_cambios(), opcion, True)
 			window=sg.Window('ScrabbleAR',resizable= True,element_justification='center',).Layout(layout).Finalize()
-			iniciado=False
 			lista=config["lista"]
 		else:
 			with open("archivos/config.json","r") as archivo:
@@ -334,6 +334,7 @@ def juego(cargar=False):
 			tiempos=[tiempo_total,tiempo_turno,True]
 			dificultad=config["dificultad"]
 			tablero=Tablero.Tablero(dificultad)
+			iniciado=False
 			if dificultad=="Dificil":
 				opciones=["Adjetivos", "Verbos"]
 				opcion=random.choice(opciones)
@@ -342,7 +343,6 @@ def juego(cargar=False):
 			else:
 				layout=Layout.crear_layout(tablero, tiempos, nombre, dificultad, 3)
 			window=sg.Window('ScrabbleAR',resizable= False,element_justification='center',auto_size_text= True, no_titlebar=False).Layout(layout).Finalize()
-			iniciado=False
 			lista=[]
 
 		pos_letra= -1 #se actualiza al clickear ficha y se utiliza en colocar letra
@@ -485,7 +485,9 @@ def juego(cargar=False):
 			sg.popup('No se encontro el archivo config.json',title='')
 	except TclError:
 		sg.popup("Lo sentimos a ocurrido un error inesperado",title='')	
-		window.close()	
+		if iniciado:
+			window.close()
+			tiempos[2]=False	
 
 if __name__ == '__main__':
 	sg.theme('BlueMono')

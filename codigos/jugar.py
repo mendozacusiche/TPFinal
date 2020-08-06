@@ -12,7 +12,8 @@ from datetime import date
 from tkinter import *
 
 def evaluar(palabra, dificultad):
-    '''Se evalúa si el tipo de palabra ingresada corresponde a alguno de los tipos aceptados en el nivel que se está jugando'''
+    '''Se evalúa si el tipo de palabra ingresada corresponde a alguno de los 
+    tipos aceptados en el nivel que se está jugando.'''
     ok=False
     analisis=parse(palabra).split('/')
     if palabra!="No es palabra":
@@ -38,7 +39,7 @@ def recargar_fichas(jugador, bolsa, window):
             jugador.get_fichas().set_letra(l,i)
             jugador.get_fichas().desusar(i)
 
-def pasar(jugador,tiempos,tiempo_turno,Intel):#CONCURRENCIA
+def pasar(jugador,tiempos,tiempo_turno,Intel):
 	'''Pasa el turno'''
 	if(jugador.get_mi_turno()):
 		Intel.set_procesando(True)
@@ -50,9 +51,10 @@ def pasar(jugador,tiempos,tiempo_turno,Intel):#CONCURRENCIA
 	tiempos[1]=tiempo_turno
 
 
-def segundo(tablero,jugador,Intel,tiempo_turno,window,t,lista): #CONCURRENCIA
-	'''Va restando de a 1 segundo los contadores de tiempo, y si llega a 0 el tiempo del turno, pasa el turno, hasta que se llega a 0 en el 
-	tiempo total de la partida o se termine por otros motivos'''
+def segundo(tablero,jugador,Intel,tiempo_turno,window,t,lista): 
+	'''Va restando de a 1 segundo los contadores de tiempo, y si llega a 0 el 
+	tiempo del turno, pasa el turno, hasta que se llega a 0 en el tiempo total de 
+	la partida o se termine por otros motivos.'''
 	while (t[0]>0 and t[2]):
 		time.sleep(1)
 		t[0]-=1
@@ -106,7 +108,7 @@ def iniciar(t, window, config, tiempo_turno, tablero, dificultad, nombre,lista):
 	jugador=Jugador.Jugador(nombre,Fichas.Fichas(nuevas),not Inteligencia.get_mi_turno())
 	if (Inteligencia.get_mi_turno()):
 		window['-turno-'].update('Turno PC')
-		window["-dotIA-"].update(filename='imagenes/greendot.png',visible=True)#Hay que poner manejo de excepciones??
+		window["-dotIA-"].update(filename='imagenes/greendot.png',visible=True)
 	else:
 		window['Pasar'].update(disabled=False)
 		window["Evaluar Palabra"].update(disabled=False)
@@ -114,7 +116,7 @@ def iniciar(t, window, config, tiempo_turno, tablero, dificultad, nombre,lista):
 		for i in range(7):
 			window["-letra"+str(i)+"-"].update(disabled=False)
 		window['-turno-'].update('Tu turno')
-		window["-dot-"].update(filename='imagenes/greendot.png',visible=True)#Hay que poner manejo de excepciones??
+		window["-dot-"].update(filename='imagenes/greendot.png',visible=True)
 	timers= threading.Thread(target= segundo, args=(tablero,jugador,Inteligencia,tiempo_turno,window,t,lista))
 	if __name__ == 'codigos.jugar':
 		timers.start()
@@ -135,7 +137,7 @@ def retomar(window,jugador,tablero,Inteligencia,tiempo_turno,bolsa,t,dificultad,
 		window["-letra"+str(i)+"-"].update(jugador.get_fichas().get_letra(i))
 	if (Inteligencia.get_mi_turno()):
 		window['-turno-'].update('Turno PC')
-		window["-dotIA-"].update(filename='imagenes/greendot.png',visible=True)#Hay que poner manejo de excepciones??
+		window["-dotIA-"].update(filename='imagenes/greendot.png',visible=True)
 	else:
 		window['Pasar'].update(disabled=False)
 		window["Evaluar Palabra"].update(disabled=False)
@@ -143,7 +145,7 @@ def retomar(window,jugador,tablero,Inteligencia,tiempo_turno,bolsa,t,dificultad,
 		for i in range(7):
 			window["-letra"+str(i)+"-"].update(disabled=False)
 		window['-turno-'].update('Tu turno')
-		window["-dot-"].update(filename='imagenes/greendot.png',visible=True)#Hay que poner manejo de excepciones??
+		window["-dot-"].update(filename='imagenes/greendot.png',visible=True)
 	timers= threading.Thread(target= segundo, args=(tablero,jugador,Inteligencia,tiempo_turno,window,t,lista))
 	if __name__ == 'codigos.jugar':
 		timers.start()
@@ -206,7 +208,8 @@ def devolver_letra(window,tablero,fichas,x,y):
     tablero.set_letra("",x,y)
 
 def devolver_fichas(window,tablero,fichas):
-	'''Devuelve todas las letras desde el tablero, no confirmadas, hacía el atril '''
+	'''Devuelve todas las letras desde el tablero, no confirmadas, hacía el 
+	atril.'''
 	coordenadas=tablero.get_no_confirmadas()
 	for c in coordenadas:
 		devolver_letra(window,tablero,fichas,c[0],c[1])
@@ -307,7 +310,7 @@ def juego(cargar=False):
 	try:
 		if cargar:
 			with open("archivos/guardado.json","r") as archivo:
-				config=json.load(archivo) #se podria cambiar el nombre a guardado de la var
+				config=json.load(archivo) 
 			nombre=config["jugador_nombre"]
 			fichas=Fichas.Fichas(config["jugador_fichas_letras"],config["jugador_fichas_usadas"],config["jugador_fichas_checked"])
 			jugador= Jugador.Jugador(nombre,fichas,config["jugador_mi_turno"],config["jugador_mi_turno"],config["jugador_cambios"],config["jugador_puntos"],config["jugador_jugado"])
@@ -345,7 +348,7 @@ def juego(cargar=False):
 			window=sg.Window('ScrabbleAR',resizable= False,element_justification='center',auto_size_text= True, no_titlebar=False).Layout(layout).Finalize()
 			lista=[]
 
-		pos_letra= -1 #se actualiza al clickear ficha y se utiliza en colocar letra
+		pos_letra= -1  #se actualiza al clickear ficha y se utiliza en colocar letra
 
 		reglas='''。 A quien le toque el primer turno debe poner la palabra pasando por el centro del tablero.
 。 Las palabras deben tener mínimo 2 letras y deben estar todas en la misma línea.
@@ -355,6 +358,7 @@ def juego(cargar=False):
 。 Para finalizar el juego se puede presionar el botón terminar, o si se desea se puede posponer el juego, oprimir el botón posponer. 
 。 Si a un jugador se le acaban sus fichas y ya no hay fichas suficientes en la bolsa de fichas, se acaba el juego.
 。 Si al colocar una palabra esta cae en una casilla de descuentos, el puntaje resultante puede ser negativo. '''
+
 		puntajes=str(config["puntaje_fichas"]).replace('{','').replace('}','').replace("'",'').replace(',',' / ')
 		
 		while True:                    
@@ -444,11 +448,16 @@ def juego(cargar=False):
 						colocar_letra(event,jugador,tablero,window,pos_letra)
 			
 
-			'''Por problemas de compatibilidad de PySimpleGUI con Threading, se busco la manera con booleanos de hacer las tareas que requerian
-			de actualización gráfica por fuera de los procesos cuando estos hayan indicado su finalización.
-			Las ultimas versiones de PySimpleGUI incorporaron una instruccion "write_event_value" que permite levantar eventos que son leidos
-			con window.Read(), pero no nos pareció indicado usar versiones posteriores que pudieran generar problemas al correr en computadoras
-			donde no este actualizado.'''
+			'''Por problemas de compatibilidad de PySimpleGUI con Threading, se 
+			busco la manera con booleanos de hacer las tareas que requerian	de 
+			actualización gráfica por fuera de los procesos cuando estos hayan indicado 
+			su finalización. 
+			Las ultimas versiones de PySimpleGUI incorporaron una instruccion 
+			"write_event_value" que permite levantar eventos que son leidos	con 
+			window.Read(), pero no nos pareció indicado usar versiones posteriores que 
+			pudieran generar problemas al correr en computadoras donde no este 
+			actualizado.'''
+			
 			if(iniciado and not Inteligencia.get_procesando() and Inteligencia.get_mi_turno()): 
 				if Inteligencia.get_terminar(): 
 					fecha=date.today()

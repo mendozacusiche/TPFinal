@@ -1,4 +1,4 @@
-if __name__ == 'codigos.Jugador':
+if __name__=='codigos.Jugador':
 	from codigos import jugar,Fichas
 	
 

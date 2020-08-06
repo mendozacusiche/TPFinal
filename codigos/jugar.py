@@ -475,7 +475,9 @@ def juego(cargar=False):
 			sg.popup('No se encontro el archivo guardado.json',title='')
 		else:
 			sg.popup('No se encontro el archivo config.json',title='')
-		
+	except TclError:
+		sg.popup("Lo sentimos a ocurrido un error inesperado",title='')	
+		window.close()	
 
 if __name__ == '__main__':
 	sg.theme('BlueMono')

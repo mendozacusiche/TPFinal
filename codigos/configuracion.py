@@ -8,9 +8,9 @@ def aplicar(vals, punts, cants,wind):
 
 		config=json.load(archivo)
 
-		config["tiempo_total"] = int(vals["-tot-"])
-		config["tiempo_turno"] = int(vals["-turn-"])
-		config["dificultad"] = vals["-dif-"]
+		config["tiempo_total"]=int(vals["-tot-"])
+		config["tiempo_turno"]=int(vals["-turn-"])
+		config["dificultad"]=vals["-dif-"]
 		for p in punts:
 			config["puntaje_fichas"][p]=punts[p]
 		for c in cants:
@@ -44,7 +44,7 @@ def restaurar(win):
 	try:
 		archivo=open("archivos/config.json","w")#acá creo que no es necesario, porque siempre va a poder abrirlo por ser en modo w
 
-		puntaje_fichas= { 'A' : 1 ,   'B' : 3 ,   'C' : 2 , 'D' : 2 ,
+		puntaje_fichas={ 'A' : 1 ,   'B' : 3 ,   'C' : 2 , 'D' : 2 ,
 					      'E' : 1 ,   'F' : 4 ,   'G' : 2 , 'H' : 4 ,
 					      'I' : 1 ,   'J' : 6 , 'K' : 7 , 'L' : 1 ,'LL': 7,
 					      'M' : 3 ,   'N' : 1 ,'Ñ': 7,   'O' : 1 , 'P' : 3 ,
@@ -52,7 +52,7 @@ def restaurar(win):
 					      'U' : 1 ,   'V' : 4 ,   'W' : 7 , 'X' : 7 ,
 					      'Y' : 4 ,   'Z' : 10 }
 
-		cant_fichas= { 'A' : 11 ,   'B' : 4 ,   'C' : 6 , 'D' : 6 ,
+		cant_fichas={ 'A' : 11 ,   'B' : 4 ,   'C' : 6 , 'D' : 6 ,
 					   'E' : 11 ,   'F' : 3 ,   'G' : 3 , 'H' : 3 ,
 					   'I' : 8 ,   'J' : 3 , 'K' : 1 , 'L' : 6 ,'LL': 1,
 					   'M' : 4 ,   'N' : 8 ,'Ñ': 1,   'O' : 8 , 'P' : 3 ,
@@ -114,7 +114,7 @@ def ventana(wind):
 		elif config["dificultad"]=="Medio":
 			layout[2][0]=sg.Text("(max: 20)",key="-max-")
 
-		window= sg.Window("Configuración",layout)
+		window=sg.Window("Configuración",layout)
 
 		nuevos_puntajes={}
 		nuevas_cantidades={}
@@ -141,31 +141,31 @@ def ventana(wind):
 						sg.popup("El tiempo de partida supera el maximo!",title="")
 				except ValueError:
 					sg.popup('Ingrese un valor válido!',title='')
-			elif evento == "Restaurar":
+			elif evento=="Restaurar":
 				restaurar(window)
 				nuevos_puntajes={}
 				nuevas_cantidades={}
 	
-			elif evento == "Atras" or evento == sg.WIN_CLOSED:
+			elif evento=="Atras" or evento == sg.WIN_CLOSED:
 				break
 	
-			elif evento == "-dif-":
+			elif evento=="-dif-":
 				actualizar_descripcion(window, valores)
 	
-			elif evento == "-l1-":
+			elif evento=="-l1-":
 				if (valores["-l1-"] in nuevos_puntajes):
 					window["-t1-"].update(nuevos_puntajes[valores["-l1-"]])
 				else:
 					window["-t1-"].update(config["puntaje_fichas"][valores["-l1-"]])
 				
-			elif evento == "-l2-":
+			elif evento=="-l2-":
 				
 				if (valores["-l2-"] in nuevos_puntajes):
 					window["-t2-"].update(nuevos_puntajes[valores["-l2-"]])
 				else:
 					window["-t2-"].update(config["cant_fichas"][valores["-l2-"]])
 				
-			elif evento == "-t1-":
+			elif evento=="-t1-":
 				try:
 					if int(valores["-t1-"])>0:
 						nuevos_puntajes[valores["-l1-"]]=int(valores["-t1-"])
@@ -173,7 +173,7 @@ def ventana(wind):
 						sg.popup('Ingrese valores mayores a 0!',title='')
 				except ValueError:
 					sg.popup('Ingrese un valor válido!',title='')
-			elif evento == "-t2-":
+			elif evento=="-t2-":
 				try:
 					if int(valores["-t2-"])>0:
 						nuevas_cantidades[valores["-l2-"]]=int(valores["-t2-"])

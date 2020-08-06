@@ -1,5 +1,5 @@
 if __name__=='codigos.Tablero':
-	from codigos import jugar
+    from codigos import jugar
 import json
 
 class Tablero():
@@ -114,9 +114,9 @@ class Tablero():
                 es_palabra=False
         else:
             es_palabra=False
-    	
+        
         medio=True
-    	#Verifico si el primer turno es del jugador y si es así, si la palabra introducida pasa por el medio del tablero
+        #Verifico si el primer turno es del jugador y si es así, si la palabra introducida pasa por el medio del tablero
         if(jugador.get_primer_turno()) and (self.__letras[self.__tamanio//2][self.__tamanio//2]==""):
             es_palabra=False
             medio=False
@@ -124,7 +124,7 @@ class Tablero():
         vacio=False
         if fichas==[]:
             vacio=True
-	
+    
         # Armo la palabra
         if es_palabra:
             palabra=""
@@ -169,8 +169,8 @@ class Tablero():
         pal=palabra.replace(' ','')
         
         if(not IA.get_primer_turno()):
-			
-			#Busca un espacio de manera horizontal
+            
+            #Busca un espacio de manera horizontal
             for i in range(self.__tamanio):
                 for j in range(self.__tamanio):
                     if(not self.__confirmadas[j][i]):
@@ -185,7 +185,7 @@ class Tablero():
                 else:
                     casillas=[]
                     
-			#Busca un espacio de manera vertical
+            #Busca un espacio de manera vertical
             if(not ok):
                 for i in range(self.__tamanio):
                     for j in range(self.__tamanio):
@@ -201,13 +201,13 @@ class Tablero():
                     else:
                         casillas=[]
                         
-		#Inserta la palabra en el medio del tablero si es el primer turno
+        #Inserta la palabra en el medio del tablero si es el primer turno
         else:
             for i in range(len(palabra.split())):
                 casillas.append((i+self.__tamanio//2, self.__tamanio//2))
             ok=True
 
-		#Si encontró un lugar actualizo el tablero con la palabra 
+        #Si encontró un lugar actualizo el tablero con la palabra 
         if(ok):
             i=0
             for c in casillas:
@@ -338,6 +338,6 @@ class Tablero():
         return puntaje
         
 if __name__=='__main__':
-	import PySimpleGUI as sg
-	sg.theme('BlueMono')
-	sg.popup('Por favor ejecute ScrabbleAR.py',title='')
+    import PySimpleGUI as sg
+    sg.theme('BlueMono')
+    sg.popup('Por favor ejecute ScrabbleAR.py',title='')

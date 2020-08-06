@@ -6,7 +6,7 @@ import time
 import json
 import threading
 if __name__ == 'codigos.jugar':
-	from codigos import ventana_bienvenida, Layout,Fichas, Tablero, IA, Jugador,cambiar_letras
+    from codigos import ventana_bienvenida, Layout,Fichas, Tablero, IA, Jugador,cambiar_letras
 from pattern.es import *
 from datetime import date
 from tkinter import *
@@ -39,28 +39,28 @@ def recargar_fichas(jugador, bolsa, window):
             jugador.get_fichas().desusar(i)
 
 def pasar(jugador,tiempos,tiempo_turno,Intel):
-	'''Pasa el turno'''
-	if(jugador.get_mi_turno()):
-		Intel.set_procesando(True)
-		Intel.set_mi_turno(True)
-		jugador.set_jugado(True)
-	else:
-		jugador.set_jugado(False)
-		jugador.set_mi_turno(True)
-	tiempos[1]=tiempo_turno
+    '''Pasa el turno'''
+    if(jugador.get_mi_turno()):
+        Intel.set_procesando(True)
+        Intel.set_mi_turno(True)
+        jugador.set_jugado(True)
+    else:
+        jugador.set_jugado(False)
+        jugador.set_mi_turno(True)
+    tiempos[1]=tiempo_turno
 
 def segundo(tablero,jugador,Intel,tiempo_turno,window,t,lista): 
-	'''Va restando de a 1 segundo los contadores de tiempo, y si llega a 0 el 
-	tiempo del turno, pasa el turno, hasta que se llega a 0 en el tiempo total de 
-	la partida o se termine por otros motivos.'''
-	while (t[0]>0 and t[2]):
-		time.sleep(1)
-		t[0]-=1
-		t[1]-=1
-		if(t[1]==0):
-			pasar(jugador,t,tiempo_turno,Intel)
-			if not jugador.get_mi_turno():
-				threading.Thread(target= Intel.turno, args=(bolsa,window,tablero,jugador,t,tiempo_turno,lista)).start()
+    '''Va restando de a 1 segundo los contadores de tiempo, y si llega a 0 el 
+    tiempo del turno, pasa el turno, hasta que se llega a 0 en el tiempo total de 
+    la partida o se termine por otros motivos.'''
+    while (t[0]>0 and t[2]):
+        time.sleep(1)
+        t[0]-=1
+        t[1]-=1
+        if(t[1]==0):
+            pasar(jugador,t,tiempo_turno,Intel)
+            if not jugador.get_mi_turno():
+                threading.Thread(target= Intel.turno, args=(bolsa,window,tablero,jugador,t,tiempo_turno,lista)).start()
 
 def contar_letras_bolsa(bolsa):
     '''Cuenta la cantidad de letras que hay en la bolsa'''
@@ -86,70 +86,70 @@ def cambiar_fichas(window, jugador, claves,bolsa,tablero):
             window["-letra"+str(i)+"-"].update(jugador.get_fichas().get_letra(i))
 
 def iniciar(t, window, config, tiempo_turno, tablero, dificultad, nombre,lista):
-	'''Define qué sucede cuando se oprime el botón iniciar'''
-	window["INICIAR"].update(disabled=True)
-	window['TERMINAR'].update(disabled=False)
-	window['Posponer'].update(disabled=False)
-	window['-cambios-'].update(visible=True)
-	bolsa=config["cant_fichas"]
-	nuevas=[]
-	for i in range(7):
-		l=sacar_letra_bolsa(bolsa)
-		nuevas.append(l)
-	turno=random.choice([True,False])
-	Inteligencia = IA.IA (Fichas.Fichas(nuevas),True,dificultad,0,mi_turno=turno,procesando=turno)
-	nuevas=[]
-	for i in range(7):
-		l=sacar_letra_bolsa(bolsa)
-		nuevas.append(l)
-		window["-letra"+str(i)+"-"].update(l)
-	jugador=Jugador.Jugador(nombre,Fichas.Fichas(nuevas),not Inteligencia.get_mi_turno())
-	if (Inteligencia.get_mi_turno()):
-		window['-turno-'].update('Turno PC')
-		window["-dotIA-"].update(filename='imagenes/greendot.png',visible=True)
-	else:
-		window['Pasar'].update(disabled=False)
-		window["Evaluar Palabra"].update(disabled=False)
-		window["Cambiar letras"].update(disabled=False)
-		for i in range(7):
-			window["-letra"+str(i)+"-"].update(disabled=False)
-		window['-turno-'].update('Tu turno')
-		window["-dot-"].update(filename='imagenes/greendot.png',visible=True)
-	timers= threading.Thread(target= segundo, args=(tablero,jugador,Inteligencia,tiempo_turno,window,t,lista))
-	if __name__ == 'codigos.jugar':
-		timers.start()
-	window["-CantFichas-"].update(str(contar_letras_bolsa(bolsa)))
-	return True, jugador, bolsa, Inteligencia
+    '''Define qué sucede cuando se oprime el botón iniciar'''
+    window["INICIAR"].update(disabled=True)
+    window['TERMINAR'].update(disabled=False)
+    window['Posponer'].update(disabled=False)
+    window['-cambios-'].update(visible=True)
+    bolsa=config["cant_fichas"]
+    nuevas=[]
+    for i in range(7):
+        l=sacar_letra_bolsa(bolsa)
+        nuevas.append(l)
+    turno=random.choice([True,False])
+    Inteligencia = IA.IA (Fichas.Fichas(nuevas),True,dificultad,0,mi_turno=turno,procesando=turno)
+    nuevas=[]
+    for i in range(7):
+        l=sacar_letra_bolsa(bolsa)
+        nuevas.append(l)
+        window["-letra"+str(i)+"-"].update(l)
+    jugador=Jugador.Jugador(nombre,Fichas.Fichas(nuevas),not Inteligencia.get_mi_turno())
+    if (Inteligencia.get_mi_turno()):
+        window['-turno-'].update('Turno PC')
+        window["-dotIA-"].update(filename='imagenes/greendot.png',visible=True)
+    else:
+        window['Pasar'].update(disabled=False)
+        window["Evaluar Palabra"].update(disabled=False)
+        window["Cambiar letras"].update(disabled=False)
+        for i in range(7):
+            window["-letra"+str(i)+"-"].update(disabled=False)
+        window['-turno-'].update('Tu turno')
+        window["-dot-"].update(filename='imagenes/greendot.png',visible=True)
+    timers= threading.Thread(target= segundo, args=(tablero,jugador,Inteligencia,tiempo_turno,window,t,lista))
+    if __name__ == 'codigos.jugar':
+        timers.start()
+    window["-CantFichas-"].update(str(contar_letras_bolsa(bolsa)))
+    return True, jugador, bolsa, Inteligencia
 
 def retomar(window,jugador,tablero,Inteligencia,tiempo_turno,bolsa,t,dificultad,lista):
-	'''Define qué sucede cuando se oprime el botón retomar'''
-	Layout.cargar_tablero(window,tablero)
-	window["RETOMAR"].update(disabled=True)
-	window['TERMINAR'].update(disabled=False)
-	window['Posponer'].update(disabled=False)
-	window['-cambios-'].update(visible=True)
-	window["-puntos-"].update(jugador.get_puntos())
-	window["-puntosIA-"].update(Inteligencia.get_puntos())
-	window['PALABRAS'].update(map(lambda x: " {}  {}  {} ".format(x[0], x[1], x[2]),lista))
-	for i in range(7):
-		window["-letra"+str(i)+"-"].update(jugador.get_fichas().get_letra(i))
-	if (Inteligencia.get_mi_turno()):
-		window['-turno-'].update('Turno PC')
-		window["-dotIA-"].update(filename='imagenes/greendot.png',visible=True)
-	else:
-		window['Pasar'].update(disabled=False)
-		window["Evaluar Palabra"].update(disabled=False)
-		window["Cambiar letras"].update(disabled=False)
-		for i in range(7):
-			window["-letra"+str(i)+"-"].update(disabled=False)
-		window['-turno-'].update('Tu turno')
-		window["-dot-"].update(filename='imagenes/greendot.png',visible=True)
-	timers= threading.Thread(target= segundo, args=(tablero,jugador,Inteligencia,tiempo_turno,window,t,lista))
-	if __name__ == 'codigos.jugar':
-		timers.start()
-	window["-CantFichas-"].update(str(contar_letras_bolsa(bolsa)))
-	
-	return True
+    '''Define qué sucede cuando se oprime el botón retomar'''
+    Layout.cargar_tablero(window,tablero)
+    window["RETOMAR"].update(disabled=True)
+    window['TERMINAR'].update(disabled=False)
+    window['Posponer'].update(disabled=False)
+    window['-cambios-'].update(visible=True)
+    window["-puntos-"].update(jugador.get_puntos())
+    window["-puntosIA-"].update(Inteligencia.get_puntos())
+    window['PALABRAS'].update(map(lambda x: " {}  {}  {} ".format(x[0], x[1], x[2]),lista))
+    for i in range(7):
+        window["-letra"+str(i)+"-"].update(jugador.get_fichas().get_letra(i))
+    if (Inteligencia.get_mi_turno()):
+        window['-turno-'].update('Turno PC')
+        window["-dotIA-"].update(filename='imagenes/greendot.png',visible=True)
+    else:
+        window['Pasar'].update(disabled=False)
+        window["Evaluar Palabra"].update(disabled=False)
+        window["Cambiar letras"].update(disabled=False)
+        for i in range(7):
+            window["-letra"+str(i)+"-"].update(disabled=False)
+        window['-turno-'].update('Tu turno')
+        window["-dot-"].update(filename='imagenes/greendot.png',visible=True)
+    timers= threading.Thread(target= segundo, args=(tablero,jugador,Inteligencia,tiempo_turno,window,t,lista))
+    if __name__ == 'codigos.jugar':
+        timers.start()
+    window["-CantFichas-"].update(str(contar_letras_bolsa(bolsa)))
+    
+    return True
     
 def cambiar_colores(window, dificultad, tablero):   
     '''Actualiza las casillas especiales de tablero dependiendo del nivel'''
@@ -172,7 +172,7 @@ def checkear_ficha(event, jugador, window, n):
         window["-letra"+str(n)+"-"].update(button_color=('white','OrangeRed3'))
 
 def clickear_ficha(event, jugador, window):
-	
+    
     if event==("-letra0-"):
         checkear_ficha(event,jugador,window,0)
         return 0
@@ -206,15 +206,15 @@ def devolver_letra(window,tablero,fichas,x,y):
     tablero.set_letra("",x,y)
 
 def devolver_fichas(window,tablero,fichas):
-	'''Devuelve todas las letras desde el tablero, no confirmadas, hacía el 
-	atril.'''
-	coordenadas=tablero.get_no_confirmadas()
-	for c in coordenadas:
-		devolver_letra(window,tablero,fichas,c[0],c[1])
-		if c==(tablero.get_tamanio()//2,tablero.get_tamanio()//2):
-			window["b_"+str(c[0])+"_"+str(c[1])].update("★")
-		else:
-			window["b_"+str(c[0])+"_"+str(c[1])].update("")
+    '''Devuelve todas las letras desde el tablero, no confirmadas, hacía el 
+    atril.'''
+    coordenadas=tablero.get_no_confirmadas()
+    for c in coordenadas:
+        devolver_letra(window,tablero,fichas,c[0],c[1])
+        if c==(tablero.get_tamanio()//2,tablero.get_tamanio()//2):
+            window["b_"+str(c[0])+"_"+str(c[1])].update("★")
+        else:
+            window["b_"+str(c[0])+"_"+str(c[1])].update("")
 
 def colocar_letra(event,jugador,tablero,window,pos):
     '''Coloca una letra en el tablero'''
@@ -236,119 +236,119 @@ def colocar_letra(event,jugador,tablero,window,pos):
                 if (tablero.get_letra(x,y)!=""):
                     devolver_letra(window,tablero,jugador.get_fichas(),x,y)
                     if (x==tablero.get_tamanio()//2 and y==tablero.get_tamanio()//2):
-                    	window[event].update("★")
+                        window[event].update("★")
                     else:
-                    	window[event].update("")
+                        window[event].update("")
 
 def confirmar(window,tablero,jugador,IA,palabra,lista):
-	'''Confirma las letras en el tablero'''
-	nuevos_puntos=tablero.confirmar_letras(window, IA.get_mi_turno())
-	if (IA.get_primer_turno() or jugador.get_primer_turno()):
-		IA.set_primer_turno(False)
-		jugador.set_primer_turno(False)
-	if IA.get_mi_turno():
-		turno='PC'
-		IA.set_puntos(IA.get_puntos()+nuevos_puntos)
-		window["-puntosIA-"].update(IA.get_puntos())
-	else:
-		turno=jugador.get_nombre()
-		jugador.set_puntos(jugador.get_puntos()+nuevos_puntos)
-		window["-puntos-"].update(jugador.get_puntos())
-	lista.append((turno.upper(),palabra.upper(),nuevos_puntos))
-	lista.append(('','',''))
-	window['PALABRAS'].update(map(lambda x: " {}  {}  {} ".format(x[0], x[1], x[2]),lista))
-	
+    '''Confirma las letras en el tablero'''
+    nuevos_puntos=tablero.confirmar_letras(window, IA.get_mi_turno())
+    if (IA.get_primer_turno() or jugador.get_primer_turno()):
+        IA.set_primer_turno(False)
+        jugador.set_primer_turno(False)
+    if IA.get_mi_turno():
+        turno='PC'
+        IA.set_puntos(IA.get_puntos()+nuevos_puntos)
+        window["-puntosIA-"].update(IA.get_puntos())
+    else:
+        turno=jugador.get_nombre()
+        jugador.set_puntos(jugador.get_puntos()+nuevos_puntos)
+        window["-puntos-"].update(jugador.get_puntos())
+    lista.append((turno.upper(),palabra.upper(),nuevos_puntos))
+    lista.append(('','',''))
+    window['PALABRAS'].update(map(lambda x: " {}  {}  {} ".format(x[0], x[1], x[2]),lista))
+    
 
 def deshabilitar_habilitar_botones(window,b,jugador):
-	'''Se habilitan y deshabilitan los distintos botones del juego'''
-	for i in range(7):
-		window["-letra"+str(i)+"-"].update(disabled=b)
-	window["Evaluar Palabra"].update(disabled=b)
-	window['Pasar'].update(disabled=b)
-	if (jugador.get_cambios()>0):
-		window['Cambiar letras'].update(disabled=b)
+    '''Se habilitan y deshabilitan los distintos botones del juego'''
+    for i in range(7):
+        window["-letra"+str(i)+"-"].update(disabled=b)
+    window["Evaluar Palabra"].update(disabled=b)
+    window['Pasar'].update(disabled=b)
+    if (jugador.get_cambios()>0):
+        window['Cambiar letras'].update(disabled=b)
 
 def posponer(config,tablero,bolsa,Inteligencia,jugador,tiempos,dificultad,lista,opcion=None):
-	'''Se guardan los datos para posponer el juego'''
-	#config["tablero_tamanio"]=tablero.get_tamanio()
-	#config["tablero_especiales"]=tablero.get_especiales()
-	config["tablero_letras"]=tablero.get_letras()
-	config["tablero_confirmadas"]=tablero.get_confirmadas()
-	config["tablero_coloreadas"]=tablero.get_coloreadas()
-	config["bolsa"]=bolsa
-	config["tiempos"]=tiempos
-	config["dificultad"]=dificultad
-	config["opcion"]=opcion
-	config["Inteligencia_fichas_letras"]=Inteligencia.get_fichas().get_letras()
-	config["Inteligencia_fichas_usadas"]=Inteligencia.get_fichas().get_usadas()
-	config["Inteligencia_fichas_checked"]=Inteligencia.get_fichas().get_checked()
-	config["Inteligencia_mi_turno"]=Inteligencia.get_mi_turno()
-	config["Inteligencia_procesando"]=Inteligencia.get_procesando()
-	config["Inteligencia_dificultad"]=Inteligencia.get_dificultad()
-	#config["Inteligencia_cambios_letras"]=Inteligencia.get_cambios_letras()
-	config["Inteligencia_puntos"]=Inteligencia.get_puntos()
-	config["Inteligencia_primer_turno"]=Inteligencia.get_primer_turno()
-	config["jugador_fichas_letras"]=jugador.get_fichas().get_letras()
-	config["jugador_fichas_usadas"]=jugador.get_fichas().get_usadas()
-	config["jugador_fichas_checked"]=jugador.get_fichas().get_checked()
-	config["jugador_puntos"]=jugador.get_puntos()
-	config["jugador_nombre"]=jugador.get_nombre()
-	config["jugador_cambios"]=jugador.get_cambios()
-	config["jugador_mi_turno"]=jugador.get_mi_turno()
-	config["jugador_primer_turno"]=jugador.get_primer_turno()
-	config["jugador_jugado"]=jugador.get_jugado()
-	config["lista"]=lista
-	archivo=open("archivos/guardado.json","w") 
-	json.dump(config,archivo)
-	tiempos[2]=False
-	sg.popup('Partida guardada con éxito',title='')
+    '''Se guardan los datos para posponer el juego'''
+    #config["tablero_tamanio"]=tablero.get_tamanio()
+    #config["tablero_especiales"]=tablero.get_especiales()
+    config["tablero_letras"]=tablero.get_letras()
+    config["tablero_confirmadas"]=tablero.get_confirmadas()
+    config["tablero_coloreadas"]=tablero.get_coloreadas()
+    config["bolsa"]=bolsa
+    config["tiempos"]=tiempos
+    config["dificultad"]=dificultad
+    config["opcion"]=opcion
+    config["Inteligencia_fichas_letras"]=Inteligencia.get_fichas().get_letras()
+    config["Inteligencia_fichas_usadas"]=Inteligencia.get_fichas().get_usadas()
+    config["Inteligencia_fichas_checked"]=Inteligencia.get_fichas().get_checked()
+    config["Inteligencia_mi_turno"]=Inteligencia.get_mi_turno()
+    config["Inteligencia_procesando"]=Inteligencia.get_procesando()
+    config["Inteligencia_dificultad"]=Inteligencia.get_dificultad()
+    #config["Inteligencia_cambios_letras"]=Inteligencia.get_cambios_letras()
+    config["Inteligencia_puntos"]=Inteligencia.get_puntos()
+    config["Inteligencia_primer_turno"]=Inteligencia.get_primer_turno()
+    config["jugador_fichas_letras"]=jugador.get_fichas().get_letras()
+    config["jugador_fichas_usadas"]=jugador.get_fichas().get_usadas()
+    config["jugador_fichas_checked"]=jugador.get_fichas().get_checked()
+    config["jugador_puntos"]=jugador.get_puntos()
+    config["jugador_nombre"]=jugador.get_nombre()
+    config["jugador_cambios"]=jugador.get_cambios()
+    config["jugador_mi_turno"]=jugador.get_mi_turno()
+    config["jugador_primer_turno"]=jugador.get_primer_turno()
+    config["jugador_jugado"]=jugador.get_jugado()
+    config["lista"]=lista
+    archivo=open("archivos/guardado.json","w") 
+    json.dump(config,archivo)
+    tiempos[2]=False
+    sg.popup('Partida guardada con éxito',title='')
 
 def juego(cargar=False):
-	'''Creación de la ventana de juego'''
-	try:
-		if cargar:
-			with open("archivos/guardado.json","r") as archivo:
-				config=json.load(archivo) 
-			nombre=config["jugador_nombre"]
-			fichas=Fichas.Fichas(config["jugador_fichas_letras"],config["jugador_fichas_usadas"],config["jugador_fichas_checked"])
-			jugador= Jugador.Jugador(nombre,fichas,config["jugador_mi_turno"],config["jugador_mi_turno"],config["jugador_cambios"],config["jugador_puntos"],config["jugador_jugado"])
-			ventana_bienvenida.ventana(nombre)
-			tiempos= config["tiempos"]
-			tiempo_total=int(config["tiempo_total"]) * 60
-			tiempo_turno=int(config["tiempo_turno"]) * 60
-			dificultad=config["dificultad"]
-			opcion=config["opcion"]
-			bolsa=config["bolsa"]
-			tablero=Tablero.Tablero(dificultad,config["tablero_letras"],config["tablero_confirmadas"],config["tablero_coloreadas"])
-			fichasIA=Fichas.Fichas(config["Inteligencia_fichas_letras"],config["Inteligencia_fichas_usadas"],config["Inteligencia_fichas_checked"])
-			Inteligencia=IA.IA(fichasIA,config["Inteligencia_primer_turno"],config["Inteligencia_dificultad"],config["Inteligencia_puntos"],config["Inteligencia_mi_turno"],config["Inteligencia_procesando"])#,config["Inteligencia_cambios_letras"])
-			iniciado=False
-			layout=Layout.crear_layout(tablero, tiempos, nombre, dificultad, jugador.get_cambios(), opcion, True)
-			window=sg.Window('ScrabbleAR',resizable= True,element_justification='center',).Layout(layout).Finalize()
-			lista=config["lista"]
-		else:
-			with open("archivos/config.json","r") as archivo:
-				config = json.load(archivo)
-			nombre=ventana_bienvenida.ventana()  
-			tiempo_total=int(config["tiempo_total"]) * 60
-			tiempo_turno=int(config["tiempo_turno"]) * 60
-			tiempos=[tiempo_total,tiempo_turno,True]
-			dificultad=config["dificultad"]
-			tablero=Tablero.Tablero(dificultad)
-			iniciado=False
-			if dificultad=="Dificil":
-				opciones=["Adjetivos", "Verbos"]
-				opcion=random.choice(opciones)
-				dificultad=dificultad+opcion
-				layout=Layout.crear_layout(tablero, tiempos, nombre, dificultad, 3, opcion)
-			else:
-				layout=Layout.crear_layout(tablero, tiempos, nombre, dificultad, 3)
-			window=sg.Window('ScrabbleAR',resizable= False,element_justification='center',auto_size_text= True, no_titlebar=False).Layout(layout).Finalize()
-			lista=[]
+    '''Creación de la ventana de juego'''
+    try:
+        if cargar:
+            with open("archivos/guardado.json","r") as archivo:
+                config=json.load(archivo) 
+            nombre=config["jugador_nombre"]
+            fichas=Fichas.Fichas(config["jugador_fichas_letras"],config["jugador_fichas_usadas"],config["jugador_fichas_checked"])
+            jugador= Jugador.Jugador(nombre,fichas,config["jugador_mi_turno"],config["jugador_mi_turno"],config["jugador_cambios"],config["jugador_puntos"],config["jugador_jugado"])
+            ventana_bienvenida.ventana(nombre)
+            tiempos= config["tiempos"]
+            tiempo_total=int(config["tiempo_total"]) * 60
+            tiempo_turno=int(config["tiempo_turno"]) * 60
+            dificultad=config["dificultad"]
+            opcion=config["opcion"]
+            bolsa=config["bolsa"]
+            tablero=Tablero.Tablero(dificultad,config["tablero_letras"],config["tablero_confirmadas"],config["tablero_coloreadas"])
+            fichasIA=Fichas.Fichas(config["Inteligencia_fichas_letras"],config["Inteligencia_fichas_usadas"],config["Inteligencia_fichas_checked"])
+            Inteligencia=IA.IA(fichasIA,config["Inteligencia_primer_turno"],config["Inteligencia_dificultad"],config["Inteligencia_puntos"],config["Inteligencia_mi_turno"],config["Inteligencia_procesando"])#,config["Inteligencia_cambios_letras"])
+            iniciado=False
+            layout=Layout.crear_layout(tablero, tiempos, nombre, dificultad, jugador.get_cambios(), opcion, True)
+            window=sg.Window('ScrabbleAR',resizable= True,element_justification='center',).Layout(layout).Finalize()
+            lista=config["lista"]
+        else:
+            with open("archivos/config.json","r") as archivo:
+                config = json.load(archivo)
+            nombre=ventana_bienvenida.ventana()  
+            tiempo_total=int(config["tiempo_total"]) * 60
+            tiempo_turno=int(config["tiempo_turno"]) * 60
+            tiempos=[tiempo_total,tiempo_turno,True]
+            dificultad=config["dificultad"]
+            tablero=Tablero.Tablero(dificultad)
+            iniciado=False
+            if dificultad=="Dificil":
+                opciones=["Adjetivos", "Verbos"]
+                opcion=random.choice(opciones)
+                dificultad=dificultad+opcion
+                layout=Layout.crear_layout(tablero, tiempos, nombre, dificultad, 3, opcion)
+            else:
+                layout=Layout.crear_layout(tablero, tiempos, nombre, dificultad, 3)
+            window=sg.Window('ScrabbleAR',resizable= False,element_justification='center',auto_size_text= True, no_titlebar=False).Layout(layout).Finalize()
+            lista=[]
 
-		pos_letra= -1  #se actualiza al clickear ficha y se utiliza en colocar letra
+        pos_letra= -1  #se actualiza al clickear ficha y se utiliza en colocar letra
 
-		reglas='''。 A quien le toque el primer turno debe poner la palabra pasando por el centro del tablero.
+        reglas='''。 A quien le toque el primer turno debe poner la palabra pasando por el centro del tablero.
 。 Las palabras deben tener mínimo 2 letras y deben estar todas en la misma línea.
 。 Las palabras deben colocarse vertical u horizontalmente y entre ellas no pueden cruzarse.
 。 Se puede pasar el turno o cambiar fichas (max 3 veces) en caso de no encontrar una palabra para colocar.
@@ -357,145 +357,145 @@ def juego(cargar=False):
 。 Si a un jugador se le acaban sus fichas y ya no hay fichas suficientes en la bolsa de fichas, se acaba el juego.
 。 Si al colocar una palabra esta cae en una casilla de descuentos, el puntaje resultante puede ser negativo. '''
 
-		puntajes=str(config["puntaje_fichas"]).replace('{','').replace('}','').replace("'",'').replace(',',' / ')
-		
-		while True:                    
-			event,values=window.Read(timeout=200)
-			#print(event, values)
-			if event==None:
-				tiempos[2]=False
-				break
-			elif event=="INICIAR":
-				if not iniciado:
-					iniciado, jugador, bolsa, Inteligencia = iniciar(tiempos, window, config, tiempo_turno, tablero, dificultad, nombre,lista)
-					jugar_IA= threading.Thread(target= Inteligencia.turno, args=(bolsa,window,tablero,jugador,tiempos,tiempo_turno,lista))			
-					cambiar_colores(window,dificultad,tablero) #actualiza el tablero con las casillas de premio  por nivel
-					if Inteligencia.get_mi_turno():
-						jugar_IA.start()
-			elif event=="RETOMAR":
-				if not iniciado:
-					cambiar_colores(window,dificultad,tablero) #actualiza el tablero con las casillas de premio  por nivel
-					iniciado = retomar(window,jugador,tablero,Inteligencia,tiempo_turno,bolsa,tiempos,dificultad,lista)
-					jugar_IA = threading.Thread(target= Inteligencia.turno, args=(bolsa,window,tablero,jugador,tiempos,tiempo_turno,lista))
-					if Inteligencia.get_mi_turno():
-						jugar_IA.start()
-			elif event==sg.TIMEOUT_KEY:
-				if(iniciado):
-					window["-TURNO-"].update(f"{tiempos[0] // 60}:{tiempos[0]%60:02d}")
-					window["-DURACION-"].update(f"{tiempos[1] // 60}:{tiempos[1]%60:02d}")
-					window["-CantFichas-"].update(str(contar_letras_bolsa(bolsa)))
-			elif event in ("-letra0-","-letra1-","-letra2-","-letra3-","-letra4-","-letra5-","-letra6-") and not Inteligencia.get_mi_turno():
-				if iniciado:
-					pos_letra = clickear_ficha(event, jugador, window)
-			elif event=="Cambiar letras" and not Inteligencia.get_mi_turno():
-				if iniciado:
-					devolver_fichas(window,tablero,jugador.get_fichas())
-					ok=cambiar_letras.ventana(window, jugador, bolsa, tablero)
-					if ok:
-						jugador.set_cambios(jugador.get_cambios()-1)
-						window['-cambios-'].update(jugador.get_cambios())
-						if jugador.get_cambios()==0:
-							window["Cambiar letras"].update(disabled=True)
-						pasar(jugador,tiempos,tiempo_turno,Inteligencia)
-			elif event=="Posponer":
-				if (iniciado):
-					devolver_fichas(window,tablero,jugador.get_fichas())
-					if (dificultad in ("Facil","Medio")):
-						posponer(config,tablero,bolsa,Inteligencia,jugador,tiempos,dificultad,lista)
-						break
-					else:
-						posponer(config,tablero,bolsa,Inteligencia,jugador,tiempos,dificultad,lista,opcion)
-						break
-			elif event=="TERMINAR":
-				devolver_fichas(window,tablero,jugador.get_fichas())
-				fecha=date.today()
-				if Layout.terminar(window,Inteligencia,tiempos,jugador,dificultad,fecha,config):
-					break
-			elif event in ("-letraIA0-","-letraIA1-","-letraIA2-","-letraIA3-","-letraIA4-","-letraIA5-","-letraIA6-"):
-				pass 
-			elif event=="Evaluar Palabra" and not Inteligencia.get_mi_turno():
-				if iniciado:
-					palabra,medio,vacio=tablero.buscar_palabra(jugador)
-					ok = evaluar(palabra, dificultad)
-					if ok:
-						confirmar(window,tablero,jugador,Inteligencia,palabra,lista)
-						
-					else:
-						devolver_fichas(window,tablero,jugador.get_fichas())
-						if vacio:
-							sg.popup("No se ingreso palabra",title="")
-						elif not medio:
-							sg.popup('En la primer jugada la palabra debe pasar por el medio',title='')
-						else:
-							sg.popup("La palabra ingresada no es valida",title='')
-					if (len(jugador.get_fichas().get_usadas())>contar_letras_bolsa(bolsa)):
-						fecha=date.today()
-						Layout.terminar_por_otros(window,Inteligencia,jugador,dificultad,tiempos,fecha,config)
-						break
-					else:
-						pasar(jugador,tiempos,tiempo_turno,Inteligencia)
-			elif event=="Pasar":
-				if iniciado and not Inteligencia.get_mi_turno():
-					pasar(jugador,tiempos,tiempo_turno,Inteligencia)
-			elif event=='AYUDA':
-			    sg.popup(reglas,title='',font=("Current",10,'bold'))
-			elif event=='PUNTAJES':
-			    sg.popup(puntajes,title='PUNTAJES LETRAS',font=("Current",11))
-			else:
-				if iniciado:
-						colocar_letra(event,jugador,tablero,window,pos_letra)
-			
+        puntajes=str(config["puntaje_fichas"]).replace('{','').replace('}','').replace("'",'').replace(',',' / ')
+        
+        while True:                    
+            event,values=window.Read(timeout=200)
+            #print(event, values)
+            if event==None:
+                tiempos[2]=False
+                break
+            elif event=="INICIAR":
+                if not iniciado:
+                    iniciado, jugador, bolsa, Inteligencia = iniciar(tiempos, window, config, tiempo_turno, tablero, dificultad, nombre,lista)
+                    jugar_IA= threading.Thread(target= Inteligencia.turno, args=(bolsa,window,tablero,jugador,tiempos,tiempo_turno,lista))          
+                    cambiar_colores(window,dificultad,tablero) #actualiza el tablero con las casillas de premio  por nivel
+                    if Inteligencia.get_mi_turno():
+                        jugar_IA.start()
+            elif event=="RETOMAR":
+                if not iniciado:
+                    cambiar_colores(window,dificultad,tablero) #actualiza el tablero con las casillas de premio  por nivel
+                    iniciado = retomar(window,jugador,tablero,Inteligencia,tiempo_turno,bolsa,tiempos,dificultad,lista)
+                    jugar_IA = threading.Thread(target= Inteligencia.turno, args=(bolsa,window,tablero,jugador,tiempos,tiempo_turno,lista))
+                    if Inteligencia.get_mi_turno():
+                        jugar_IA.start()
+            elif event==sg.TIMEOUT_KEY:
+                if(iniciado):
+                    window["-TURNO-"].update(f"{tiempos[0] // 60}:{tiempos[0]%60:02d}")
+                    window["-DURACION-"].update(f"{tiempos[1] // 60}:{tiempos[1]%60:02d}")
+                    window["-CantFichas-"].update(str(contar_letras_bolsa(bolsa)))
+            elif event in ("-letra0-","-letra1-","-letra2-","-letra3-","-letra4-","-letra5-","-letra6-") and not Inteligencia.get_mi_turno():
+                if iniciado:
+                    pos_letra = clickear_ficha(event, jugador, window)
+            elif event=="Cambiar letras" and not Inteligencia.get_mi_turno():
+                if iniciado:
+                    devolver_fichas(window,tablero,jugador.get_fichas())
+                    ok=cambiar_letras.ventana(window, jugador, bolsa, tablero)
+                    if ok:
+                        jugador.set_cambios(jugador.get_cambios()-1)
+                        window['-cambios-'].update(jugador.get_cambios())
+                        if jugador.get_cambios()==0:
+                            window["Cambiar letras"].update(disabled=True)
+                        pasar(jugador,tiempos,tiempo_turno,Inteligencia)
+            elif event=="Posponer":
+                if (iniciado):
+                    devolver_fichas(window,tablero,jugador.get_fichas())
+                    if (dificultad in ("Facil","Medio")):
+                        posponer(config,tablero,bolsa,Inteligencia,jugador,tiempos,dificultad,lista)
+                        break
+                    else:
+                        posponer(config,tablero,bolsa,Inteligencia,jugador,tiempos,dificultad,lista,opcion)
+                        break
+            elif event=="TERMINAR":
+                devolver_fichas(window,tablero,jugador.get_fichas())
+                fecha=date.today()
+                if Layout.terminar(window,Inteligencia,tiempos,jugador,dificultad,fecha,config):
+                    break
+            elif event in ("-letraIA0-","-letraIA1-","-letraIA2-","-letraIA3-","-letraIA4-","-letraIA5-","-letraIA6-"):
+                pass 
+            elif event=="Evaluar Palabra" and not Inteligencia.get_mi_turno():
+                if iniciado:
+                    palabra,medio,vacio=tablero.buscar_palabra(jugador)
+                    ok = evaluar(palabra, dificultad)
+                    if ok:
+                        confirmar(window,tablero,jugador,Inteligencia,palabra,lista)
+                        
+                    else:
+                        devolver_fichas(window,tablero,jugador.get_fichas())
+                        if vacio:
+                            sg.popup("No se ingreso palabra",title="")
+                        elif not medio:
+                            sg.popup('En la primer jugada la palabra debe pasar por el medio',title='')
+                        else:
+                            sg.popup("La palabra ingresada no es valida",title='')
+                    if (len(jugador.get_fichas().get_usadas())>contar_letras_bolsa(bolsa)):
+                        fecha=date.today()
+                        Layout.terminar_por_otros(window,Inteligencia,jugador,dificultad,tiempos,fecha,config)
+                        break
+                    else:
+                        pasar(jugador,tiempos,tiempo_turno,Inteligencia)
+            elif event=="Pasar":
+                if iniciado and not Inteligencia.get_mi_turno():
+                    pasar(jugador,tiempos,tiempo_turno,Inteligencia)
+            elif event=='AYUDA':
+                sg.popup(reglas,title='',font=("Current",10,'bold'))
+            elif event=='PUNTAJES':
+                sg.popup(puntajes,title='PUNTAJES LETRAS',font=("Current",11))
+            else:
+                if iniciado:
+                        colocar_letra(event,jugador,tablero,window,pos_letra)
+            
 
-			'''Por problemas de compatibilidad de PySimpleGUI con Threading, se 
-			busco la manera con booleanos de hacer las tareas que requerian	de 
-			actualización gráfica por fuera de los procesos cuando estos hayan indicado 
-			su finalización. 
-			Las ultimas versiones de PySimpleGUI incorporaron una instruccion 
-			"write_event_value" que permite levantar eventos que son leidos	con 
-			window.Read(), pero no nos pareció indicado usar versiones posteriores que 
-			pudieran generar problemas al correr en computadoras donde no este 
-			actualizado.'''
-			
-			if(iniciado and not Inteligencia.get_procesando() and Inteligencia.get_mi_turno()): 
-				if Inteligencia.get_terminar(): 
-					fecha=date.today()
-					Layout.terminar_por_otros(window,Inteligencia,jugador,dificultad,tiempos,fecha,config)
-					break
-				else:
-					Inteligencia.set_mi_turno(False)
-					jugar_IA= threading.Thread(target= Inteligencia.turno, args=(bolsa,window,tablero,jugador,tiempos,tiempo_turno,lista))
-					window['-turno-'].update('Tu turno')
-					window["-dotIA-"].update(filename='imagenes/greendot.png',visible=False)
-					window["-dot-"].update(filename='imagenes/greendot.png',visible=True)
-					deshabilitar_habilitar_botones(window,False,jugador)
-			elif (iniciado and jugador.get_jugado() and jugador.get_mi_turno()):
-				jugador.set_mi_turno(False)
-				deshabilitar_habilitar_botones(window,True,jugador)
-				devolver_fichas(window,tablero,jugador.get_fichas())
-				recargar_fichas(jugador,bolsa,window)
-				window['-turno-'].update('Turno PC')
-				window["-dotIA-"].update(filename='imagenes/greendot.png',visible=True)
-				window["-dot-"].update(filename='imagenes/greendot.png',visible=False)
-				jugar_IA.start()
+            '''Por problemas de compatibilidad de PySimpleGUI con Threading, se 
+            busco la manera con booleanos de hacer las tareas que requerian de 
+            actualización gráfica por fuera de los procesos cuando estos hayan indicado 
+            su finalización. 
+            Las ultimas versiones de PySimpleGUI incorporaron una instruccion 
+            "write_event_value" que permite levantar eventos que son leidos con 
+            window.Read(), pero no nos pareció indicado usar versiones posteriores que 
+            pudieran generar problemas al correr en computadoras donde no este 
+            actualizado.'''
+            
+            if(iniciado and not Inteligencia.get_procesando() and Inteligencia.get_mi_turno()): 
+                if Inteligencia.get_terminar(): 
+                    fecha=date.today()
+                    Layout.terminar_por_otros(window,Inteligencia,jugador,dificultad,tiempos,fecha,config)
+                    break
+                else:
+                    Inteligencia.set_mi_turno(False)
+                    jugar_IA= threading.Thread(target= Inteligencia.turno, args=(bolsa,window,tablero,jugador,tiempos,tiempo_turno,lista))
+                    window['-turno-'].update('Tu turno')
+                    window["-dotIA-"].update(filename='imagenes/greendot.png',visible=False)
+                    window["-dot-"].update(filename='imagenes/greendot.png',visible=True)
+                    deshabilitar_habilitar_botones(window,False,jugador)
+            elif (iniciado and jugador.get_jugado() and jugador.get_mi_turno()):
+                jugador.set_mi_turno(False)
+                deshabilitar_habilitar_botones(window,True,jugador)
+                devolver_fichas(window,tablero,jugador.get_fichas())
+                recargar_fichas(jugador,bolsa,window)
+                window['-turno-'].update('Turno PC')
+                window["-dotIA-"].update(filename='imagenes/greendot.png',visible=True)
+                window["-dot-"].update(filename='imagenes/greendot.png',visible=False)
+                jugar_IA.start()
 
-			if tiempos[0]==0:
-				devolver_fichas(window,tablero,jugador.get_fichas())
-				fecha=date.today()
-				Layout.terminar_por_otros(window,Inteligencia,jugador,dificultad,tiempos,fecha,config)
-				break
-		window.close()
+            if tiempos[0]==0:
+                devolver_fichas(window,tablero,jugador.get_fichas())
+                fecha=date.today()
+                Layout.terminar_por_otros(window,Inteligencia,jugador,dificultad,tiempos,fecha,config)
+                break
+        window.close()
 
-	except FileNotFoundError:
-		if cargar:
-			sg.popup('No se encontro el archivo guardado.json',title='')
-		else:
-			sg.popup('No se encontro el archivo config.json',title='')
-	except TclError:
-		sg.popup("Lo sentimos a ocurrido un error inesperado",title='')	
-		if iniciado:
-			window.close()
-			tiempos[2]=False	
+    except FileNotFoundError:
+        if cargar:
+            sg.popup('No se encontro el archivo guardado.json',title='')
+        else:
+            sg.popup('No se encontro el archivo config.json',title='')
+    except TclError:
+        sg.popup("Lo sentimos ha ocurrido un error inesperado",title='') 
+        if iniciado:
+            window.close()
+            tiempos[2]=False    
 
 if __name__ == '__main__':
-	sg.theme('BlueMono')
-	sg.popup('Por favor ejecute ScrabbleAR.py',title='')
+    sg.theme('BlueMono')
+    sg.popup('Por favor ejecute ScrabbleAR.py',title='')

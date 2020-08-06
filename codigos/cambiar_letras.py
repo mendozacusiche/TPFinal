@@ -101,7 +101,7 @@ def ventana(win, jugador ,bolsa, tablero):
     window=sg.Window('CAMBIAR LETRAS',element_justification='center', keep_on_top= True).Layout(layout)
 
     ok=False
-    cambiar_fichas,fichas_b = sacar_letras(win, jugador)
+    cambiar_fichas,fichas_b=sacar_letras(win, jugador)
 
     while True:             # Event Loop
         event, values=window.read()

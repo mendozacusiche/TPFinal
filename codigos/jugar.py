@@ -408,14 +408,16 @@ def juego(cargar=False):
 				pass #Usamos esto porque si no al clickear una ficha de la IA se traba el programa y si las deshabilitamos cambia el color, por lo tanto no nos sirve
 			elif event == "Evaluar Palabra" and not Inteligencia.get_mi_turno():
 				if iniciado:
-					palabra,medio = tablero.buscar_palabra(jugador)
+					palabra,medio,vacio=tablero.buscar_palabra(jugador)
 					ok = evaluar(palabra, dificultad)
 					if ok:
 						confirmar(window,tablero,jugador,Inteligencia,palabra,lista)
 						
 					else:
 						devolver_fichas(window,tablero,jugador.get_fichas())
-						if not medio:
+						if vacio:
+							sg.popup("No se ingreso palabra",title="")
+						elif not medio:
 							sg.popup('En la primer jugada la palabra debe pasar por el medio',title='')
 						else:
 							sg.popup("La palabra ingresada no es valida",title='')

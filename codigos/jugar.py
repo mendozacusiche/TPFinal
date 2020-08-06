@@ -423,11 +423,11 @@ def juego(cargar=False):
                     else:
                         devolver_fichas(window,tablero,jugador.get_fichas())
                         if vacio:
-                            sg.popup("No se ingreso palabra",title="")
+                            sg.popup("No se ingresó palabra",title="")
                         elif not medio:
-                            sg.popup('En la primer jugada la palabra debe pasar por el medio',title='')
+                            sg.popup('En la primer jugada la palabra debe pasar por el medio del tablero',title='')
                         else:
-                            sg.popup("La palabra ingresada no es valida",title='')
+                            sg.popup("La palabra ingresada no es válida",title='')
                     if (len(jugador.get_fichas().get_usadas())>contar_letras_bolsa(bolsa)):
                         fecha=date.today()
                         Layout.terminar_por_otros(window,Inteligencia,jugador,dificultad,tiempos,fecha,config)
@@ -487,11 +487,11 @@ def juego(cargar=False):
 
     except FileNotFoundError:
         if cargar:
-            sg.popup('No se encontro el archivo guardado.json',title='')
+            sg.popup('No se encontró el archivo guardado.json',title='')
         else:
-            sg.popup('No se encontro el archivo config.json',title='')
+            sg.popup('No se encontró el archivo config.json',title='')
     except TclError:
-        sg.popup("Lo sentimos ha ocurrido un error inesperado",title='') 
+        sg.popup("Lo sentimos, ha ocurrido un error inesperado",title='') 
         if iniciado:
             window.close()
             tiempos[2]=False    

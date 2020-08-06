@@ -48,8 +48,9 @@ def actualizar(nombre,puntaje,nivel,fecha):
 		sg.popup('No se encontro el archivo topten.json')
 
 
-def guardarDatos(datos): #no uso manejo de excepciones porque ya las uso cuando lo llamo 
-	'''Guardo los datos en topten.son que fueron generados en actualizar, ya que es el método que llama a guardarDatos'''
+def guardarDatos(datos):   #no uso manejo de excepciones porque ya las uso cuando lo llamo 
+	'''Guardo los datos en topten.son que fueron generados en actualizar, ya 
+	que es el método que llama a guardarDatos.'''
 	with open('archivos/topten.json','w') as p:
 		json.dump(datos,p,indent=4)
 
@@ -69,6 +70,6 @@ def imprimir(nivel,win):
 		sg.popup('No se encontro el archivo topten.json')
 		
 
-if __name__=='__main__':
+if __name__ == '__main__':
 	sg.theme('BlueMono')
 	sg.popup('Por favor ejecute ScrabbleAR.py',title='')

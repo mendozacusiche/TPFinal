@@ -9,7 +9,7 @@ def sacar_letras( win, jugador):
     for i in range(7):
         fichas.append(jugador.get_fichas().get_letras()[i])
         fichas_f.append(True)
-        win["-letra"+str(i)+"-"].update("",disabled=True)
+        win["-letra"+str(i)+"-"].update("")
 
     return fichas, fichas_f
 

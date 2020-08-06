@@ -104,9 +104,9 @@ def ventana(wind):
 			[sg.Combo(["Facil","Medio","Dificil"],config["dificultad"], enable_events=True, key="-dif-")],
 			[sg.Text("", size=(50,1) , key=("-desc-"))],
 			[sg.Text("Puntaje: ",font=("Arial Black",10))], 
-			[sg.Text("Letra "),sg.Combo(letras,size=(3,1), enable_events=True, key="-l1-"),sg.Text("Puntos "),sg.InputText("",size=(3,1), enable_events=True, key="-t1-")],
+			[sg.Text("Letra "),sg.Combo(letras,letras[0],size=(3,1), enable_events=True, key="-l1-"),sg.Text("Puntos "),sg.InputText(config["puntaje_fichas"][letras[0]],size=(3,1), enable_events=True, key="-t1-")],
 			[sg.Text("Cantidad: ",font=("Arial Black",10))],
-			[sg.Text("Letra "),sg.Combo(letras,size=(3,1), enable_events=True, key="-l2-"),sg.Text("Cantidad "),sg.InputText("",size=(3,1), enable_events=True, key="-t2-")],
+			[sg.Text("Letra "),sg.Combo(letras,letras[0],size=(3,1), enable_events=True, key="-l2-"),sg.Text("Cantidad "),sg.InputText(config["cant_fichas"][letras[0]],size=(3,1), enable_events=True, key="-t2-")],
 			[sg.Button("Aplicar",font=("Arial Black",11),size=(15, 0),pad=(0, 0)),sg.Button("Restaurar",font=("Arial Black",11), size=(15, 0),pad=(0, 0)),sg.Button("Atrás",key="Atras",font=("Arial Black",11), size=(15, 0),pad=(0, 0))]
 			]
 		if config["dificultad"]=="Facil":

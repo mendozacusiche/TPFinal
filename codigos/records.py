@@ -44,7 +44,7 @@ def actualizar(nombre,puntaje,nivel,fecha):
             datos[nivel]=datos_nivel
         guardarDatos(datos)
     except FileNotFoundError:
-        sg.popup('No se encontro el archivo topten.json',title='')
+        sg.popup('No se encontró el archivo topten.json',title='')
 
 def guardarDatos(datos):   #no uso manejo de excepciones porque ya las uso cuando lo llamo 
     '''Guardo los datos en topten.son que fueron generados en actualizar, ya 
@@ -65,7 +65,7 @@ def imprimir(nivel,win):
         except KeyError:
             sg.popup('No hay registros del nivel seleccionado',title='')
     except FileNotFoundError:
-        sg.popup('No se encontro el archivo topten.json',title='')
+        sg.popup('No se encontró el archivo topten.json',title='')
         
 if __name__=='__main__':
     sg.theme('BlueMono')

@@ -423,7 +423,7 @@ def juego(cargar=False):
                     else:
                         devolver_fichas(window,tablero,jugador.get_fichas())
                         if vacio:
-                            sg.popup("No se ingresó palabra",title="")
+                            sg.popup("No se ingresó ninguna palabra",title="")
                         elif not medio:
                             sg.popup('En la primer jugada la palabra debe pasar por el medio del tablero',title='')
                         else:

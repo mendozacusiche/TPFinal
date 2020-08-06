@@ -1,4 +1,4 @@
-if __name__=='codigos.IA':
+if __name__ == 'codigos.IA':
 	from codigos import jugar, Layout, Fichas, Tablero
 	
 
@@ -48,7 +48,7 @@ class IA():
 		'''Acciones que realiza la IA cuando es su turno'''
 		palabra=self.buscar_palabra()
 		if (palabra!=""):
-			ok=tablero.insertar_palabra(palabra,window,jugador,self,lista)
+			ok = tablero.insertar_palabra(palabra,window,jugador,self,lista)
 			#
 			if(ok):
 				for l in palabra.split():
@@ -105,3 +105,8 @@ class IA():
 
 	def get_terminar(self):
 		return self.__terminar
+
+if __name__ == '__main__':
+	import PySimpleGUI as sg
+	sg.theme('BlueMono')
+	sg.popup('Por favor ejecute ScrabbleAR.py',title='')

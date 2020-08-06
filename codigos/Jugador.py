@@ -1,4 +1,4 @@
-if __name__ == 'codigos.Jugador':
+if __name__=='codigos.Jugador':
 	from codigos import jugar,Fichas
 	
 
@@ -50,7 +50,7 @@ class Jugador():
 	def set_jugado(self,b):
 		self.__jugado=b
 
-if __name__ == '__main__':
+if __name__=='__main__':
 	import PySimpleGUI as sg
 	sg.theme('BlueMono')
 	sg.popup('Por favor ejecute ScrabbleAR.py',title='')

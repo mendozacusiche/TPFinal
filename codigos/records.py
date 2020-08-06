@@ -10,7 +10,7 @@ def  ventana ():
         [sg.Listbox( values={}, key='RECORDS', size= (60,10), pad=(0,0))],
         [sg.Button('Salir')]
         ]
-    window=sg.Window('record',layout)
+    window=sg.Window('TOP TEN',layout)
     while True:
         event,values=window.Read()
         if event=="-dif-":
@@ -44,7 +44,7 @@ def actualizar(nombre,puntaje,nivel,fecha):
             datos[nivel]=datos_nivel
         guardarDatos(datos)
     except FileNotFoundError:
-        sg.popup('No se encontro el archivo topten.json')
+        sg.popup('No se encontro el archivo topten.json',title='')
 
 def guardarDatos(datos):   #no uso manejo de excepciones porque ya las uso cuando lo llamo 
     '''Guardo los datos en topten.son que fueron generados en actualizar, ya 
@@ -63,9 +63,9 @@ def imprimir(nivel,win):
 
             win['RECORDS'].update(map(lambda x: "{}. {} {}: {}".format(lista.index(x)+1,x[1][1],x[0], x[1][0]),lista))
         except KeyError:
-            sg.popup('No hay registros del nivel seleccionado')
+            sg.popup('No hay registros del nivel seleccionado',title='')
     except FileNotFoundError:
-        sg.popup('No se encontro el archivo topten.json')
+        sg.popup('No se encontro el archivo topten.json',title='')
         
 if __name__=='__main__':
     sg.theme('BlueMono')

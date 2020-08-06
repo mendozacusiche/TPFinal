@@ -70,10 +70,10 @@ def restaurar(win):
 		win["-turn-"].update(j["tiempo_turno"])
 		win["-dif-"].update(j["dificultad"])
 		win["-desc-"].update("")
-		win["-l1-"].update("")
-		win["-l2-"].update("")
-		win["-t1-"].update("")
-		win["-t2-"].update("")
+		win["-l1-"].update("A")
+		win["-l2-"].update("A")
+		win["-t1-"].update(j["puntaje_fichas"]["A"])
+		win["-t2-"].update(j["cant_fichas"]["A"])
 	except FileNotFoundError as ex:
 		sg.popup("No se encontro el archivo config.json",title='')
 

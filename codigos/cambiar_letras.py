@@ -80,7 +80,8 @@ def clickear_ficha(event, jugador, window, win, fichas):
             fichas[6]=True
 
 def unirlis(lista1, listas2):
-    '''Une en una tupla las listas de letras y  de booleanos que representan las fichas a cambiar  y conservar en el atril'''
+    '''Une en una tupla las listas de letras y  de booleanos que representan las 
+    fichas a cambiar  y conservar en el atril.'''
     claves=[]
     for i in range(7):
         claves.append((lista1[i], listas2[i]))
